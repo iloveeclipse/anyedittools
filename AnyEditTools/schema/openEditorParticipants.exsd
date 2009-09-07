@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="de.loskutov.anyedit.AnyEditTools">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="de.loskutov.anyedit.AnyEditTools" id="openEditorParticipants" name="Open editor"/>
+      </appInfo>
+      <documentation>
+         Allows to participate in AnyEdit &quot;Open file under cursor...&quot; action
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="openEditorParticipant" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="openEditorParticipant">
+      <annotation>
+         <appInfo>
+            <meta.element labelAttribute="class"/>
+         </appInfo>
+         <documentation>
+            A participant in &quot;open file&quot; action, which is capable to open appropriated editor.
+Because there might be multiple participants, the order is undefined. If one of
+participants was successful in opening the editor, other participants are ignored. See IOpenEditorParticipant
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Instanceof IOpenFileParticipant, must have a zero argument public constructor and be accessible from other plugins (exported)
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="de.loskutov.anyedit.IOpenEditorParticipant"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         1.8.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         see IOpenFileParticipant, AbstractOpenAction, DefaultOpenEditorParticipant
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         A new participant instance is created each time the action is performed, so the participant creation should be lightweight.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+
+      </documentation>
+   </annotation>
+
+</schema>

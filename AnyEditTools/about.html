@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>AnyEdit tools plugin for Eclipse</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="author" content="Andrei Loskutov" />
+<meta name="copyright" content="Copyright 2004,2005 Andrei Loskutov" />
+<meta name="description" content="AnyEdit plugin adds several new actions to the context menu of Text-based Eclipse editors" />
+<meta name="keywords" content="Java, Eclipse, Plugin, Plugins, Anyedit, free, Whitespace, Spaces, Tabs, convert, open, type, file, trailing, Entities, jsp, Tool, Programmer, Loskutov" />
+<meta name="revisit-after" content="3 Days" />
+<meta name="robots" content="index, follow" />
+<meta name="distribution" content="global" />
+<meta name="rating" content="General" />
+<meta name="audience" content="All" />
+<link rel="stylesheet" href="../styles/styles.css" type="text/css" />
+<link rel="SHORTCUT ICON" href="../favicon.ico" />
+</head>
+<body>
+<table width="86%" border="0" align="center" cellpadding="8" cellspacing="0" class="mainTable">
+  <tr>
+    <td> <a href="http://andrei.gmxhome.de/index.html" class="box">Home</a> | <a href="http://andrei.gmxhome.de/eclipse.html" class="box">Eclipse
+        plugins</a> <strong>-&gt;</strong> <span class="menu">AnyEdit</span></td>
+    <td align="right">| <a href="http://andrei.gmxhome.de/privat.html" class="box">About</a></td>
+  </tr>
+</table>
+<br />
+<table width="86%" border="0" align="center" cellpadding="20" cellspacing="0" class="mainTable">
+  <tr>
+    <td>
+		<a href="http://www.eclipse.org/community/index.html" class="none" title="Eclipse ready"><img src="../images/rea_eclipse_pos_logo_fc_sm.jpg" alt="Eclipse ready" width="140" height="79" border="0" align="right" class="none" /></a>
+		<h1>AnyEdit  tools plugin for Eclipse</h1>
+      <blockquote>
+    <p> AnyEdit plugin adds several new tools to the context menu of text-
+      based Eclipse editors, to output consoles, to Eclipse main menu and editor toolbar. AnyEdit contributes also Import/Export working sets wizards.</p>
+    <p><a href="http://andrei.gmxhome.de/anyedit/examples.html" class="box"> AnyEdit examples</a> - <a href="http://andrei.gmxhome.de/anyedit/preferences.html" class="box"> AnyEdit preferences </a> - <a href="http://andrei.gmxhome.de/anyedit/examples2.html" class="box"> AnyEdit in action </a></p>
+    <p>AnyEdit can <strong>show</strong> the withespace (tabs vs spaces) in editors and may use custom project settings for tab&lt;-&gt;spaces auto-convert-on-save feature.</p>
+    <p>AnyEdit could perform <strong>tabs &lt;-&gt; spaces</strong> convert on multiple files or entire directories and supports also file exclusion filter for tabs &lt;-&gt; spaces action.</p>
+    <p>AnyEdit
+       allows you  <strong>automatically</strong> remove trailing whitespaces
+      and/or perform tabs&lt;-&gt;spaces conversion on a "save" action in all
+      text- based Eclipse editors. It could automatically create a new line at the end of the file if the last line was not terminated by new line.</p>
+    <p>AnyEdit adds  &quot;<strong>Save All</strong>&quot;, &quot;<strong>Open File</strong>&quot; and &quot;<strong>Show whitespace in editor</strong>&quot; buttons to the global Eclipse toolbar and could remove &quot;Print&quot; button from it (because it is completely useless on Linux). </p>
+    <p>AnyEdit  adds &quot;<strong>Open File</strong>&quot;, &quot;<strong>Open Type</strong>&quot; and &quot;<strong>Save to file...</strong>&quot; actions to  supported output consoles and  &quot;Save to file...&quot; toolbar button to the Console view. </p>
+    <p> AnyEdit   adds  four new context menu actions  to  &quot;<strong>Compare With</strong>&quot; and &quot;<strong>Replace With</strong>&quot; menus in both editors and files. </p>
+    <p><strong>Here is an overview about all *visible* contributions provided by AnyEdit tools:</strong></p>
+    <table width="100%" border="0" cellpadding="4" cellspacing="0" style="border:dashed;border-width:thin;">
+      <tr>
+        <th width="30%" nowrap scope="col">What?</th>
+        <th width="20%" scope="col">Where?</th>
+        <th width="50%" scope="col">Details</th>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Open file under cursor</td>
+        <td align="left" valign="top">Editors, Console views, <a href="http://andrei.gmxhome.de/bytecode/index.html">Bytecode Outline View</a></td>
+        <td align="left" valign="top">Useful by many include's in jsp's, C/C++ files, file names in the console output etc. Can jump to the right line!<br />
+Works with run/debug and Ant console too,  support &quot;jump     to
+          line&quot;!</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Open type under cursor</td>
+        <td align="left" valign="top">Editors, Console views, <a href="http://andrei.gmxhome.de/bytecode/index.html">Bytecode Outline View</a></td>
+        <td align="left" valign="top">Useful for all xml's, tld's, jsp's etc files with referenced
+          Java types. <strong><br />
+            </strong>Works with run/debug and Ant console too! </td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Save to file... </td>
+        <td align="left" valign="top">Most of the Console views, <a href="http://andrei.gmxhome.de/bytecode/index.html">Bytecode Outline View</a> </td>
+        <td align="left" valign="top">Allows  to save the console/view content and quickly reopen it in an editor. <br />
+          Works with most of the existing consoles! </td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"><p>Edit<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;Show Witespace </p>          </td>
+        <td align="left" valign="top">&quot;Edit&quot; menu, main toolbar</td>
+        <td align="left" valign="top">Allows  to show tabs and spaces colored in the text editor. 
+          Has to be enabled once for the desired perspective via Window -&gt; Customize Perspective -&gt; Commands -&gt; Whitespace  </td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">File Import / Export<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Working Sets </td>
+        <td align="left" valign="top">&quot;File&quot; menu </td>
+        <td align="left" valign="top">Allows you to store working set definitions to the file and apply them to the another workspace by importing them.</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">File<br /> 
+  &nbsp;&nbsp;&nbsp;&nbsp;Convert tabs &lt;-&gt; Spaces </td>
+        <td align="left" valign="top">&quot;File&quot; menu </td>
+        <td align="left" valign="top">Enabled only if more then one file/folder is selected in Navigator or Project Explorer </td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"><p>Convert <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Tabs to spaces<br />
+&nbsp;&nbsp;&nbsp;          Spaces to tabs</p>          </td>
+        <td align="left" valign="top">Editors</td>
+        <td align="left" valign="top">Trailing whitespace
+      will be removed automatically</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top"><p>Convert <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Chars
+          to Html entities<br />
+&nbsp;&nbsp;&nbsp;          Html entities to chars</p>          </td>
+        <td align="left" valign="top">Editors</td>
+        <td align="left" valign="top">Useful if working
+            in bilingual team to convert &eacute;'s, &ocirc;'s, &auml;'s
+            etc between html and other sources ;)</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Convert <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;Camel &lt;-&gt; Underscores</td>
+        <td align="left" valign="top">Editors</td>
+        <td align="left" valign="top">Auto-convert variable names from/to &quot;camel&quot; notation, like <br />
+thisIsMyFieldName &lt;-&gt; this_is_my_field_name</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Convert <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;Capitalize</td>
+        <td align="left" valign="top">Editors</td>
+        <td align="left" valign="top">Only  text selection in editor will be changed</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Convert <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Invert
+            case</td>
+        <td align="left" valign="top">Editors</td>
+        <td align="left" valign="top">Only  text selection in editor will be changed</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Convert <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;To
+            upper case<br />
+&nbsp;&nbsp;&nbsp;            To
+            lower case</td>
+        <td align="left" valign="top">Editors</td>
+        <td align="left" valign="top">Only  text selection in editor will be changed</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Convert <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;To  Unicode notation<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;From  Unicode notation</td>
+        <td align="left" valign="top">Editors</td>
+        <td align="left" valign="top">Only  text selection in editor will be changed</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Convert <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;To Base64<br />          
+          &nbsp;&nbsp;&nbsp;&nbsp;From Base64</td>
+        <td align="left" valign="top">Editors</td>
+        <td align="left" valign="top">Only  text selection in editor will be changed</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Compare  / Replace With<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Clipboard </td>
+        <td align="left" valign="top">Editors, Navigator, Project Explorer </td>
+        <td align="left" valign="top">If some text is selected in editor, then only this selection will be compared, otherwise entire editor</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Compare / Replace With<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Workspace file...        </td>
+        <td align="left" valign="top">Editors, Navigator, Project Explorer </td>
+        <td align="left" valign="top">If some text is selected in editor, then only this selection will be compared, otherwise entire editor</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Compare  / Replace With<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;External file...</td>
+        <td align="left" valign="top">Editors, Navigator, Project Explorer </td>
+        <td align="left" valign="top">If some text is selected in editor, then only this selection will be compared, otherwise entire editor</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">Compare  / Replace With<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Opened Editor...</td>
+        <td align="left" valign="top">Editors, Navigator, Project Explorer </td>
+        <td align="left" valign="top">If some text is selected in editor, then only this selection will be compared, otherwise entire editor</td>
+      </tr>
+    </table>
+    <p>This programm is free, see <a href="http://andrei.gmxhome.de/anyedit/copyright.html" class="box">copyright</a></p>
+      </blockquote>
+      <p class="titel">Download</p>
+      <blockquote>
+        <p><a href="http://andrei.gmxhome.de/anyedit/links.html" class="box">Here</a></p>
+      </blockquote>      
+      <p class="titel">Users about AnyEdit</p>
+      <blockquote>
+        <p><a href="http://www.eclipseplugincentral.com/Web_Links-index-req-viewlink-cid-123.html">Plugin page at Eclipse plugin central</a></p>
+      </blockquote>
+      <p class="titel">Why AnyEdit </p>
+      <blockquote>
+        <p>&quot;<strong>Open file</strong>&quot; acton  was inspired by refactoring
+          of one big J2EE project that heavily used &quot;included&quot; JSP
+          files. Some times it was necessary to traverse 5 nested includes to
+          find a field declaration, thus 5 times open package explorer and search
+            for the next file, brrr. With &quot;<span class="code">Open file
+            under cursor</span>&quot; this is a single click action. This works
+            from Eclipse debug/Ant console too - moreover, if line information
+        is included, then the right source line will be selected in editor! </p>
+        <p>&quot;<strong>Open  type</strong>&quot; acton  was inspired by
+            working with web.xml/weblogic.xml/*.tld/*.jsp files.
+            You can now simply change from XML to the Java editor if you want
+          to see the declaring Java class, without typing the Java class name
+          in the &quot;Open
+          type&quot; dialog. This works from the Eclipse Ant/debug console too!</p>
+        <p>&quot;<strong>Convert Spaces/Tabs</strong>&quot; action set was inspired
+          by Rahul Kuchhal's whitespace plugin and good old UltraEdit. The main difference is that my
+          plugin doesn't change line ends while performing &quot;spaces&quot; operations.
+          E.g. if you edit a Unix text file on Windows PC, Rahul's plugin automatically
+          convert all line ends into DOS format (from &quot;\n&quot; to &quot;\r\n&quot;)
+          and vice versa. The same is for Mac/Unix, Mac/DOS text files too. This
+          is angry for version control systems, diff tools etc. The trailing whitespace and/or tabs&lt;-&gt;spaces
+          conversion could be performed automatically on &quot;save&quot; action
+          in nearly all text editors, even in editors which are not directly
+        supported by AnyEdit context menu actions.</p>
+        <p>And the rest is now just history :o)</p>
+        <p>This program is free, see <a href="copyright.html">copyright</a>. </p>
+      </blockquote>      
+      <p class="titel">Editor / Console integration</p>
+      <blockquote>
+    <p>For almost of Eclipse text editors this is done automatically. It works with
+      default Eclipse Java and Text editors, with <a href="http://www.eclipse.org/webtools/index.html">Web
+      Tools</a> from IBM, <a href="http://www.myeclipseide.com">MyEclipse</a>,
+      SolarEclipse and Loboz JSP editors, JavaScript editor form Harish Kataria, <a href="http://www.eclipse-plugins.info/eclipse/plugin_details.jsp?id=266">EclipseColorer</a>, <a href="http://www.eclipse-plugins.info/eclipse/plugin_details.jsp?id=178">ColorEditor</a>,
+      <a href="http://www.phpeclipse.de/">PHPEClipse</a>,
+      <a href="http://cfeclipse.org/index.html">CFEclipse</a>, CDT editors, <a href="http://e-p-i-c.sourceforge.net/">EPIC</a> (Perl), Zend <a href="http://www.eclipse.org/php/">PHP</a>, <a href="http://pydev.sourceforge.net/">PyDev (Python development environment)</a>, <a href="http://www.trex.informatik.uni-goettingen.de/trac">TRex TTCN3</a>, <a href="http://www.adobe.com/products/flex/">Adobe Flex</a>, <a href="http://www.aptana.com/products/">Aptana Studio</a> and I think with many other editors too. 
+      For any other editors it can be simply
+      to add AnyEdit to  context menu. </p>
+    <p>Console integration for &quot;Save to file:&quot; Ant, Java run / debug / stack trace, External tools, CVS, CDT make. Known limitation: SVN (Subclipse) Console is not supported by design restrictions (no access to console viewer or document).</p>
+    <p>Please do not hesitate to contact me if
+      your editor is not supported. </p>
+    <p>Please also read <a href="http://andrei.gmxhome.de/anyedit/faq.html">the
+        FAQ</a>!</p>
+</blockquote>
+<p class="titel">Installation</p>
+<blockquote>
+    <p>All what you need to install AnyEdit plugin is to <strong>copy</strong> the
+        downloaded
+        <strong>jar</strong> file into you <span class="code">%Eclipse%/plugin</span> directory
+        and restart Eclipse. You don't need to do anymore to install AnyEdit.
+        <strong>Do not unzip the downloaded jar file!</strong> </p>
+    <p>For  Update Manager users: you can use special Eclipse update
+      site for this plugin. Go to &quot;Help -&gt; Software Updates -&gt; Find
+      and Install... -&gt; Search for new features to install -&gt; Next -&gt; New
+      Remote Site...&quot; and use the <strong>http://andrei.gmxhome.de/eclipse/</strong> as
+      url. </p>
+    <p><span class="red">Note</span>: AnyEdit tested and works on Eclipse
+           2.1, 3.0, 3.1, 3.2,  3.3, 3.4 ...</p>
+    <p>Please also read <a href="http://andrei.gmxhome.de/anyedit/faq.html">the
+        FAQ</a>!<a name="usage" class="none"></a></p>
+</blockquote>
+<p class="titel">Usage</p>
+<blockquote>
+    <p>For &quot;<span class="code">Convert tabs&lt;-&gt;spaces</span>&quot; actions on a single file 
+      you can right-click anywhere in current editor and then select preferred
+      action to run. Whole editor buffer will be changed, trailing whitespace
+        will be removed automatically.</p>
+    <p>For  &quot;<span class="code">Convert tabs&lt;-&gt;spaces</span>&quot; on a number of files, just select these files or directories in Navigator view and use &quot;File-&gt;Convert tabs&lt;-&gt;spaces&quot; window menu. All selected text files and all text files in selected directory hierarchy would be checked out and &quot;tabs&lt;-&gt;spaces&quot; would be executed on each file. This operation could not be undone without version control system, so be careful by using it. You may exclude files per project/global settings from this operation, using AnyEdit preferences. </p>
+    <p>For &quot;<span class="code">Convert chars/html/case</span>&quot; actions
+      you must select some text, then right-click on current selection and then
+      select preferred action to run. Only the selected text will be changed.</p>
+    <p>For &quot;<span class="code">Open</span>&quot; actions place cursor into file/java type string
+      and select preferred action to run. You can also select a part of file/type
+      and then click on &quot;<span class="code">Open</span>&quot; action. In both cases AnyEdit will try
+      to determine right file/type, and if it is found, will open file/type in
+      associated Eclipse editor.</p>
+    <p>&quot;<span class="code">Convert  tabs&lt;-&gt;spaces</span>&quot; actions uses
+      tab width from AnyEdit Preference page to replace tabs with spaces/vice
+      versa (except Java editor, which formatter preferences could be used instead). </p>
+    <p><span class="red">Note</span>:  As default, trailing whitespace
+        will be removed automatically on save and while &quot;<span class="code">Convert
+        spaces/tabs</span>&quot; actons, but you can turn this behavoir
+      off in AnyEdit preferences.</p>
+    <p>&quot;<span class="code">Open file</span>&quot; action
+          uses special characters from AnyEdit Preference page to guess file
+      name/path under cursor. It uses the simply string search for a continuous
+      character sequence with allowed/required in path characters. Found character
+          sequence can be the full file path or only one part of them, therefore
+      plugin will search for this character sequence first relative to current
+      document and if nothing found, in entire project/workspace and then on
+      local file system.</p>
+    <p>Import/Export working sets wizards allows you to store working set definitions to the file and apply them to the another workspace by importing them. This is especially useful when working on big workspaces containing same set of projects (each workspace represents just different product version or branch). Please first import projects into the workspace, and then working sets, otherwise working sets would be imported but empty. </p>
+    <p><span class="red">Note:</span> only working set <strong>descriptions</strong> would be imported/exported, and <strong>not</strong> the resources included in the working sets. </p>
+    <p>Please also read <a href="http://andrei.gmxhome.de/anyedit/faq.html">the
+        FAQ</a>,  <a href="http://andrei.gmxhome.de/anyedit/examples.html">examples</a>, <a href="http://andrei.gmxhome.de/anyedit/preferences.html">preferences</a> and <a href="http://andrei.gmxhome.de/anyedit/examples2.html">AnyEdit in action</a>! </p>
+</blockquote>
+<p class="titel">Feedback</p>
+<blockquote>
+    <p>Please send comments  and suggestions to <img src="../images/loskutov.gif" alt="loskutov" width="130" height="12" align="top" /></p>
+    </blockquote>
+<p class="titel">History</p>
+<blockquote>
+  <p class="red">New in version 2.0.0 (Eclipse 3.3-3.4 only) [06.05.2008]</p>
+  <ul>
+    <li>
+      <p>Added four new actions to the each &quot;<span class="code">Compare With</span>&quot; and &quot;<span class="code">Replace With</span>&quot; menu (available in  context menu of selected file in Navigator, Package Explorer, Project Explorer and also in the editors):</p>
+      <table border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="border"><img src="../images/anyedit_menu4.gif" alt="File/Editor context actions" width="374" height="164" border="0" /></td>
+            </tr>
+      </table>
+			<br/>
+    </li>
+    <li>
+      <p> Added &quot;<span class="code">Compare With</span>&quot; and &quot;<span class="code">Replace With</span>&quot; menus to the context menu of external editors and also Java Class file editor (the one used to show source of imported libraries etc). </p>
+    </li>
+    <li>
+      <p><strong>When it is useful? (#1)</strong> Consider you have two  big pieces of code in the same editor which looks 
+        pretty similar, and you wish to compare them. Now you can  just select one of the pieces, &quot;Ctrl+C&quot;
+        (clipboard), then select the next one and choose &quot;Compare With -&gt;
+        Clipboard&quot; and get the Eclipse compare editor up (original idea &copy; by Stefan Chyssler :). </p>
+    </li>
+    <li>
+      <p><strong>When it is useful? (#2)</strong><strong> </strong>Have you ever tried to compare external  file  editor or class file editor with  other files/editors? Just try it :-) There is NO way... Eclipse just don't provide any chance to do it by default. If you can't select editor's file in some kind of navigator, then you will never able to compare it in Eclipse =&gt; you have either run external diff tool or somehow import your external file into the workspace. </p>
+    </li>
+    <li>
+      <p><strong>When it is useful? (#3)</strong><strong> </strong>Have you ever tried to compare any two opened editors together? It works fine if you have a small project with one folder and 10 files. Ok, in this case you do not need to  know what is Anyedit good for :-) But if you have 30+ projects in different working sets,  it gets worser - you have navigate first to the first file, select this one, hold Ctrl key, navigate  to the second file, select it too and then open a context menu to compare both. Usually you have also to unset some filters or enable/disable selected working sets etc, so it will never be done with less then 5-10 clicks. </p>
+    </li>
+    <li>
+      <p><strong>But now you can compare ANY opened text editor with just  3 clicks! </strong>The new feature is a real time saver - and it is even possible to compare/patch two external editors together!</p>
+    </li>
+    <li>
+      <p>If &quot;Compare With&quot; action is executed in the context of an opened editor, and editor selection is not empty, then only the selection is compared, otherwise the whole editor buffer.</p>
+    </li>
+    <li>
+      <p>Compare editors opened on both  workspace or external files supports patching of content.</p>
+    </li>
+    <li>
+      <p>Before &quot;Compare With-&gt; Clipboard&quot; action, text from clipboard will be transformed to have same newlines as the selected editor/file</p>
+    </li>
+    <li>
+      <p>Before &quot;Replace With&quot; action will be executed on a dirty editor,  editor will be saved to create new version in local history</p>
+    </li>
+    <li>
+      <p>Bugfix: unchecked files should be now properly checked out from VCS  before executing  &quot;File-&gt;Convert Tabs&lt;-&gt;Spaces&quot; action</p>
+    </li>
+    <li>
+      <p> Bugfix: &quot;Ctrl+S&quot; in the Variables view don't show a stupid &quot;File is read-only!&quot; dialog if debugging read-only class file on Eclipse 3.4 </p>
+    </li>
+    <li>
+      <p>Internal package renaming </p>
+    </li>
+  </ul>
+  <p class="red">Here you can see <a href="http://andrei.gmxhome.de/anyedit/history.html" class="box">older
+    versions history </a> </p>
+</blockquote></td>
+</tr>
+</table>
+
+<p align="center"><i><small>Last changed at:
+      <!-- #BeginDate format:Br1m -->29.04.08  23:39<!-- #EndDate -->
+</small></i></p>
+</body>
+</html>

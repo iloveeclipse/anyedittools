@@ -1,0 +1,1081 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension-point id="openEditorParticipants" name="%extension-point.1.name" schema="schema/openEditorParticipants.exsd"/>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.ui.preferencePages.Editors"
+            class="de.loskutov.anyedit.ui.preferences.AnyEditPreferencePage"
+            id="AnyEditPreferencePage"
+            name="%prefPage">
+         <keywordReference id="AnyEditTools.keyword1"/>
+         <keywordReference id="AnyEditTools.keyword2"/>
+         <keywordReference id="AnyEditTools.keyword3"/>
+         <keywordReference id="AnyEditTools.keyword4"/>
+         <keywordReference id="AnyEditTools.keyword5"/>
+         <keywordReference id="AnyEditTools.keyword6"/>
+         <keywordReference id="AnyEditTools.keyword7"/>
+         <keywordReference id="AnyEditTools.keyword8"/>
+         <keywordReference id="org.eclipse.debug.ui.console"/>
+         <keywordReference id="org.eclipse.team.cvs.ui.cvs.console"/>
+         <keywordReference id="org.eclipse.ui.editors.general"/>
+         <keywordReference id="org.eclipse.ui.ide.editors"/>
+
+      </page>
+   </extension>
+
+   <extension
+         id="AnyEditPropertyPage"
+         name="%propPageName"
+         point="org.eclipse.ui.propertyPages">
+      <page
+            adaptable="true"
+            class="de.loskutov.anyedit.ui.preferences.ProjectPreferencePage"
+            id="de.loskutov.anyedit.ui.preferences.ProjectPreferencePage"
+            name="%Bundle-Name"
+            nameFilter="*"
+            objectClass="org.eclipse.core.resources.IProject">
+         <keywordReference id="AnyEditTools.keyword1"/>
+         <keywordReference id="AnyEditTools.keyword2"/>
+         <keywordReference id="AnyEditTools.keyword3"/>
+         <keywordReference id="AnyEditTools.keyword4"/>
+         <keywordReference id="AnyEditTools.keyword5"/>
+         <keywordReference id="AnyEditTools.keyword6"/>
+         <keywordReference id="AnyEditTools.keyword7"/>
+         <keywordReference id="AnyEditTools.keyword8"/>
+         <keywordReference id="org.eclipse.ui.editors.general"/>
+         <keywordReference id="org.eclipse.ui.ide.editors"/>
+      </page>
+   </extension>
+
+  <extension point="org.eclipse.core.runtime.preferences">
+    <initializer class="de.loskutov.anyedit.ui.preferences.AndyEditPreferenceInitializer"/>
+  </extension>
+  <!-- see changelist 01251: now we do not need this
+  <extension point="org.eclipse.ui.editors.documentProviders">
+      <provider
+            class="org.eclipse.ui.editors.text.TextFileDocumentProvider"
+            inputTypes="de.loskutov.anyedit.actions.ExternalFileEditorInput"
+            id="de.loskutov.anyedit.actions.ExternalFileEditorInput">
+      </provider>
+   </extension>
+   -->
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+
+        <objectContribution
+              adaptable="true"
+              id="de.loskutov.anyedit.c2editor"
+              objectClass="org.eclipse.core.resources.IFile">
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
+                 definitionId="AnyEdit.compareWith.editor"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 id="AnyEdit.compareWith.editor"
+                 label="%compareWithEditor"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithExternalAction"
+                 definitionId="AnyEdit.compareWith.external"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.compareWith.external"
+                 label="%compareWithExternalFile"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithResourceAction"
+                 definitionId="AnyEdit.compareWith.file"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.compareWith.file"
+                 label="%compareWithFile"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
+                 definitionId="AnyEdit.compareWith.clipboard"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 id="AnyEdit.compareWith.clipboard"
+                 label="%compareWithClipboard"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+        </objectContribution>
+
+
+        <!-- contribution to external files
+        "Replace" menu hast to be defined before "Compare", to appear after...
+         -->
+        <objectContribution
+              adaptable="true"
+              id="de.loskutov.anyedit.r2editor2"
+              objectClass="java.io.File">
+
+             <!-- Eclipse doesn't provide "Replace With..." menu for external files -->
+             <menu
+                   label="Replace With"
+                   path="additions"
+                   id="replaceWithMenu">
+                <separator
+                      name="replaceWithGroup2"/>
+                <separator
+                      name="additions"/>
+             </menu>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 id="AnyEdit.replaceWith.editor"
+                 label="%compareWithEditor"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithExternalAction"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.replaceWith.external"
+                 label="%compareWithExternalFile"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithResourceAction"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.replaceWith.file"
+                 label="%compareWithFile"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 id="AnyEdit.replaceWith.clipboard"
+                 label="%compareWithClipboard"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+        </objectContribution>
+
+        <objectContribution
+              adaptable="true"
+              id="de.loskutov.anyedit.c2editor2"
+              objectClass="java.io.File">
+
+         <!-- Eclipse doesn't provide "Compare With..." menu for external files -->
+         <menu
+               label="Compare With"
+               path="additions"
+               id="compareWithMenu">
+            <separator
+                  name="compareWithGroup2"/>
+            <separator
+                  name="additions"/>
+         </menu>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 id="AnyEdit.compareWith.editor"
+                 label="%compareWithEditor"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithExternalAction"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.compareWith.external"
+                 label="%compareWithExternalFile"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithResourceAction"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.compareWith.file"
+                 label="%compareWithFile"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 id="AnyEdit.compareWith.clipboard"
+                 label="%compareWithClipboard"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+        </objectContribution>
+
+        <!-- contribution to class files and "unnamed" editor
+        "Replace" menu hast to be defined before "Compare", to appear after...
+         -->
+        <objectContribution
+              adaptable="true"
+              id="de.loskutov.anyedit.r2editor3"
+              objectClass="de.loskutov.anyedit.compare.ContentWrapper">
+
+             <!-- Eclipse doesn't provide "Replace With..." menu for external files -->
+           <visibility>
+              <objectState
+                    name="isModifiable"
+                    value="true">
+              </objectState>
+           </visibility>
+
+           <menu
+                   label="Replace With"
+                   path="additions"
+                   id="replaceWithMenu">
+                <separator
+                      name="replaceWithGroup2"/>
+                <separator
+                      name="additions"/>
+           </menu>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 id="AnyEdit.replaceWith.editor"
+                 label="%compareWithEditor"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithExternalAction"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.replaceWith.external"
+                 label="%compareWithExternalFile"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithResourceAction"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.replaceWith.file"
+                 label="%compareWithFile"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 id="AnyEdit.replaceWith.clipboard"
+                 label="%compareWithClipboard"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+        </objectContribution>
+
+
+
+        <!-- contribution to class files and "unnamed" editor -->
+        <objectContribution
+              adaptable="true"
+              id="de.loskutov.anyedit.c2editor3"
+              objectClass="de.loskutov.anyedit.compare.ContentWrapper">
+
+         <!-- Eclipse doesn't provide "Compare With..." menu for class files -->
+         <menu
+               label="Compare With"
+               path="additions"
+               id="compareWithMenu">
+            <separator
+                  name="compareWithGroup2"/>
+            <separator
+                  name="additions"/>
+         </menu>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 id="AnyEdit.compareWith.editor"
+                 label="%compareWithEditor"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithExternalAction"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.compareWith.external"
+                 label="%compareWithExternalFile"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithResourceAction"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.compareWith.file"
+                 label="%compareWithFile"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 id="AnyEdit.compareWith.clipboard"
+                 label="%compareWithClipboard"
+                 menubarPath="compareWithMenu/compareWithGroup2">
+           </action>
+        </objectContribution>
+
+        <objectContribution
+              adaptable="true"
+              id="de.loskutov.anyedit.r2editor"
+              objectClass="org.eclipse.core.resources.IFile">
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
+                 definitionId="AnyEdit.replaceWith.editor"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 id="AnyEdit.replaceWith.editor"
+                 label="%compareWithEditor"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithExternalAction"
+                 definitionId="AnyEdit.replaceWith.external"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.replaceWith.external"
+                 label="%compareWithExternalFile"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithResourceAction"
+                 definitionId="AnyEdit.replaceWith.file"
+                 enablesFor="?"
+                 icon="icons/open_resource.gif"
+                 id="AnyEdit.replaceWith.file"
+                 label="%compareWithFile"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+
+           <action
+                 class="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
+                 definitionId="AnyEdit.replaceWith.clipboard"
+                 enablesFor="?"
+                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 id="AnyEdit.replaceWith.clipboard"
+                 label="%compareWithClipboard"
+                 menubarPath="replaceWithMenu/replaceWithGroup2">
+           </action>
+        </objectContribution>
+
+
+   </extension>
+
+
+
+   <!-- Action set for command bindings -->
+   <extension
+         point="org.eclipse.ui.actionSets">
+
+      <actionSet
+            label="%actionSetLabel"
+            description="%actionSetDescr"
+            visible="true"
+            id="AnyEdit.actionSet">
+
+    <!-- this is the patch to enable toolbar button for the already
+      existing "open workspace file" action. This action was made non-accessible in 3.2:
+      org.eclipse.ui.internal.ide.handlers.OpenResourceHandler -->
+         <action
+               class="de.loskutov.anyedit.actions.OpenFile"
+               helpContextId="org.eclipse.ui.open_workspace_file_action_context"
+               icon="icons/open_resource.gif"
+               id="org.eclipse.ui.OpenWorkspaceFile2"
+               label="%openFileLbl"
+               toolbarPath="org.eclipse.search.searchActionSet/Search"
+               tooltip="%openFileTooltip">
+         </action>
+         <action
+               class="de.loskutov.anyedit.actions.ConvertAllInFolderAction"
+               icon="icons/to_spaces.gif"
+               id="de.loskutov.anyedit.convertAllInFolder"
+               label="%convertAll"
+               menubarPath="file/save.ext"
+               style="push">
+         </action>
+      </actionSet>
+
+
+   </extension>
+
+    <!-- Key bindings -->
+    <extension
+     point="org.eclipse.ui.bindings">
+
+      <key
+            sequence="Ctrl+Alt+T"
+            commandId="AnyEdit.openTypeFromTextEditor.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+R"
+            commandId="AnyEdit.openFileFromTextEditor.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+Space"
+            commandId="AnyEdit.CnvrtTabToSpaces.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+Tab"
+            commandId="AnyEdit.CnvrtSpacesToTabs.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+W"
+            commandId="AnyEdit.unescape.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+E"
+            commandId="AnyEdit.escape.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+L"
+            commandId="AnyEdit.toLowerCase.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+U"
+            commandId="AnyEdit.toUpperCase.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+I"
+            commandId="AnyEdit.invertCase.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+C"
+            commandId="AnyEdit.capitalize.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+      <key
+            sequence="Ctrl+Alt+K"
+            commandId="AnyEdit.camel.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
+            <!-- TODO no meaningful keys...
+      <key
+            commandId="AnyEdit.base64encode.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="AnyEdit.base64decode.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="AnyEdit.deunicode.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="AnyEdit.unicodify.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            -->
+
+    </extension>
+
+   <!-- Commands -->
+   <extension
+         point="org.eclipse.ui.commands">
+
+      <category
+            name="%keyConfigName"
+            description="%keyConfigDescription"
+            id="AnyEdit.category"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.OpenType"
+            id="AnyEdit.openTypeFromTextEditor.command"
+            name="%openType"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.OpenFile"
+            id="AnyEdit.openFileFromTextEditor.command"
+            name="%openFile"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.SaveToFileAction"
+            id="AnyEdit.saveToFile.command"
+            name="%saveToFile"/>
+
+      <!-- editor actions -->
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.Spaces"
+            id="AnyEdit.CnvrtTabToSpaces.command"
+            name="%tabsToSpaces"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.Spaces"
+            id="AnyEdit.CnvrtSpacesToTabs.command"
+            name="%spacesToTabs"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.UnEscape"
+            id="AnyEdit.unescape.command"
+            name="%htmlToChar"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.UnEscape"
+            id="AnyEdit.escape.command"
+            name="%charToHtml"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
+            id="AnyEdit.toLowerCase.command"
+            name="%caseToLower"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
+            id="AnyEdit.toUpperCase.command"
+            name="%caseToUpper"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
+            id="AnyEdit.invertCase.command"
+            name="%invertCase"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
+            id="AnyEdit.capitalize.command"
+            name="%capitalize"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
+            id="AnyEdit.camel.command"
+            name="%camel"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.Base64UnEncode"
+            id="AnyEdit.base64encode.command"
+            name="%base64encode"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.Base64UnEncode"
+            id="AnyEdit.base64decode.command"
+            name="%base64decode"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.ConvertUnicode"
+            id="AnyEdit.deunicode.command"
+            name="%fromUnicode"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.ConvertUnicode"
+            id="AnyEdit.unicodify.command"
+            name="%toUnicode"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            name="%showWhitespace"
+            id="AnyEdit.ShowWhiteSpace.command"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            name="%_compareWithExternalFile"
+            id="AnyEdit.compareWith.external"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            name="%_compareWithFile"
+            id="AnyEdit.compareWith.file"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            name="%_compareWithClipboard"
+            id="AnyEdit.compareWith.clipboard"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            name="%_compareWithEditor"
+            id="AnyEdit.compareWith.editor"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            name="%_replaceWithExternalFile"
+            id="AnyEdit.replaceWith.external"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            name="%_replaceWithFile"
+            id="AnyEdit.replaceWith.file"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            name="%_replaceWithClipboard"
+            id="AnyEdit.replaceWith.clipboard"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            name="%_replaceWithEditor"
+            id="AnyEdit.replaceWith.editor"/>
+
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.startup">
+   </extension>
+   <extension
+         id="anyedit.whitespace"
+         name="%showWhitespace"
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerType="AnyEditTools.tabs"
+            name="AnyEditTools.tabs"/>
+      <type
+            markerType="AnyEditTools.spaces"
+            name="AnyEditTools.spaces"/>
+      <type
+            markerType="AnyEditTools.compare"
+            name="AnyEditTools.compare"/>
+   </extension>
+   <extension
+     	id="anyedit.ws.marker"
+     	name="%showWhitespace"
+     	point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="AnyEditTools.tabs"
+            colorPreferenceKey="AnyEditTools.tabs.color"
+            colorPreferenceValue="255,210,255"
+            contributesToHeader="false"
+            highlightPreferenceKey="AnyEditTools.tabs.highlight"
+            highlightPreferenceValue="true"
+            icon="icons/whiteSpace.gif"
+            includeOnPreferencePage="true"
+            label="%whiteSpaceTabs"
+            overviewRulerPreferenceKey="AnyEditTools.tabs.oruler"
+            overviewRulerPreferenceValue="false"
+            presentationLayer="3"
+            textPreferenceKey="AnyEditTools.tabs.text"
+            textPreferenceValue="false"
+            verticalRulerPreferenceKey="AnyEditTools.tabs.vruler"
+            verticalRulerPreferenceValue="false"/>
+
+     <specification
+           annotationType="AnyEditTools.spaces"
+           colorPreferenceKey="AnyEditTools.spaces.color"
+           colorPreferenceValue="210,255,210"
+           contributesToHeader="false"
+           highlightPreferenceKey="AnyEditTools.spaces.highlight"
+           highlightPreferenceValue="true"
+           icon="icons/whiteSpace.gif"
+           includeOnPreferencePage="true"
+           label="%whiteSpaceSpaces"
+           overviewRulerPreferenceKey="AnyEditTools.spaces.oruler"
+           overviewRulerPreferenceValue="false"
+           presentationLayer="3"
+           textPreferenceKey="AnyEditTools.spaces.text"
+           textPreferenceValue="false"
+           verticalRulerPreferenceKey="AnyEditTools.spaces.vruler"
+           verticalRulerPreferenceValue="false"/>
+
+     <specification
+           annotationType="AnyEditTools.compare"
+           colorPreferenceKey="AnyEditTools.compare.color"
+           colorPreferenceValue="210,210,255"
+           contributesToHeader="false"
+           highlightPreferenceKey="AnyEditTools.compare.highlight"
+           highlightPreferenceValue="true"
+           includeOnPreferencePage="true"
+           label="%compareSelection"
+           overviewRulerPreferenceKey="AnyEditTools.compare.oruler"
+           overviewRulerPreferenceValue="false"
+           presentationLayer="3"
+           showInNextPrevDropdownToolbarAction="false"
+           showInNextPrevDropdownToolbarActionKey="false"
+           symbolicIcon="info"
+           textPreferenceKey="AnyEditTools.compare.text"
+           textPreferenceValue="false"
+           verticalRulerPreferenceKey="AnyEditTools.compare.vruler"
+           verticalRulerPreferenceValue="false"/>
+   </extension>
+
+   <!-- Toggle Whitespace Marker -->
+   <extension
+         point="org.eclipse.ui.actionSets">
+   <actionSet
+        label="%actionSetWhiteSpace"
+        visible="false"
+        id="AnyEdit.actionSet.whitespace">
+     <action
+           class="de.loskutov.anyedit.actions.ToggleWhitespace"
+           definitionId="AnyEdit.ShowWhiteSpace.command"
+           disabledIcon="icons/whiteSpaceDisabled.gif"
+           icon="icons/whiteSpace.gif"
+           id="AnyEdit.ShowWhiteSpace.command"
+           label="%toggleWhitespace"
+           state="false"
+           retarget="false"
+           style="toggle"
+           menubarPath="edit/additions"
+           toolbarPath="org.eclipse.ui.edit.text.actionSet.presentation/Presentation"
+           tooltip="%showWhitespaceTooltip">
+     </action>
+   </actionSet>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.console.consolePageParticipants">
+      <consolePageParticipant
+            class="de.loskutov.anyedit.actions.SaveToFileParticipant"
+            id="AnyEditTools.consolePageParticipant">
+         <enablement>
+            <instanceof value="org.eclipse.ui.console.AbstractConsole"/>
+         </enablement>
+      </consolePageParticipant>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="AnyEditTools.keyword1"
+            label="AnyEdit"/>
+      <keyword
+            id="AnyEditTools.keyword2"
+            label="Andrei"/>
+      <keyword
+            id="AnyEditTools.keyword3"
+            label="cool"/>
+      <keyword
+            id="AnyEditTools.keyword4"
+            label="console"/>
+      <keyword
+            id="AnyEditTools.keyword5"
+            label="tabs"/>
+      <keyword
+            id="AnyEditTools.keyword6"
+            label="spaces"/>
+      <keyword
+            id="AnyEditTools.keyword7"
+            label="whitespace"/>
+      <keyword
+            id="AnyEditTools.keyword8"
+            label="convert"/>
+   </extension>
+
+   <extension
+         id="de.loskutov.defaultOpenEditorParticipant"
+         point="de.loskutov.anyedit.AnyEditTools.openEditorParticipants">
+      <openEditorParticipant
+            class="de.loskutov.anyedit.actions.DefaultOpenEditorParticipant"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            category="org.eclipse.ui.Basic"
+            class="de.loskutov.anyedit.ui.wizards.WorkingSetExportWizard"
+            icon="icons/workingSets2.gif"
+            id="AnyEditTools.workingSetExportWizard"
+            name="Working Sets">
+         <description>
+            Exports all working sets to the file.
+         </description>
+      </wizard>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <wizard
+            category="org.eclipse.ui.Basic"
+            class="de.loskutov.anyedit.ui.wizards.WorkingSetImportWizard"
+            icon="icons/workingSets.gif"
+            id="AnyEditTools.workingSetImportWizard"
+            name="Working Sets">
+         <description>
+            Imports all working sets from file.
+         </description>
+      </wizard>
+   </extension>
+
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.ui.ide.FileStoreEditorInput"
+            class="de.loskutov.anyedit.ui.editor.EditorAdapterFactory">
+         <adapter
+               type="java.io.File">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.eclipse.ui.internal.editors.text.NonExistingFileEditorInput"
+            class="de.loskutov.anyedit.ui.editor.EditorAdapterFactory">
+         <adapter
+               type="de.loskutov.anyedit.compare.ContentWrapper">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.eclipse.jdt.internal.ui.javaeditor.IClassFileEditorInput"
+            class="de.loskutov.anyedit.ui.editor.EditorAdapterFactory">
+         <adapter
+               type="de.loskutov.anyedit.compare.ContentWrapper">
+         </adapter>
+      </factory>
+   </extension>
+
+
+   <!-- see org.eclipse.ui.ISources -->
+   <extension
+         point="org.eclipse.ui.menus">
+      <!--
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <dynamic
+               class="de.loskutov.anyedit.actions.compare.DynamicCompareContributionItem"
+               id="de.loskutov.anyedit.compareWithOthers">
+            <visibleWhen checkEnabled="false">
+               <and>
+                   <with variable="selection">
+                      <iterate ifEmpty="false" operator="or">
+                         <or>
+                            <adapt type="org.eclipse.core.resources.IFile" />
+                            <adapt type="java.io.File" />
+                            <adapt type="de.loskutov.anyedit.compare.ContentWrapper"/>
+                         </or>
+                      </iterate>
+                   </with>
+               </and>
+            </visibleWhen>
+         </dynamic>
+      </menuContribution> -->
+
+
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               icon="icons/invertCase.gif"
+               id="AnyEdit.convertMenu"
+               label="%convert">
+            <command
+                  commandId="AnyEdit.CnvrtTabToSpaces.command"
+                  icon="icons/to_spaces.gif"
+                  id="AnyEdit.CnvrtTabToSpaces"
+                  label="%tabsToSpaces"/>
+             <command
+                   commandId="AnyEdit.CnvrtSpacesToTabs.command"
+                   icon="icons/to_tabs.gif"
+                   id="AnyEdit.CnvrtSpacesToTabs"
+                   label="%spacesToTabs"/>
+
+            <separator name="spaces" visible="true" />
+
+             <command
+                   label="%charToHtml"
+                   icon="icons/to_html.gif"
+                   commandId="AnyEdit.escape.command"
+                   id="AnyEdit.escape"/>
+
+             <command
+                   label="%htmlToChar"
+                   icon="icons/to_chars.gif"
+                   commandId="AnyEdit.unescape.command"
+                   id="AnyEdit.unescape"/>
+
+            <separator name="html" visible="true" />
+
+             <command
+                   label="%camel"
+                   icon="icons/camel.gif"
+                   commandId="AnyEdit.camel.command"
+                   id="AnyEdit.camel"/>
+
+             <command
+                   label="%capitalize"
+                   icon="icons/capitalize.gif"
+                   commandId="AnyEdit.capitalize.command"
+                   id="AnyEdit.capitalize"/>
+
+             <command
+                   label="%invertCase"
+                   icon="icons/invertCase.gif"
+                   commandId="AnyEdit.invertCase.command"
+                   id="AnyEdit.invertCase"/>
+
+             <command
+                   label="%caseToUpper"
+                   icon="icons/to_upper.gif"
+                   commandId="AnyEdit.toUpperCase.command"
+                   id="AnyEdit.toUpperCase"/>
+
+
+             <command
+                   label="%caseToLower"
+                   commandId="AnyEdit.toLowerCase.command"
+                   icon="icons/to_lower.gif"
+                   id="AnyEdit.toLowerCase"/>
+
+            <separator name="case" visible="true" />
+
+             <command
+                   label="%toUnicode"
+                   commandId="AnyEdit.unicodify.command"
+                   icon="icons/to_unicode.gif"
+                   id="AnyEdit.unicodify"/>
+
+             <command
+                   label="%fromUnicode"
+                   commandId="AnyEdit.deunicode.command"
+                   id="AnyEdit.deunicode"/>
+
+             <command
+                   label="%base64encode"
+                   commandId="AnyEdit.base64encode.command"
+                   icon="icons/to_base64.gif"
+                   id="AnyEdit.base64encode"/>
+
+             <command
+                   label="%base64decode"
+                   commandId="AnyEdit.base64decode.command"
+                   id="AnyEdit.base64decode"/>
+
+             <visibleWhen checkEnabled="false">
+                <with variable="activePart">
+                  <test
+                        forcePluginActivation="true"
+                        property="AnyEditTools.EditorPropertyTester.hasModifiableDocument">
+                  </test>
+               </with>
+            </visibleWhen>
+         </menu>
+
+         <separator
+               name="AnyEditTools.separator3"
+               visible="true">
+         </separator>
+
+        <command
+               label="%openFile"
+               icon="platform:/plugin/org.eclipse.ui.ide/icons/full/elcl16/gotoobj_tsk.gif"
+               commandId="AnyEdit.openFileFromTextEditor.command"
+               id="AnyEdit.openFileFromTextEditor">
+            <visibleWhen
+                  checkEnabled="false">
+                    <with variable="activePart">
+                      <test
+                            forcePluginActivation="true"
+                            property="AnyEditTools.EditorPropertyTester.hasDocument">
+                      </test>
+                   </with>
+            </visibleWhen>
+         </command>
+
+         <command
+               label="%openType"
+               commandId="AnyEdit.openTypeFromTextEditor.command"
+               icon="icons/open_type.gif"
+               id="AnyEdit.openTypeFromTextEditor">
+            <visibleWhen
+                  checkEnabled="false">
+                    <with variable="activePart">
+                  <and>
+                     <test
+                           forcePluginActivation="true"
+                           property="AnyEditTools.EditorPropertyTester.showOpenType">
+                     </test>
+                     <test
+                           forcePluginActivation="true"
+                           property="AnyEditTools.EditorPropertyTester.hasDocument">
+                     </test>
+                  </and>
+                   </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="AnyEditTools.separator2"
+               visible="true">
+         </separator>
+
+         <command
+               label="%saveToFile"
+               icon="icons/saveToFile.gif"
+               id="AnyEdit.saveToFile"
+               commandId="AnyEdit.saveToFile.command">
+            <visibleWhen
+                  checkEnabled="false">
+                    <with variable="activePart">
+                      <and>
+                         <instanceof value="org.eclipse.ui.IViewPart" />
+                          <test
+                                forcePluginActivation="true"
+                                property="AnyEditTools.EditorPropertyTester.hasDocument">
+                          </test>
+                      </and>
+                   </with>
+            </visibleWhen>
+         </command>
+
+      </menuContribution>
+
+
+   </extension>
+
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="de.loskutov.anyedit.ui.editor.EditorPropertyTester"
+            id="AnyEditTools.EditorPropertyTester"
+            namespace="AnyEditTools.EditorPropertyTester"
+            properties="hasDocument,hasModifiableDocument,showOpenType"
+            type="org.eclipse.ui.IWorkbenchPart">
+      </propertyTester>
+   </extension>
+</plugin>
