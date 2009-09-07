@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="AnyEditTools"
+      label="AnyEditTools"
+      version="2.2.0.qualifier"
+      provider-name="Andrei Loskutov"
+      plugin="de.loskutov.anyedit.AnyEditTools"
+      image="loskutov32.gif">
+
+   <description url="http://andrei.gmxhome.de/anyedit/index.html">
+      Adds useful context menu actions to text files and editors - Open file, type under
+      cursor, Convert tabs to spaces, case, html, base64, unicode, Compare/Replace with
+      clipboard or external files etc. AnyEdit can remove trailing whitespace and/or
+      convert tabs-spaces on save and contributes Import/Export working sets wizards.
+   </description>
+
+   <copyright url="http://andrei.gmxhome.de/anyedit/copyright.html">
+      Copyright (C)2002 - 2008 by Andrei Loskutov &lt;Loskutov@gmx.de&gt;.
+All rights reserved.
+   </copyright>
+
+   <license url="http://andrei.gmxhome.de/anyedit/copyright.html">
+      Copyright (C)2002 - 2008 by Andrei Loskutov &lt;Loskutov@gmx.de&gt;.
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS
+IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGE.
+   </license>
+
+   <url>
+      <update label="Andrei Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
+      <discovery label="Andrei Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.filesystem"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.compare"/>
+      <import plugin="org.eclipse.core.net"/>
+      <import plugin="org.eclipse.core.expressions"/>
+   </requires>
+
+   <plugin
+         id="de.loskutov.anyedit.AnyEditTools"
+         download-size="400"
+         install-size="400"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
