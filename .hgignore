@@ -1,0 +1,5 @@
+
+syntax: regexp
+^AnyEditTools/bin$
+syntax: regexp
+^AnyEditTools/images$
