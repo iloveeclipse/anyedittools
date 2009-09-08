@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2009 Andrei Loskutov.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * Contributor:  Andrei Loskutov - initial API and implementation
+ *******************************************************************************/
 package de.loskutov.anyedit.jdt;
 
 import java.util.Arrays;
@@ -34,7 +42,7 @@ public class TypeFactory {
 
     static final char PACKAGE_PART_SEPARATOR = '.';
 
-    private String[] fProjects;
+    private final String[] fProjects;
 
     private char[][] enclosingNames;
 
@@ -106,8 +114,9 @@ public class TypeFactory {
             IJavaSearchScope searchScope) {
         String rest = path.substring(project.length() + 1); // the first slashes.
         int index = rest.lastIndexOf(SEPARATOR);
-        if (index == -1)
+        if (index == -1) {
             return null;
+        }
         String middle = rest.substring(0, index);
         rest = rest.substring(index + 1);
         index = rest.lastIndexOf(EXTENSION_SEPARATOR);
@@ -175,8 +184,9 @@ public class TypeFactory {
     private String getProject(String path) {
         for (int i = 0; i < fProjects.length; i++) {
             String project = fProjects[i];
-            if (path.startsWith(project, 1))
+            if (path.startsWith(project, 1)) {
                 return project;
+            }
         }
         return null;
     }
@@ -200,10 +210,12 @@ public class TypeFactory {
             public int compare(Object o1, Object o2) {
                 int l1 = ((String) o1).length();
                 int l2 = ((String) o2).length();
-                if (l1 < l2)
+                if (l1 < l2) {
                     return 1;
-                if (l2 < l1)
+                }
+                if (l2 < l1) {
                     return -1;
+                }
                 return 0;
             }
         });
@@ -222,7 +234,7 @@ public class TypeFactory {
                 IType declaringType = type.getDeclaringType();
                 if (declaringType != null) {
                     return getTypeQualifiedName(declaringType) + '.'
-                            + type.getElementName();
+                    + type.getElementName();
                 }
             }
         } catch (JavaModelException e) {
@@ -270,7 +282,7 @@ public class TypeFactory {
         }
 
         private IJavaElement getContainer(IJavaSearchScope scope)
-                throws JavaModelException {
+        throws JavaModelException {
             IJavaModel jmodel = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());
             IPath[] enclosedPaths = scope.enclosingProjectsAndJars();
 
