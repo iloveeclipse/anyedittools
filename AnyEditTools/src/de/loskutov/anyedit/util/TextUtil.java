@@ -891,57 +891,58 @@ public class TextUtil {
     /**
      * Characters used for escape operations
      */
-    private static final String[][] HTML_ESCAPE_CHARS = { { "&lt;", "<" }, {
+    private static final String[][] HTML_ESCAPE_CHARS = { {
+            "&lt;", "<" }, {
             "&gt;", ">" }, {
             "&amp;", "&" }, {
             "&quot;", "\"" }, {
-            "&agrave;", "à" }, {
-            "&Agrave;", "À" }, {
-            "&acirc;", "â" }, {
-            "&auml;", "ä" }, {
-            "&Auml;", "Ä" }, {
-            "&Acirc;", "Â" }, {
-            "&aring;", "å" }, {
-            "&Aring;", "Å" }, {
-            "&aelig;", "æ" }, {
-            "&AElig;", "Æ" }, {
-            "&ccedil;", "ç" }, {
-            "&Ccedil;", "Ç" }, {
-            "&eacute;", "é" }, {
-            "&Eacute;", "É" }, {
-            "&aacute;", "á" }, {
-            "&Aacute;", "Á" }, {
-            "&egrave;", "è" }, {
-            "&Egrave;", "È" }, {
-            "&ecirc;", "ê" }, {
-            "&Ecirc;", "Ê" }, {
-            "&euml;", "ë" }, {
-            "&Euml;", "Ë" }, {
-            "&iuml;", "ï" }, {
-            "&Iuml;", "Ï" }, {
-            "&iacute;", "í" }, {
-            "&Iacute;", "Í" }, {
-            "&atilde;", "ã" }, {
-            "&Atilde;", "Ã" }, {
-            "&otilde;", "õ" }, {
-            "&Otilde;", "Õ" }, {
-            "&oacute;", "ó" }, {
-            "&Oacute;", "Ó" }, {
-            "&ocirc;", "ô" }, {
-            "&Ocirc;", "Ô" }, {
-            "&ouml;", "ö" }, {
-            "&Ouml;", "Ö" }, {
-            "&oslash;", "ø" }, {
-            "&Oslash;", "Ø" }, {
-            "&szlig;", "ß" }, {
-            "&ugrave;", "ù" }, {
-            "&Ugrave;", "Ù" }, {
-            "&uacute;", "ú" }, {
-            "&Uacute;", "Ú" }, {
-            "&ucirc;", "û" }, {
-            "&Ucirc;", "Û" }, {
-            "&uuml;", "ü" }, {
-            "&Uuml;", "Ü" }, {
+            "&agrave;", "\u00e0" }, {
+            "&Agrave;", "\u00c0" }, {
+            "&acirc;", "\u00e2" }, {
+            "&auml;", "\u00e4" }, {
+            "&Auml;", "\u00c4" }, {
+            "&Acirc;", "\u00c2" }, {
+            "&aring;", "\u00e5" }, {
+            "&Aring;", "\u00c5" }, {
+            "&aelig;", "\u00e6" }, {
+            "&AElig;", "\u00c6" }, {
+            "&ccedil;", "\u00e7" }, {
+            "&Ccedil;", "\u00c7" }, {
+            "&eacute;", "\u00e9" }, {
+            "&Eacute;", "\u00c9" }, {
+            "&aacute;", "\u00e1" }, {
+            "&Aacute;", "\u00c1" }, {
+            "&egrave;", "\u00e8" }, {
+            "&Egrave;", "\u00c8" }, {
+            "&ecirc;", "\u00ea" }, {
+            "&Ecirc;", "\u00ca" }, {
+            "&euml;", "\u00eb" }, {
+            "&Euml;", "\u00cb" }, {
+            "&iuml;", "\u00ef" }, {
+            "&Iuml;", "\u00cf" }, {
+            "&iacute;", "\u00ed" }, {
+            "&Iacute;", "\u00cd" }, {
+            "&atilde;", "\u00e3" }, {
+            "&Atilde;", "\u00c3" }, {
+            "&otilde;", "\u00f5" }, {
+            "&Otilde;", "\u00d5" }, {
+            "&oacute;", "\u00f3" }, {
+            "&Oacute;", "\u00d3" }, {
+            "&ocirc;", "\u00f4" }, {
+            "&Ocirc;", "\u00d4" }, {
+            "&ouml;", "\u00f6" }, {
+            "&Ouml;", "\u00d6" }, {
+            "&oslash;", "\u00f8" }, {
+            "&Oslash;", "\u00d8" }, {
+            "&szlig;", "\u00df" }, {
+            "&ugrave;", "\u00f9" }, {
+            "&Ugrave;", "\u00d9" }, {
+            "&uacute;", "\u00fa" }, {
+            "&Uacute;", "\u00da" }, {
+            "&ucirc;", "\u00fb" }, {
+            "&Ucirc;", "\u00db" }, {
+            "&uuml;", "\u00fc" }, {
+            "&Uuml;", "\u00dc" }, {
             "&nbsp;", " " }, {
             "&reg;", "\u00AE" }, {
             "&copy;", "\u00A9" }, {
@@ -964,99 +965,99 @@ public class TextUtil {
             return "&amp;";
         case '"':
             return "&quot;";
-        case 'à':
+        case '\u00e0':
             return "&agrave;";
-        case 'á':
+        case '\u00e1':
             return "&aacute;";
-        case 'À':
+        case '\u00c0':
             return "&Agrave;";
-        case 'Á':
+        case '\u00c1':
             return "&Aacute;";
-        case 'â':
+        case '\u00e2':
             return "&acirc;";
-        case 'Â':
+        case '\u00c2':
             return "&Acirc;";
-        case 'ä':
+        case '\u00e4':
             return "&auml;";
-        case 'Ä':
+        case '\u00c4':
             return "&Auml;";
-        case 'å':
+        case '\u00e5':
             return "&aring;";
-        case 'Å':
+        case '\u00c5':
             return "&Aring;";
-        case 'ã':
+        case '\u00e3':
             return "&atilde;";
-        case 'Ã':
+        case '\u00c3':
             return "&Atilde;";
-        case 'æ':
+        case '\u00e6':
             return "&aelig;";
-        case 'Æ':
+        case '\u00c6':
             return "&AElig;";
-        case 'ç':
+        case '\u00e7':
             return "&ccedil;";
-        case 'Ç':
+        case '\u00c7':
             return "&Ccedil;";
-        case 'é':
+        case '\u00e9':
             return "&eacute;";
-        case 'É':
+        case '\u00c9':
             return "&Eacute;";
-        case 'è':
+        case '\u00e8':
             return "&egrave;";
-        case 'È':
+        case '\u00c8':
             return "&Egrave;";
-        case 'ê':
+        case '\u00ea':
             return "&ecirc;";
-        case 'Ê':
+        case '\u00ca':
             return "&Ecirc;";
-        case 'ë':
+        case '\u00eb':
             return "&euml;";
-        case 'Ë':
+        case '\u00cb':
             return "&Euml;";
-        case 'í':
+        case '\u00ed':
             return "&iacute;";
-        case 'Í':
+        case '\u00cd':
             return "&Iacute;";
-        case 'ï':
+        case '\u00ef':
             return "&iuml;";
-        case 'Ï':
+        case '\u00cf':
             return "&Iuml;";
-        case 'õ':
+        case '\u00f5':
             return "&otilde;";
-        case 'Õ':
+        case '\u00d5':
             return "&Otilde;";
-        case 'ó':
+        case '\u00f3':
             return "&oacute;";
-        case 'ô':
+        case '\u00f4':
             return "&ocirc;";
-        case 'Ó':
+        case '\u00d3':
             return "&Oacute;";
-        case 'Ô':
+        case '\u00d4':
             return "&Ocirc;";
-        case 'ö':
+        case '\u00f6':
             return "&ouml;";
-        case 'Ö':
+        case '\u00d6':
             return "&Ouml;";
-        case 'ø':
+        case '\u00f8':
             return "&oslash;";
-        case 'Ø':
+        case '\u00d8':
             return "&Oslash;";
-        case 'ß':
+        case '\u00df':
             return "&szlig;";
-        case 'ù':
+        case '\u00f9':
             return "&ugrave;";
-        case 'Ù':
+        case '\u00d9':
             return "&Ugrave;";
-        case 'ú':
+        case '\u00fa':
             return "&uacute;";
-        case 'Ú':
+        case '\u00da':
             return "&Uacute;";
-        case 'û':
+        case '\u00fb':
             return "&ucirc;";
-        case 'Û':
+        case '\u00db':
             return "&Ucirc;";
-        case 'ü':
+        case '\u00fc':
             return "&uuml;";
-        case 'Ü':
+        case '\u00dc':
             return "&Uuml;";
         case '\u00AE':
             return "&reg;";
