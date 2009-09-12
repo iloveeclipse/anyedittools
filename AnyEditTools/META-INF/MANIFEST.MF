@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.3.0",
  org.eclipse.core.net,
  org.eclipse.jdt.launching;resolution:=optional,
  org.eclipse.jdt.ui;resolution:=optional,
- org.eclipse.jdt.core;resolution:=optional
+ org.eclipse.jdt.core;resolution:=optional,
+ org.junit;resolution:=optional
 Eclipse-LazyStart: true
 Export-Package: de.loskutov.anyedit,
  de.loskutov.anyedit.compare,
