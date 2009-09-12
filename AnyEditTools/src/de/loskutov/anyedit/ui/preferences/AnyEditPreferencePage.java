@@ -93,6 +93,8 @@ IWorkbenchPreferencePage, SelectionListener {
 
     protected Text disallowedInPathText;
 
+    protected Text lineSeparatorRegex;
+
     protected Text requiredInPathText;
 
     protected Button requiredInPathEnabledCheck;
@@ -300,6 +302,10 @@ IWorkbenchPreferencePage, SelectionListener {
                 store.getString(IAnyEditConstants.CHARACTERS_REQUIRED_IN_PATH),
                 openFileComposite, true, SWT.NONE);
 
+        lineSeparatorRegex = createLabeledText(Messages.pref_lineSeparatorRegex,
+                Messages.pref_lineSeparatorRegexTip,
+                store.getString(IAnyEditConstants.LINE_SEPARATOR_REGEX),
+                openFileComposite, true, SWT.NONE);
 
         requiredInPathEnabledCheck.addSelectionListener(new SelectionListener() {
             public void widgetSelected(SelectionEvent e) {
@@ -637,6 +643,10 @@ IWorkbenchPreferencePage, SelectionListener {
     public boolean performOk() {
         IPreferenceStore store = getPreferenceStore();
 
+        if (!TextUtil.isValidLineSeparatorRegex(lineSeparatorRegex.getText())) {
+        	return false;
+        }
+
         fileFilterContentProvider.saveFilters();
 
         store.setValue(IAnyEditConstants.EDITOR_TAB_WIDTH, tabWidthText.getText());
@@ -646,6 +656,8 @@ IWorkbenchPreferencePage, SelectionListener {
                 disallowedInPathText.getText());
         store.setValue(IAnyEditConstants.USE_REQUIRED_IN_PATH_CHARACTERS,
                 requiredInPathEnabledCheck.getSelection());
+        store.setValue(IAnyEditConstants.LINE_SEPARATOR_REGEX,
+                lineSeparatorRegex.getText());
         store.setValue(IAnyEditConstants.HIDE_OPEN_TYPE_ACTION,
                 hideOpenTypeCheck.getSelection());
         store.setValue(IAnyEditConstants.INCLUDE_DERIVED_RESOURCES,
@@ -772,6 +784,8 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getDefaultString(IAnyEditConstants.CHARACTERS_REQUIRED_IN_PATH));
         requiredInPathEnabledCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.USE_REQUIRED_IN_PATH_CHARACTERS));
+        lineSeparatorRegex.setText(store
+                .getDefaultString(IAnyEditConstants.LINE_SEPARATOR_REGEX));
         hideOpenTypeCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.HIDE_OPEN_TYPE_ACTION));
         includeDerivedCheck.setSelection(store

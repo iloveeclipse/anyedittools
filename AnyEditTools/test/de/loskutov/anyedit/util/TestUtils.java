@@ -34,7 +34,7 @@ public class TestUtils extends TestCase {
 
         tu.setCharsDisallowedInPath(TextUtil.DEFAULT_CHARACTERS_DISALLOWED_IN_PATH);
 
-        Field isWindows = EclipseUtils.class.getField("isWindows");
+        Field isWindows = EclipseUtils.class.getDeclaredField("isWindows");
         isWindows.setAccessible(true);
 
         isWindows.set(null, Boolean.TRUE);
@@ -54,7 +54,7 @@ public class TestUtils extends TestCase {
         tu.setCharsDisallowedInPath(":" + TextUtil.DEFAULT_CHARACTERS_DISALLOWED_IN_PATH);
         for (int i = firstCursorIdx; i < firstPart.length(); i++) {
             path = tu.findPath(text, i);
-            assertEquals("\\temp\\B.txt", path);
+            assertEquals("temp\\B.txt", path);
         }
 
         /*
@@ -85,10 +85,11 @@ public class TestUtils extends TestCase {
         // first char after colon
         int firstCursorIdx = 2;
         String currText;
+        TextUtil tu = TextUtil.getDefaultTextUtilities();
         for (int i = firstCursorIdx; i < firstPart.length(); i++) {
             currText = text.substring(i);
             for (int j = 0; i < firstPart.length(); i++) {
-                int lineRef = TextUtil.findLineReference(currText, j);
+                int lineRef = tu.findLineReferenceRegex(currText, j);
                 assertEquals("idx: " + i + "/" + j , 10, lineRef);
             }
         }
@@ -159,7 +160,7 @@ public class TestUtils extends TestCase {
 
     public void testCapitalize() {
         String string = TextUtil.capitalize("abcdefghijklmnopqrstuvwxyz0123456789,.;:-_צה<>|@*+~#'`´?ß\\");
-        assertEquals(string, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;:-_ײִ<>|@*+~#'`´?SS\\");
+        assertEquals(string, "Abcdefghijklmnopqrstuvwxyz0123456789,.;:-_צה<>|@*+~#'`´?ß\\");
     }
 
     public void testInvertCase() {

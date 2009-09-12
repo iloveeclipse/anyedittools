@@ -14,9 +14,11 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
+import de.loskutov.anyedit.Messages;
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
 
@@ -42,6 +44,8 @@ public class TextUtil {
     public static final String DEFAULT_CHARACTERS_DISALLOWED_IN_PATH = EclipseUtils.isWindows()?
         " \n\"'*?><|=(){};&$,%@" : " \n\"'*?><|=(){};&$,%@:"; // ':' is invalid in some cases too
 
+    public static final String DEFAULT_LINE_SEPARATOR_REGEX = ":|\\s+";
+
     private static final String INVALID_PATH_ENDS_CHARACTERS = "/\\";
 
     public static final boolean DEFAULT_UNICODIFY_ALL = false;
@@ -55,6 +59,8 @@ public class TextUtil {
     private String charsDisallowedInPath;
 
     private String charsRequiredInPath;
+
+    private String lineSeparatorRegex;
 
     private int base64LineLength;
 
@@ -339,18 +345,57 @@ public class TextUtil {
     /**
      * Search for occurencies of line references in text, like
      * <pre>
+     * foo/Foo.java RegexSeparator 156
+     * </pre>
+     * If the regular expression separator can't be compiled it just uses the separator as string.
+	 * @param line
+	 * @param startOffset
+	 * @return integer value guessed as line reference in text (this is not a offset in given line!!!)
+	 */
+	public int findLineReferenceRegex(String line, int startOffset) {
+		try {
+        	Pattern p = Pattern.compile("(" + getLineSeparatorRegex() + ")(\\d+)" );
+        	Matcher m = p.matcher(line);
+        	if(m.find()){
+        	    int groupCount = m.groupCount();
+        	    if(groupCount == 0){
+        	        return -1;
+        	    }
+        	    String group = m.group(groupCount);
+        	    if(group == null){
+        	        return -1;
+        	    }
+        	    try {
+        	        return Integer.parseInt(group);
+        	    } catch (Exception e) {
+        	        // ignore, there was no line info?
+        	        return -1;
+        	    }
+        	}
+
+        } catch (PatternSyntaxException e) {
+        	//since input values in preferences dialog are checked for valid patterns
+        	//exception normally can't happen.
+        	return findLineReference(line, startOffset);
+        }
+        return -1;
+	}
+
+    /**
+     * Search for occurencies of line references in text, like
+     * <pre>
      * foo/Foo.java:156
      * </pre>
      * @return integer value guessed as line reference in text (this is not a offset in given line!!!)
      */
-    public static int findLineReference(String line, int startOffset) {
+    private int findLineReference(String line, int startOffset) {
         if (line == null || line.length() == 0 || startOffset >= line.length()
                 || startOffset < 0) {
             return -1; // shit in, shit out
         }
 
         // search for first ':', if any
-        int doppIndx = line.indexOf(':', startOffset);
+        int doppIndx = line.indexOf(getLineSeparatorRegex(), startOffset);
 
         // means > -1 and not the same occurence
         if (doppIndx > startOffset) {
@@ -465,6 +510,10 @@ public class TextUtil {
         return charsRequiredInPath;
     }
 
+    public String getLineSeparatorRegex() {
+        return lineSeparatorRegex;
+    }
+
     public boolean isUseRequiredInPathChars() {
         return useRequiredInPathChars;
     }
@@ -475,6 +524,10 @@ public class TextUtil {
 
     public void setCharsRequiredInPath(String string) {
         charsRequiredInPath = string;
+    }
+
+    public void setLineSeparatorRegex(String string) {
+        lineSeparatorRegex = string;
     }
 
     public void setUseRequiredInPathChars(boolean b) {
@@ -620,6 +673,16 @@ public class TextUtil {
         return "Charset '" + charset + "' does not support encoding for \\u" + unicodeValue + ".";
     }
 
+    public static boolean isValidLineSeparatorRegex(String regex) {
+    	try {
+        	Pattern.compile(regex);
+            return true;
+        } catch (PatternSyntaxException e) {
+        	AnyEditToolsPlugin.errorDialog(Messages.OpenLineSeparatorRegex_WarningInvalidRegex, e);
+        	return false;
+        }
+    }
+
     public static synchronized void updateTextUtils() {
         TextUtil textUtils = getInstance();
         IPreferenceStore store = AnyEditToolsPlugin.getDefault().getPreferenceStore();
@@ -627,6 +690,9 @@ public class TextUtil {
                 .getString(IAnyEditConstants.CHARACTERS_DISALLOWED_IN_PATH));
         textUtils.setCharsRequiredInPath(store
                 .getString(IAnyEditConstants.CHARACTERS_REQUIRED_IN_PATH));
+        textUtils.setLineSeparatorRegex(store
+                .getString(IAnyEditConstants.LINE_SEPARATOR_REGEX));
+
         textUtils.setUseRequiredInPathChars(store
                 .getBoolean(IAnyEditConstants.USE_REQUIRED_IN_PATH_CHARACTERS));
         textUtils.base64LineLength = store.getInt(IAnyEditConstants.BASE64_LINE_LENGTH);

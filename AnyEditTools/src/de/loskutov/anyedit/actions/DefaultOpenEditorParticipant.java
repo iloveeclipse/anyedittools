@@ -67,7 +67,7 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
         // only if line information available
         int caretPosition = EclipseUtils.getCaretPosition(selectionProvider);
         String line = getLinePart(doc, caretPosition);
-        int lineReference = TextUtil.findLineReference(line, 0);
+        int lineReference = TextUtil.getDefaultTextUtilities().findLineReferenceRegex(line, 0);
         return lineReference;
     }
 

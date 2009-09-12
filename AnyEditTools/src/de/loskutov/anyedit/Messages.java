@@ -83,6 +83,9 @@ public class Messages  extends NLS {
     public static String pref_requiredInPathEnabled;
     public static String pref_requiredInPathEnabledTip;
 
+    public static String pref_lineSeparatorRegex;
+    public static String pref_lineSeparatorRegexTip;
+
     public static String pref_saveAndTrim;
     public static String pref_saveAndTrimTip;
 
@@ -158,4 +161,6 @@ public class Messages  extends NLS {
     public static String SaveTo_MessageSelection;
     public static String SaveTo_MessageNoSelection;
     public static String SaveTo_MessageToggle;
+
+    public static String OpenLineSeparatorRegex_WarningInvalidRegex;
 }

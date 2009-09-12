@@ -44,6 +44,14 @@ public interface IAnyEditConstants {
     String CHARACTERS_DISALLOWED_IN_PATH = "disallowedInPath";
 
     /**
+     * A named preference that holds a regular expression describing the separator
+     * between file path and line number
+     * <p>
+     * Value is of type <code>String</code>
+     */
+    String LINE_SEPARATOR_REGEX = "lineSeparatorRegex";
+
+    /**
      * A named preference that holds the characters, required in file name/path
      * <p>
      * Value is of type <code>String</code>
