@@ -1,0 +1,76 @@
+##########################################################################################
+Artikel für den Eclipse Magazin Ausgabe 2/2010
+##########################################################################################
+
+AnyEdit plugin ist nicht der erste, den ich geschrieben habe, dafür aber der erfolgreichste.
+Allein in den letzten zwei Jahren wurde es über 160000 mal installiert [1], und auf der EPIC Seite [2]
+ist er in den Top-5 "best rated" Plugins aller Zeiten. Wie kam es dazu?
+
+Anfang 2003 (Eclipse 2.1 kam damals im März und nicht wie heute im Juni raus) arbeitete
+ich an einer sehr umfangreichen Web-Anwendung. Wie schrieben den JSP Code tatsächlich noch
+per Hand, und als IDE benutzten wir (was sonst?) Eclipse (ohne Webtools, denn das Projekt
+gab es damals noch gar nicht!). Der jsp Code den wir hatten war sehr tief verschachtelt,
+jeder "JSP-Include" hat weitere "Includes" referenziert, die weitere "Includes" hatten und
+so weiter. Kurzum, es war wirklich mühsam, in dem Code zu navigieren, Spass an der Arbeit
+stellt man sich irgendwie anders vor. Mein damaliger Kollege und Mentor Guido Grüning
+beschwerte sich also laut, dass der dumme Editor die im JSP Code referenzierten "Includes"
+oder Java Servlets nicht automatisch navigieren und öffnen kann, obwohl diese doch im
+selben Workspace liegen.
+
+Das andere Problem war bei dem jsp code die Einrückung und Leerzeichen am Ende der Zeilen.
+Da es damals noch keinen de-fakto Standart für die jsp-Editoren in Eclipse gab, und einige
+Entwickler auch nicht mal Eclipse benuzten, waren die jsp Dateien voll von kreativen
+Ideen zum Thema "Ich benutze mal x tabs und y spaces zum Einrücken". Der Code war dann auch
+dementsprechend gut lesbar... Ausser dem "ästetischen" Aspect ist es sicherlich auch ein
+grosses Hindernis, wenn man versuchte, die Logik der verschachtelten jsp Fragmente anhand
+der Einrückung nachzuvollziehen. Zusätzlich macht es auch noch viel Spass, solche jsp
+Dateien zu mergen bzw. die Änderungen darin zu verfolgen, wo dann auch noch als das
+"i"-Tüpfelchen die hängende Leerzeichen am Zeilenende besonders stören (der Compare-Editor
+in Eclipse war damals nicht so mächtig wie Heute und markierte die ganze Zeile als verändert an).
+
+Da ich schon mal einige Erfahrung mit Eclipse Programmierung hatte (mein Erstling war
+JDepend4Eclipse [3]), hab ich gedacht, dass ich es probieren soll, diese fehlende "Navigation"
+und "White-Space-Formatierung" in Eclipse einzubauen. So bekamen Eclipse Editoren
+"Open Type under Cursor" und "Open File under Cursor" Menus, und beim Speichern hat AnyEdit
+automatisch das "White-Space" korrekt formatiert und lästige Leerzeichen am Zeilenende entfernt.
+Zuerst waren das nur einige wenige Editoren, die ich mit Hilfe von AnyEdit "aufgepimpt" habe, aber mit
+der Zeit unterstützte AnyEdit mehr und mehr, um nun funktioniert es einfach mit allen Texteditoren.
+
+Weiterer Einsatzgebiet für die "Open Type" (meine Lieblingsfunktion in AnyEdit) ist definitiv
+die Unterstützung von aller Art Server-Logdateien und der Konsolenausgabe, die oft Stack Traces
+oder Dateiverweise enthalten. AnyEdit kommt hier zu Hilfe, indem er aus jeder erdenklichen
+Textauswahl die passende Datei oder Java Klasse (im richtigen Projekt) berechnen und öffnen kann,
+und anschlissend springt er sogar zu der richtigen Zeile.
+
+Angefangen mit der Konvertierung von Tabs zu Leerzeichen, gab es eine logische Vortsetzung
+in die Richtung "universelles" Konvertieren von A nach B und zurück. So ist es bei den Servlets
+und jsp's üblich, html-code "on the fly" zu generieren, und z.B. die Teile der vorformatierten
+html-Bausteinen aus dem Datanbanken oder preparierten xml Templates einfügen.
+Versteht dann der Datenbank keine Sonderzeichen, oder soll der html code mitten in der xml
+Datei stehen, muss man viele Sonderzeichen (und auch "<>") als html-Entities abspeichern.
+Dies ist äußerst mühsam, Fehleranfällig und macht überhaupt kein Spass. Der html Code, der
+davor noch sohnenklar war, sieht plötzlich unleserlich aus, und es ist nicht mal garantiert,
+dass es dann beim wiedereinfügen in die html Seite syntaxisch richtig ist. Also, eine
+ideale Aufgabe für AnyEdit :-). Aus der gleichen Ecke kamen dann weitere Erweiterungen:
+konvertieren von und zu Unicode, Base64, Camel Case etc.
+
+Als letztes Schmankerl darf ich die "Compare with..." Funktionen vorstellen, die ich fast
+täglich benutze. Wenn man Code Reviews macht, hat man oft das Problem die externen Dateien
+(außerhalb der Eclipse Workspace), zwei geöffneten Editoren oder zwei ähnlichen Stellen
+in der gleichen Datei vergleichen zu wollen. Eclipse bietet da nichts, und so kommt wie
+immer AnyEdit zum Einsatz: um zwei verdächtig ähnlichen Stellen in der selben Datei zu
+vergleichen, kopiert man einfach eine Stelle in die Zwischenablage und dann vergleicht die
+zweite Stelle mittels "Compare with Clipboard" mit der ersten. Der Vergleich von zwei
+geöffneten Editoren oder externen Dateien ist auch dank AnyEdit kein Problem mehr.
+
+AnyEdit ist voll von vielen anderen kleinen und nutzlichen Funktionen, die mir mein Leben
+als Programmierer leichter machen und mich von müsamen und langweiligen Aufgaben befreien.
+
+Bei der Entwickling halfen mir besonders die kreativen Vorschläge der AnyEdit Benutzer.
+Ohne dieser würde AnyEdit heute nicht der Schweizermesser unter den Eclipse Werkzeugen sein,
+der er ist. Daher anschliessend vielen Dank an alle, die mir mit Kommentaren und Vorschlägen
+geholfen haben.
+
+[1] http://code.google.com/p/anyedittools/downloads/
+[2] http://www.eclipseplugincentral.com/
+[3] http://andrei.gmxhome.de/jdepend4eclipse/index.html
