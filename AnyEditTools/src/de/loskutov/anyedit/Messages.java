@@ -68,6 +68,9 @@ public class Messages  extends NLS {
     public static String pref_removeTrailingSpaces;
     public static String pref_removeTrailingSpacesTip;
 
+    public static String pref_addNewline;
+    public static String pref_addNewlineTip;
+
     public static String pref_replaceAllTabs;
     public static String pref_replaceAllTabsTip;
 

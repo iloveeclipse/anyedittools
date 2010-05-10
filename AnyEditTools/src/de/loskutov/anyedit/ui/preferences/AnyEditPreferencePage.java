@@ -181,6 +181,8 @@ IWorkbenchPreferencePage, SelectionListener {
 
     private Button useWorkspaceScopeCheck;
 
+    private Button addNewLineCheck;
+
     public AnyEditPreferencePage() {
         super();
         setPreferenceStore(AnyEditToolsPlugin.getDefault().getPreferenceStore());
@@ -375,6 +377,11 @@ IWorkbenchPreferencePage, SelectionListener {
         removeTrailingSpacesCheck = createLabeledCheck(Messages.pref_removeTrailingSpaces,
                 Messages.pref_removeTrailingSpacesTip,
                 store.getBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES),
+                spacesComposite);
+
+        addNewLineCheck = createLabeledCheck(Messages.pref_addNewline,
+                Messages.pref_addNewlineTip,
+                store.getBoolean(IAnyEditConstants.ADD_NEW_LINE),
                 spacesComposite);
 
         replaceAllTabsCheck = createLabeledCheck(Messages.pref_replaceAllTabs,
@@ -673,6 +680,10 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getSelection());
         store.setValue(IAnyEditConstants.REMOVE_TRAILING_SPACES,
                 removeTrailingSpacesCheck.getSelection());
+
+        store.setValue(IAnyEditConstants.ADD_NEW_LINE,
+                addNewLineCheck.getSelection());
+
         store.setValue(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES,
                 replaceAllTabsCheck.getSelection());
         store.setValue(IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS,
@@ -804,6 +815,8 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getDefaultBoolean(IAnyEditConstants.SAVE_DIRTY_BUFFER));
         removeTrailingSpacesCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES));
+        addNewLineCheck.setSelection(store
+                .getDefaultBoolean(IAnyEditConstants.ADD_NEW_LINE));
         replaceAllTabsCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES));
         replaceAllSpacesCheck.setSelection(store

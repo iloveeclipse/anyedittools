@@ -79,7 +79,7 @@ public class Spaces extends AbstractTextAction {
             removeTrailing = isRemoveTrailingSpaceEnabled(prefs);
             tabsToSpaces = actionID.startsWith(ACTION_ID_CONVERT_TABS);
             convertEnabled = true;
-            addLineEnabled = false;
+            addLineEnabled = isAddLineEnabled(prefs);
         }
 
         int tabWidth = getTabWidth(getFile(), prefs);
@@ -190,6 +190,10 @@ public class Spaces extends AbstractTextAction {
 
     private boolean isSaveAndConvertEnabled(CombinedPreferences prefs) {
         return prefs.getBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED);
+    }
+
+    private boolean isAddLineEnabled(CombinedPreferences prefs) {
+        return prefs.getBoolean(IAnyEditConstants.ADD_NEW_LINE);
     }
 
     protected boolean isRemoveTrailingSpaceEnabled(CombinedPreferences prefs) {

@@ -86,6 +86,15 @@ public interface IAnyEditConstants {
     String REMOVE_TRAILING_SPACES = "removeTrailingSpaces";
 
     /**
+     * A named preference that controls if if while "tabs to spaces" we should
+     * add a new line of the end of file.
+     * <p>
+     * Value is of type <code>Boolean</code>.
+     * </p>
+     */
+    String ADD_NEW_LINE = "addNewLine";
+
+    /**
      * A named preference that controls if while "tabs to spaces" we should
      * replace all existing tabs (not only leading)
      * <p>

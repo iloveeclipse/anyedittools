@@ -128,6 +128,8 @@ public class ProjectPreferencePage extends PropertyPage {
 
     private Link workspaceSettingsLink;
 
+    private Button addNewLineCheck;
+
     public ProjectPreferencePage() {
         super();
     }
@@ -217,6 +219,8 @@ public class ProjectPreferencePage extends PropertyPage {
 
         prefs.putBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES,
                 removeTrailingSpacesCheck.getSelection());
+        prefs.putBoolean(IAnyEditConstants.ADD_NEW_LINE,
+                addNewLineCheck.getSelection());
         prefs.putBoolean(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES,
                 replaceAllTabsCheck.getSelection());
         prefs.putBoolean(IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS,
@@ -265,6 +269,8 @@ public class ProjectPreferencePage extends PropertyPage {
 
         removeTrailingSpacesCheck.setSelection(defaultStore
                 .getDefaultBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES));
+        addNewLineCheck.setSelection(defaultStore
+                .getDefaultBoolean(IAnyEditConstants.ADD_NEW_LINE));
         replaceAllTabsCheck.setSelection(defaultStore
                 .getDefaultBoolean(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES));
         replaceAllSpacesCheck.setSelection(defaultStore
@@ -418,6 +424,7 @@ public class ProjectPreferencePage extends PropertyPage {
         useJavaTabsCheck.setEnabled(selection);
         useModulo4TabsCheck.setEnabled(selection);
         removeTrailingSpacesCheck.setEnabled(selection);
+        addNewLineCheck.setEnabled(selection);
         replaceAllTabsCheck.setEnabled(selection);
         replaceAllSpacesCheck.setEnabled(selection);
         setFilterButtonsEnabled(selection);
@@ -938,6 +945,13 @@ public class ProjectPreferencePage extends PropertyPage {
                 Messages.pref_removeTrailingSpacesTip, prefs.getBoolean(
                         IAnyEditConstants.REMOVE_TRAILING_SPACES, defaultStore
                         .getBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES)),
+                        spacesComposite);
+
+        addNewLineCheck = AnyEditPreferencePage.createLabeledCheck(
+                Messages.pref_addNewline,
+                Messages.pref_addNewlineTip, prefs.getBoolean(
+                        IAnyEditConstants.ADD_NEW_LINE, defaultStore
+                        .getBoolean(IAnyEditConstants.ADD_NEW_LINE)),
                         spacesComposite);
 
         replaceAllTabsCheck = AnyEditPreferencePage
