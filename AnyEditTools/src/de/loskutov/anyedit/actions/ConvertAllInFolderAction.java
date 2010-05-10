@@ -13,8 +13,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -59,13 +59,13 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
     }
 
     private IResource getResource(Object selection) {
-        if(selection instanceof IFolder || selection instanceof IFile) {
+        if(selection instanceof IContainer || selection instanceof IFile) {
             return (IResource)selection;
         }
         if(selection instanceof IAdaptable) {
             IAdaptable adaptable= (IAdaptable) selection;
             Object adapter = adaptable.getAdapter(IResource.class);
-            if(adapter instanceof IFolder || adapter instanceof IFile){
+            if(adapter instanceof IContainer || adapter instanceof IFile){
                 return (IResource) adapter;
             }
         }
@@ -109,8 +109,8 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
                                         && !monitor.isCanceled(); i++) {
 
                                     Object o = selectedResources.get(i);
-                                    if(o instanceof IFolder) {
-                                        addAllFiles((IFolder) o,
+                                    if(o instanceof IContainer) {
+                                        addAllFiles((IContainer) o,
                                                 selectedFiles, monitor);
                                     } else if(o instanceof IFile){
                                         if (selectedFiles.contains(o)) {
@@ -139,9 +139,9 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
         super.run(action);
     }
 
-    protected void addAllFiles(IFolder folder, List fileList, IProgressMonitor monitor) {
+    protected void addAllFiles(IContainer container, List fileList, IProgressMonitor monitor) {
         try {
-            IResource[] resources = folder.members();
+            IResource[] resources = container.members();
             for (int i = 0; i < resources.length && !monitor.isCanceled(); i++) {
                 monitor.internalWorked(1);
                 IResource resource = resources[i];
@@ -150,12 +150,12 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
                         continue;
                     }
                     fileList.add(resource);
-                } else if (resource.getType() == IResource.FOLDER) {
-                    addAllFiles((IFolder) resource, fileList, monitor);
+                } else if (resource.getType() == IResource.FOLDER || resource.getType() == IResource.PROJECT) {
+                    addAllFiles((IContainer) resource, fileList, monitor);
                 }
             }
         } catch (CoreException e) {
-            AnyEditToolsPlugin.logError("Couldn't collect all files for convert action in folder " + folder, e);
+            AnyEditToolsPlugin.logError("Couldn't collect all files for convert action in folder " + container, e);
         }
     }
 
