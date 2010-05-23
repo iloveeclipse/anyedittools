@@ -26,6 +26,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IEditorInput;
 
@@ -253,7 +254,7 @@ public class SaveToFileAction extends AbstractOpenAction {
     }
 
     private File getFileFromUser() {
-        FileDialog fd = new FileDialog(AnyEditToolsPlugin.getShell());
+        FileDialog fd = new FileDialog(AnyEditToolsPlugin.getShell(), SWT.SAVE);
         if (lastUsedFile == null) {
             String property = System.getProperty("user.home");
             fd.setFilterPath(property);
