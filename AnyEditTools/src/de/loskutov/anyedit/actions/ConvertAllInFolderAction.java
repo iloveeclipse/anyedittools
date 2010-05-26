@@ -51,14 +51,16 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
                 }
             }
         }
-        action.setEnabled(getEnablement());
+        if(action != null) {
+            action.setEnabled(getEnablement());
+        }
     }
 
-    private boolean getEnablement() {
+    protected boolean getEnablement() {
         return !selectedResources.isEmpty();
     }
 
-    private IResource getResource(Object selection) {
+    protected IResource getResource(Object selection) {
         if(selection instanceof IContainer || selection instanceof IFile) {
             return (IResource)selection;
         }

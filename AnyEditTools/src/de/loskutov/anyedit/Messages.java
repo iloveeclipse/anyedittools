@@ -150,6 +150,7 @@ public class Messages  extends NLS {
     public static String ConvertAllInFolder_warnMessage;
     public static String ConvertAllInFolder_toggleMessage;
     public static String ConvertAllInFolder_task;
+    public static String CollectAllInFolder_task;
     public static String ConvertAll_task;
     public static String ConvertUnicode_title;
     public static String ConvertUnicode_warn;

@@ -421,6 +421,14 @@
                menubarPath="file/save.ext"
                style="push">
          </action>
+         <action
+               class="de.loskutov.anyedit.actions.CountAllInFolderAction"
+               icon="platform:/plugin/org.eclipse.ui.ide/icons/full/markers/help_small.gif"
+               id="de.loskutov.anyedit.countAllInFolder"
+               label="%countAll"
+               menubarPath="file/save.ext"
+               style="push">
+         </action>
       </actionSet>
 
 
@@ -543,6 +551,12 @@
             defaultHandler="de.loskutov.anyedit.actions.SaveToFileAction"
             id="AnyEdit.saveToFile.command"
             name="%saveToFile"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.CountAllInFolderAction"
+            id="AnyEdit.countAll.command"
+            name="%countAll"/>
 
       <!-- editor actions -->
 
