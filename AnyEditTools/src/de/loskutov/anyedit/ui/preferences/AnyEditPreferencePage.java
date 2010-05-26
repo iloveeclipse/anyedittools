@@ -487,7 +487,7 @@ IWorkbenchPreferencePage, SelectionListener {
         ratingComposite.setLayout(layout);
         gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
         ratingComposite.setLayoutData(gridData);
-        ratingComposite.setText("Rate AnyEdit plugin on EPIC");
+        ratingComposite.setText("Support AnyEdit plugin and get support too :-)");
 
         RateIt.createTextArea(ratingComposite);
     }
