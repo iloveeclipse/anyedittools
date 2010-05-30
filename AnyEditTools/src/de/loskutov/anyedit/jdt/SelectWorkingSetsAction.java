@@ -48,9 +48,7 @@ public class SelectWorkingSetsAction extends Action implements IWSAction {
                 return;
             }
             PackageExplorerPart viewPart = (PackageExplorerPart) part;
-            // Eclipse 3.3: ViewActionGroup.SHOW_WORKING_SETS, value is 2
-            // XXX Eclipse 3.4: PackageExplorerPart.WORKING_SETS_AS_ROOTS
-            int showWS = 2;
+            int showWS = PackageExplorerPart.WORKING_SETS_AS_ROOTS;
             if (viewPart.getRootMode() != showWS) {
                 viewPart.rootModeChanged(showWS);
             }
