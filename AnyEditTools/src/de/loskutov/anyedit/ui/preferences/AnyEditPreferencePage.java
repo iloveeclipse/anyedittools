@@ -489,7 +489,7 @@ IWorkbenchPreferencePage, SelectionListener {
         ratingComposite.setLayoutData(gridData);
         ratingComposite.setText("Support AnyEdit plugin and get support too :-)");
 
-        RateIt.createTextArea(ratingComposite);
+        SupportPanel.createSupportLinks(ratingComposite);
     }
 
     private void createTabAutoSave() {
