@@ -22,9 +22,11 @@ import de.loskutov.anyedit.util.EclipseUtils;
 import de.loskutov.anyedit.util.TextUtil;
 
 public class OpenType extends AbstractOpenAction {
+
     private InternalOpenType defaultAction;
+
     protected void handleAction(IDocument doc,
-        ISelectionProvider selectionProvider, IEditorInput currentInput) {
+            ISelectionProvider selectionProvider, IEditorInput currentInput) {
 
         String selectedText = guessType(doc, selectionProvider);
 
@@ -43,6 +45,10 @@ public class OpenType extends AbstractOpenAction {
             typeOpened = JdtUtils.searchAndOpenType(selectedText);
         } catch (OperationCanceledException e) {
             //fix similar to https://bugs.eclipse.org/bugs/show_bug.cgi?id=66436
+            return;
+        } catch (NoClassDefFoundError e) {
+            // no JDT installed
+            AnyEditToolsPlugin.logError("There is no JDT installed: OpenType can't do anything", e);
             return;
         }
         if (typeOpened != 1) {
@@ -72,22 +78,18 @@ public class OpenType extends AbstractOpenAction {
         if (!textUtil.isJavaType(selectedText) && doc != null) {
             // try to search around caret
             int caretPosition = EclipseUtils
-                .getCaretPosition(selectionProvider);
+            .getCaretPosition(selectionProvider);
             try {
                 IRegion line = doc.getLineInformation(doc
-                    .getLineOfOffset(caretPosition));
+                        .getLineOfOffset(caretPosition));
                 String lineText = doc.get(line.getOffset(), line.getLength());
                 selectedText = textUtil.findJavaType(
-                    lineText, caretPosition - line.getOffset());
+                        lineText, caretPosition - line.getOffset());
             } catch (BadLocationException e) {
                 AnyEditToolsPlugin.logError(null, e);
                 selectedText = null;
             }
         }
-        //System.out.println("found type: " + selectedText);
         return selectedText;
     }
-
-
-
 }

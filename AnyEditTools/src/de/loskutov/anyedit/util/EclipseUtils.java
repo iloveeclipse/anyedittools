@@ -21,6 +21,7 @@ import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.internal.resources.Container;
 import org.eclipse.core.internal.resources.ICoreConstants;
 import org.eclipse.core.internal.resources.Workspace;
@@ -80,6 +81,18 @@ public final class EclipseUtils {
 
     private static Boolean isWindows;
 
+    private static final boolean hasJDT;
+    static {
+        boolean ok;
+        try {
+            JdtUtils.searchAndOpenType(null);
+            ok = true;
+        } catch (NoClassDefFoundError e) {
+            ok = false;
+        }
+        hasJDT = ok;
+    }
+
     private EclipseUtils() {
         super();
     }
@@ -101,7 +114,7 @@ public final class EclipseUtils {
             IFileEditorInput fileInput = (IFileEditorInput) currentInput;
             IFile currentFile = fileInput.getFile();
             project = currentFile.getProject();
-        } else if (isJavaInput(currentInput)) {
+        } else if (hasJDT && isJavaInput(currentInput)) {
             // it must be a class because java source *files* are IFileEditorInput's
             project = JdtUtils.getProjectForClass(currentInput);
         }
@@ -138,7 +151,7 @@ public final class EclipseUtils {
         if (configFile != null) {
             // config file exist => should be inside project
             project = configFile.getProject();
-        } else {
+        } else if(hasJDT){
             // no external config file...
             // try to find java project, if exist for this configuration
             project = JdtUtils.getProject(config);
@@ -154,7 +167,7 @@ public final class EclipseUtils {
                 String label = process.getLabel();
                 IPath ipath = new Path(label);
                 IFile[] files = ResourcesPlugin.getWorkspace().getRoot()
-                        .findFilesForLocation(ipath);
+                .findFilesForLocation(ipath);
                 if (files != null && files.length == 1) {
                     project = files[0].getProject();
                 }
@@ -194,7 +207,7 @@ public final class EclipseUtils {
         List resultList = new ArrayList();
         IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
         boolean useWorkspaceScope = AnyEditToolsPlugin.getDefault().getPreferenceStore()
-                .getBoolean(IAnyEditConstants.USE_WORKSPACE_SCOPE_FOR_SEARCH);
+        .getBoolean(IAnyEditConstants.USE_WORKSPACE_SCOPE_FOR_SEARCH);
         if (project != null) {
             resource = findInProject(currentPath, project, selectedText, resultList);
             if (resource != null) {
@@ -272,7 +285,7 @@ public final class EclipseUtils {
     }
 
     private static IFile findAbsoluteFile(String selectedText)
-            throws OperationCanceledException {
+    throws OperationCanceledException {
         IPath iPath = new Path(selectedText);
         File file = iPath.toFile();
         if (!file.isFile() || !file.canRead()) {
@@ -305,7 +318,7 @@ public final class EclipseUtils {
 
     private static IFile findInProjects(IProject[] projects, String currentPath,
             String selectedText, List checkedProjects, List resultList)
-            throws OperationCanceledException {
+    throws OperationCanceledException {
         for (int i = 0; i < projects.length; i++) {
             IFile resource = findInProject(currentPath, projects[i], selectedText,
                     resultList);
@@ -378,9 +391,10 @@ public final class EclipseUtils {
     private static IFile getWorkspaceFile(File file) throws OperationCanceledException {
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         IPath location = new Path(file.getAbsolutePath()); // Path.fromOSString();
-        IFile[] files = workspace.getRoot().findFilesForLocation(location);
+        IFile[] files = workspace.getRoot().findFilesForLocationURI(
+        	URIUtil.toURI(location.makeAbsolute()));
         List filesList = filterNonExistentFiles(files);
-        if (filesList == null || filesList.size() == 0) {
+        if (filesList == null || filesList.isEmpty()) {
             return null;
         }
         if (filesList.size() == 1) {
@@ -404,7 +418,7 @@ public final class EclipseUtils {
             bufferManager.connect(file.getFullPath(), LocationKind.IFILE,
                     new NullProgressMonitor());
             fileBuffer = bufferManager
-                    .getTextFileBuffer(file.getFullPath(), LocationKind.IFILE);
+            .getTextFileBuffer(file.getFullPath(), LocationKind.IFILE);
         } catch (CoreException e) {
             AnyEditToolsPlugin.logError(null, e);
         }
@@ -471,7 +485,7 @@ public final class EclipseUtils {
             return;
         }
         ITextFileBufferManager bufferManager = FileBuffers
-                .getTextFileBufferManager();
+        .getTextFileBufferManager();
         try {
             bufferManager.disconnect(buffer.getLocation(), LocationKind.IFILE,
                     new NullProgressMonitor());
@@ -559,7 +573,7 @@ public final class EclipseUtils {
         if (input != null) {
             String name = input.getName();
             String filterPerf = getCombinedPreferences(input)
-                    .getString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST);
+            .getString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST);
             String[] filters = parseList(filterPerf);
             if (matchFilter(name, filters)) {
                 return true;
@@ -645,7 +659,7 @@ public final class EclipseUtils {
         try {
             // here we could exclude derived resources
             boolean includeDerived = AnyEditToolsPlugin.getDefault().getPreferenceStore()
-                    .getBoolean(IAnyEditConstants.INCLUDE_DERIVED_RESOURCES);
+            .getBoolean(IAnyEditConstants.INCLUDE_DERIVED_RESOURCES);
             if (includeDerived) {
                 resources = container.members();
             } else {
@@ -673,7 +687,7 @@ public final class EclipseUtils {
      * @throws OperationCanceledException if user cancels the dialog
      */
     public static IFile queryFile(String path, IContainer input)
-            throws OperationCanceledException {
+    throws OperationCanceledException {
         Shell parent = AnyEditToolsPlugin.getShell();
 
         MyOpenResourceDialog dialog = new MyOpenResourceDialog(parent, input,
@@ -690,6 +704,10 @@ public final class EclipseUtils {
         }
 
         return (IFile) result[0];
+    }
+
+    public static boolean hasJDT() {
+        return hasJDT;
     }
 
     public static boolean isWindows() {
@@ -713,7 +731,7 @@ public final class EclipseUtils {
 
     public static IEditorPart getActiveEditor() {
         IWorkbenchWindow window = AnyEditToolsPlugin.getDefault().getWorkbench()
-                .getActiveWorkbenchWindow();
+        .getActiveWorkbenchWindow();
         if (window != null) {
             IWorkbenchPage page = window.getActivePage();
             if (page != null) {
@@ -752,7 +770,7 @@ public final class EclipseUtils {
         }
 
         public void accept(IResourceProxyVisitor visitor, int memberFlags)
-                throws CoreException {
+        throws CoreException {
             for (int i = 0; i < resources.size(); i++) {
                 ((IResource) resources.get(i)).accept(visitor, memberFlags);
             }

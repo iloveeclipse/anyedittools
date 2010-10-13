@@ -24,6 +24,7 @@ import org.eclipse.ui.part.PageBookView;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
+import de.loskutov.anyedit.util.EclipseUtils;
 
 public class EditorPropertyTester extends PropertyTester {
 
@@ -45,7 +46,7 @@ public class EditorPropertyTester extends PropertyTester {
     }
 
     private boolean showOpenType(IWorkbenchPart receiver, Object[] args, Object expectedValue) {
-        boolean hide = AnyEditToolsPlugin.getDefault().getPreferenceStore().getBoolean(
+        boolean hide = !EclipseUtils.hasJDT() || AnyEditToolsPlugin.getDefault().getPreferenceStore().getBoolean(
                 IAnyEditConstants.HIDE_OPEN_TYPE_ACTION);
         return !hide;
     }
