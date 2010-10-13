@@ -169,7 +169,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
             return null;
         }
         String path = uri.toString();
-        int dot = path.lastIndexOf(".");
+        int dot = path.lastIndexOf('.') + 1;
         if(dot >= 0){
             return path.substring(dot);
         }
