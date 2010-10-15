@@ -39,7 +39,7 @@ import de.loskutov.anyedit.AnyEditToolsPlugin;
  * @author Andrei
  */
 public class ExternalFileStreamContent extends BufferedContent implements StreamContent,
-    IEditableContent, IModificationDate, IEditableContentExtension {
+IEditableContent, IModificationDate, IEditableContentExtension {
 
     protected boolean dirty;
     private final ContentWrapper content;
@@ -134,7 +134,7 @@ public class ExternalFileStreamContent extends BufferedContent implements Stream
     public IStatus validateEdit(Shell shell) {
         File file = content.getFile();
         if(file.canWrite()) {
-           return Status.OK_STATUS;
+            return Status.OK_STATUS;
         }
         FileInfo fi = new FileInfo(file.getAbsolutePath());
         fi.setAttribute(EFS.ATTRIBUTE_READ_ONLY, false);
@@ -151,7 +151,7 @@ public class ExternalFileStreamContent extends BufferedContent implements Stream
     }
 
     public void dispose() {
-        // noop
+        discardBuffer();
     }
 
     public boolean isDisposed() {
@@ -159,7 +159,7 @@ public class ExternalFileStreamContent extends BufferedContent implements Stream
     }
 
     public void init(AnyeditCompareInput input) {
-        // noop
+        getContent();
     }
 
     public StreamContent recreate() {

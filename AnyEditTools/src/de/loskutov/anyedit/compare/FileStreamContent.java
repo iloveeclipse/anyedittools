@@ -10,6 +10,7 @@ package de.loskutov.anyedit.compare;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.eclipse.compare.ResourceNode;
 import org.eclipse.core.resources.IFile;
@@ -72,7 +73,7 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
     }
 
     public void dispose() {
-        // noop
+        discardBuffer();
     }
 
     public boolean isDisposed() {
@@ -80,7 +81,7 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
     }
 
     public void init(AnyeditCompareInput input) {
-        // noop
+        getContent();
     }
 
     public StreamContent recreate() {

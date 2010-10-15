@@ -25,8 +25,10 @@ public class ClipboardStreamContent implements StreamContent, IStreamContentAcce
 
     private final String type;
     private final String newLine;
-    private String clipboardContent;
+    private final String clipboardContent;
     private final String charset;
+    private final String lineSeparator;
+    private byte [] bytes;
 
     /**
      * @param type NOT null
@@ -42,6 +44,7 @@ public class ClipboardStreamContent implements StreamContent, IStreamContentAcce
         this.type = type;
         this.newLine = newLine;
         this.clipboardContent = clipboardContent;
+        lineSeparator = System.getProperty("line.separator");
     }
 
     public Image getImage() {
@@ -69,35 +72,34 @@ public class ClipboardStreamContent implements StreamContent, IStreamContentAcce
     }
 
     public InputStream getContents() throws CoreException {
-        if(clipboardContent != null){
-            String property = System.getProperty("line.separator");
-            if(newLine == null || newLine.equals(property)){
-                try {
-                    return new ByteArrayInputStream(clipboardContent.getBytes(charset));
-                } catch (UnsupportedEncodingException e) {
-                    return new ByteArrayInputStream(clipboardContent.getBytes());
-                }
-            }
-            String replaceAll = clipboardContent.replaceAll(property, newLine);
-            try {
-                return new ByteArrayInputStream(replaceAll.getBytes(charset));
-            } catch (UnsupportedEncodingException e) {
-                return new ByteArrayInputStream(replaceAll.getBytes());
-            }
-        }
-        return new ByteArrayInputStream(new byte[0]);
+        return new ByteArrayInputStream(bytes);
     }
 
     public void dispose() {
-        clipboardContent = null;
+        bytes = null;
     }
 
     public boolean isDisposed() {
-        return clipboardContent == null;
+        return bytes == null;
     }
 
     public void init(AnyeditCompareInput input) {
-        // noop
+        if(clipboardContent != null){
+            if(newLine == null || newLine.equals(lineSeparator)){
+                try {
+                    bytes = clipboardContent.getBytes(charset);
+                } catch (UnsupportedEncodingException e) {
+                    bytes = clipboardContent.getBytes();
+                }
+            }
+            String replaceAll = clipboardContent.replaceAll(lineSeparator, newLine);
+            try {
+                bytes = replaceAll.getBytes(charset);
+            } catch (UnsupportedEncodingException e) {
+                bytes = replaceAll.getBytes();
+            }
+        }
+        bytes = new byte[0];
     }
 
     public StreamContent recreate() {
