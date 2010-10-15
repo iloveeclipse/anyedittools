@@ -18,9 +18,9 @@ import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import de.loskutov.anyedit.Messages;
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
+import de.loskutov.anyedit.Messages;
 
 
 /**
@@ -42,7 +42,7 @@ public class TextUtil {
     public static final String DEFAULT_CHARACTERS_REQUIRED_IN_PATH = ".";
 
     public static final String DEFAULT_CHARACTERS_DISALLOWED_IN_PATH = EclipseUtils.isWindows()?
-        " \n\"'*?><|=(){};&$,%@" : " \n\"'*?><|=(){};&$,%@:"; // ':' is invalid in some cases too
+            " \n\"'*?><|=(){};&$,%@" : " \n\"'*?><|=(){};&$,%@:"; // ':' is invalid in some cases too
 
     public static final String DEFAULT_LINE_SEPARATOR_REGEX = ":|\\s+";
 
@@ -348,38 +348,38 @@ public class TextUtil {
      * foo/Foo.java RegexSeparator 156
      * </pre>
      * If the regular expression separator can't be compiled it just uses the separator as string.
-	 * @param line
-	 * @param startOffset
-	 * @return integer value guessed as line reference in text (this is not a offset in given line!!!)
-	 */
-	public int findLineReferenceRegex(String line, int startOffset) {
-		try {
-        	Pattern p = Pattern.compile("(" + getLineSeparatorRegex() + ")(\\d+)" );
-        	Matcher m = p.matcher(line);
-        	if(m.find()){
-        	    int groupCount = m.groupCount();
-        	    if(groupCount == 0){
-        	        return -1;
-        	    }
-        	    String group = m.group(groupCount);
-        	    if(group == null){
-        	        return -1;
-        	    }
-        	    try {
-        	        return Integer.parseInt(group);
-        	    } catch (Exception e) {
-        	        // ignore, there was no line info?
-        	        return -1;
-        	    }
-        	}
+     * @param line
+     * @param startOffset
+     * @return integer value guessed as line reference in text (this is not a offset in given line!!!)
+     */
+    public int findLineReferenceRegex(String line, int startOffset) {
+        try {
+            Pattern p = Pattern.compile("(" + getLineSeparatorRegex() + ")(\\d+)" );
+            Matcher m = p.matcher(line);
+            if(m.find()){
+                int groupCount = m.groupCount();
+                if(groupCount == 0){
+                    return -1;
+                }
+                String group = m.group(groupCount);
+                if(group == null){
+                    return -1;
+                }
+                try {
+                    return Integer.parseInt(group);
+                } catch (Exception e) {
+                    // ignore, there was no line info?
+                    return -1;
+                }
+            }
 
         } catch (PatternSyntaxException e) {
-        	//since input values in preferences dialog are checked for valid patterns
-        	//exception normally can't happen.
-        	return findLineReference(line, startOffset);
+            //since input values in preferences dialog are checked for valid patterns
+            //exception normally can't happen.
+            return findLineReference(line, startOffset);
         }
         return -1;
-	}
+    }
 
     /**
      * Search for occurencies of line references in text, like
@@ -605,7 +605,7 @@ public class TextUtil {
      * from given text
      */
     public String fromUnicode(String charset, String input)
-        throws UnsupportedOperationException {
+    throws UnsupportedOperationException {
         StringBuffer ret = new StringBuffer();
         Matcher matcher = UNICODE_PATTERN.matcher(input);
         String error = null;
@@ -674,12 +674,12 @@ public class TextUtil {
     }
 
     public static boolean isValidLineSeparatorRegex(String regex) {
-    	try {
-        	Pattern.compile(regex);
+        try {
+            Pattern.compile(regex);
             return true;
         } catch (PatternSyntaxException e) {
-        	AnyEditToolsPlugin.errorDialog(Messages.OpenLineSeparatorRegex_WarningInvalidRegex, e);
-        	return false;
+            AnyEditToolsPlugin.errorDialog(Messages.OpenLineSeparatorRegex_WarningInvalidRegex, e);
+            return false;
         }
     }
 
@@ -958,62 +958,62 @@ public class TextUtil {
      * Characters used for escape operations
      */
     private static final String[][] HTML_ESCAPE_CHARS = { {
-            "&lt;", "<" }, {
+        "&lt;", "<" }, {
             "&gt;", ">" }, {
-            "&amp;", "&" }, {
-            "&quot;", "\"" }, {
-            "&agrave;", "\u00e0" }, {
-            "&Agrave;", "\u00c0" }, {
-            "&acirc;", "\u00e2" }, {
-            "&auml;", "\u00e4" }, {
-            "&Auml;", "\u00c4" }, {
-            "&Acirc;", "\u00c2" }, {
-            "&aring;", "\u00e5" }, {
-            "&Aring;", "\u00c5" }, {
-            "&aelig;", "\u00e6" }, {
-            "&AElig;", "\u00c6" }, {
-            "&ccedil;", "\u00e7" }, {
-            "&Ccedil;", "\u00c7" }, {
-            "&eacute;", "\u00e9" }, {
-            "&Eacute;", "\u00c9" }, {
-            "&aacute;", "\u00e1" }, {
-            "&Aacute;", "\u00c1" }, {
-            "&egrave;", "\u00e8" }, {
-            "&Egrave;", "\u00c8" }, {
-            "&ecirc;", "\u00ea" }, {
-            "&Ecirc;", "\u00ca" }, {
-            "&euml;", "\u00eb" }, {
-            "&Euml;", "\u00cb" }, {
-            "&iuml;", "\u00ef" }, {
-            "&Iuml;", "\u00cf" }, {
-            "&iacute;", "\u00ed" }, {
-            "&Iacute;", "\u00cd" }, {
-            "&atilde;", "\u00e3" }, {
-            "&Atilde;", "\u00c3" }, {
-            "&otilde;", "\u00f5" }, {
-            "&Otilde;", "\u00d5" }, {
-            "&oacute;", "\u00f3" }, {
-            "&Oacute;", "\u00d3" }, {
-            "&ocirc;", "\u00f4" }, {
-            "&Ocirc;", "\u00d4" }, {
-            "&ouml;", "\u00f6" }, {
-            "&Ouml;", "\u00d6" }, {
-            "&oslash;", "\u00f8" }, {
-            "&Oslash;", "\u00d8" }, {
-            "&szlig;", "\u00df" }, {
-            "&ugrave;", "\u00f9" }, {
-            "&Ugrave;", "\u00d9" }, {
-            "&uacute;", "\u00fa" }, {
-            "&Uacute;", "\u00da" }, {
-            "&ucirc;", "\u00fb" }, {
-            "&Ucirc;", "\u00db" }, {
-            "&uuml;", "\u00fc" }, {
-            "&Uuml;", "\u00dc" }, {
-            "&nbsp;", " " }, {
-            "&reg;", "\u00AE" }, {
-            "&copy;", "\u00A9" }, {
-            "&euro;", "\u20A0" }, {
-            "&#8364;", "\u20AC" }
+                "&amp;", "&" }, {
+                    "&quot;", "\"" }, {
+                        "&agrave;", "\u00e0" }, {
+                            "&Agrave;", "\u00c0" }, {
+                                "&acirc;", "\u00e2" }, {
+                                    "&auml;", "\u00e4" }, {
+                                        "&Auml;", "\u00c4" }, {
+                                            "&Acirc;", "\u00c2" }, {
+                                                "&aring;", "\u00e5" }, {
+                                                    "&Aring;", "\u00c5" }, {
+                                                        "&aelig;", "\u00e6" }, {
+                                                            "&AElig;", "\u00c6" }, {
+                                                                "&ccedil;", "\u00e7" }, {
+                                                                    "&Ccedil;", "\u00c7" }, {
+                                                                        "&eacute;", "\u00e9" }, {
+                                                                            "&Eacute;", "\u00c9" }, {
+                                                                                "&aacute;", "\u00e1" }, {
+                                                                                    "&Aacute;", "\u00c1" }, {
+                                                                                        "&egrave;", "\u00e8" }, {
+                                                                                            "&Egrave;", "\u00c8" }, {
+                                                                                                "&ecirc;", "\u00ea" }, {
+                                                                                                    "&Ecirc;", "\u00ca" }, {
+                                                                                                        "&euml;", "\u00eb" }, {
+                                                                                                            "&Euml;", "\u00cb" }, {
+                                                                                                                "&iuml;", "\u00ef" }, {
+                                                                                                                    "&Iuml;", "\u00cf" }, {
+                                                                                                                        "&iacute;", "\u00ed" }, {
+                                                                                                                            "&Iacute;", "\u00cd" }, {
+                                                                                                                                "&atilde;", "\u00e3" }, {
+                                                                                                                                    "&Atilde;", "\u00c3" }, {
+                                                                                                                                        "&otilde;", "\u00f5" }, {
+                                                                                                                                            "&Otilde;", "\u00d5" }, {
+                                                                                                                                                "&oacute;", "\u00f3" }, {
+                                                                                                                                                    "&Oacute;", "\u00d3" }, {
+                                                                                                                                                        "&ocirc;", "\u00f4" }, {
+                                                                                                                                                            "&Ocirc;", "\u00d4" }, {
+                                                                                                                                                                "&ouml;", "\u00f6" }, {
+                                                                                                                                                                    "&Ouml;", "\u00d6" }, {
+                                                                                                                                                                        "&oslash;", "\u00f8" }, {
+                                                                                                                                                                            "&Oslash;", "\u00d8" }, {
+                                                                                                                                                                                "&szlig;", "\u00df" }, {
+                                                                                                                                                                                    "&ugrave;", "\u00f9" }, {
+                                                                                                                                                                                        "&Ugrave;", "\u00d9" }, {
+                                                                                                                                                                                            "&uacute;", "\u00fa" }, {
+                                                                                                                                                                                                "&Uacute;", "\u00da" }, {
+                                                                                                                                                                                                    "&ucirc;", "\u00fb" }, {
+                                                                                                                                                                                                        "&Ucirc;", "\u00db" }, {
+                                                                                                                                                                                                            "&uuml;", "\u00fc" }, {
+                                                                                                                                                                                                                "&Uuml;", "\u00dc" }, {
+                                                                                                                                                                                                                    "&nbsp;", " " }, {
+                                                                                                                                                                                                                        "&reg;", "\u00AE" }, {
+                                                                                                                                                                                                                            "&copy;", "\u00A9" }, {
+                                                                                                                                                                                                                                "&euro;", "\u20A0" }, {
+                                                                                                                                                                                                                                    "&#8364;", "\u20AC" }
 
     };
 
@@ -1184,13 +1184,13 @@ public class TextUtil {
      */
     public static String unescapeText(String s) {
         int i, j, k;
-        int arraySize = HTML_ESCAPE_CHARS.length;
-        if (s != null && (i = s.indexOf("&")) > -1) {
-            j = s.indexOf(";", i);
+        if (s != null && (i = s.indexOf('&')) > -1) {
+            j = s.indexOf(';', i);
             if (j > i) {
                 String temp = s.substring(i, j + 1);
                 // search in escape[][] if temp is there
                 k = 0;
+                int arraySize = HTML_ESCAPE_CHARS.length;
                 while (k < arraySize) {
                     if (HTML_ESCAPE_CHARS[k][0].equals(temp)) {
                         break;
@@ -1205,8 +1205,8 @@ public class TextUtil {
                             .toString();
                     return unescapeText(s); // recursive call
                 } else if (k == arraySize) {
-                    s = new StringBuffer(s.substring(0, i)).append("&")
-                            .append(unescapeText(s.substring(i + 1))).toString();
+                    s = new StringBuffer(s.substring(0, i)).append('&')
+                    .append(unescapeText(s.substring(i + 1))).toString();
                     return s;
                 }
             }

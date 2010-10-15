@@ -66,8 +66,6 @@ import de.loskutov.anyedit.util.EclipseUtils;
 
 public class ProjectPreferencePage extends PropertyPage {
 
-    private Color red;
-
     private TabFolder tabFolder;
 
     private Group saveComposite;
@@ -126,8 +124,6 @@ public class ProjectPreferencePage extends PropertyPage {
 
     private String fInvalidEditorText;
 
-    private Link workspaceSettingsLink;
-
     private Button addNewLineCheck;
 
     public ProjectPreferencePage() {
@@ -181,7 +177,7 @@ public class ProjectPreferencePage extends PropertyPage {
             }
         });
 
-        workspaceSettingsLink = createLink(composite, "Configure Workspace Settings...");
+        Link workspaceSettingsLink = createLink(composite, "Configure Workspace Settings...");
         workspaceSettingsLink
         .setLayoutData(new GridData(SWT.END, SWT.CENTER, true, false));
     }
@@ -322,7 +318,7 @@ public class ProjectPreferencePage extends PropertyPage {
         if (!isSaveHookEnabled) {
             saveComposite.setToolTipText(saveGroupText);
             Label label = new Label(saveComposite, SWT.WRAP);
-            red = new Color(tabFolder.getDisplay(), 255, 0, 0);
+            Color red = tabFolder.getDisplay().getSystemColor(SWT.COLOR_RED);
             label.setForeground(red);
             label.setText(Messages.pref_saveHookNotEnabled);
         }

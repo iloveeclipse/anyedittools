@@ -309,8 +309,8 @@ public final class EclipseUtils {
          * doesnt' work for external files
          */
         // TODO can we just use getLocalFile(URI) instead???
-        Workspace workspace = (Workspace) ResourcesPlugin.getWorkspace();
         if (iPath.segmentCount() >= ICoreConstants.MINIMUM_FILE_SEGMENT_LENGTH) {
+            Workspace workspace = (Workspace) ResourcesPlugin.getWorkspace();
             return (IFile) workspace.newResource(iPath, IResource.FILE);
         }
         return null;
@@ -392,7 +392,7 @@ public final class EclipseUtils {
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         IPath location = new Path(file.getAbsolutePath()); // Path.fromOSString();
         IFile[] files = workspace.getRoot().findFilesForLocationURI(
-        	URIUtil.toURI(location.makeAbsolute()));
+                URIUtil.toURI(location.makeAbsolute()));
         List filesList = filterNonExistentFiles(files);
         if (filesList == null || filesList.isEmpty()) {
             return null;
@@ -710,7 +710,7 @@ public final class EclipseUtils {
         return hasJDT;
     }
 
-    public static boolean isWindows() {
+    public static synchronized boolean isWindows() {
         if (isWindows == null) {
             String property;
             try {

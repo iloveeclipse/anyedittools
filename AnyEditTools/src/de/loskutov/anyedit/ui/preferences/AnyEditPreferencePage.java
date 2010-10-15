@@ -151,10 +151,6 @@ IWorkbenchPreferencePage, SelectionListener {
 
     private Table filterTable;
 
-    private Label tableLabel;
-
-    private Button addFilterButton;
-
     protected Button removeFilterButton;
 
     private Button enableAllButton;
@@ -651,7 +647,7 @@ IWorkbenchPreferencePage, SelectionListener {
         IPreferenceStore store = getPreferenceStore();
 
         if (!TextUtil.isValidLineSeparatorRegex(lineSeparatorRegex.getText())) {
-        	return false;
+            return false;
         }
 
         fileFilterContentProvider.saveFilters();
@@ -892,7 +888,7 @@ IWorkbenchPreferencePage, SelectionListener {
         container.setLayoutData(gd);
 
         // table label
-        tableLabel = new Label(container, SWT.WRAP);
+        Label tableLabel = new Label(container, SWT.WRAP);
         tableLabel.setText(Messages.pref_Defined_file_filters);
         gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
         gd.horizontalSpan = 2;
@@ -952,7 +948,7 @@ IWorkbenchPreferencePage, SelectionListener {
         buttonContainer.setLayout(buttonLayout);
 
         // Add filter button
-        addFilterButton = new Button(buttonContainer, SWT.PUSH);
+        Button addFilterButton = new Button(buttonContainer, SWT.PUSH);
         addFilterButton.setText(Messages.pref_Add_filter);
         addFilterButton.setToolTipText(Messages.pref_Add_filterTip);
         gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);

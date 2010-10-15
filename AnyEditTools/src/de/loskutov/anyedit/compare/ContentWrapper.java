@@ -186,8 +186,8 @@ public class ContentWrapper implements IActionFilter {
         if(!(target instanceof ContentWrapper)){
             return false;
         }
-        ContentWrapper content = (ContentWrapper) target;
         if("isModifiable".equals(attrName)){
+            ContentWrapper content = (ContentWrapper) target;
             return Boolean.valueOf(value).booleanValue() == content.isModifiable();
         }
         return false;

@@ -50,7 +50,7 @@ import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.util.TextUtil;
 
 public class TextStreamContent implements StreamContent, IStreamContentAccessor, IEditableContent,
- IEditableContentExtension {
+IEditableContentExtension {
 
     private static final String ANY_EDIT_COMPARE = "AnyEditTools.compare";
     private final String selectedText;
@@ -126,11 +126,7 @@ public class TextStreamContent implements StreamContent, IStreamContentAccessor,
     private void hookOnSelection() {
         try {
             IDocument document = editor.getDocument();
-            positionUpdater = new DefaultPositionUpdater(ANY_EDIT_COMPARE) {
-                public void update(DocumentEvent event) {
-                    super.update(event);
-                }
-            };
+            positionUpdater = new DefaultPositionUpdater(ANY_EDIT_COMPARE);
             document.addPositionCategory(ANY_EDIT_COMPARE);
             document.addPositionUpdater(positionUpdater);
             document.addPosition(ANY_EDIT_COMPARE, position);
@@ -248,7 +244,7 @@ public class TextStreamContent implements StreamContent, IStreamContentAccessor,
         return null;
     }
 
-    public boolean isEditable() {
+    public final boolean isEditable() {
         if (selectedText != null) {
             return !position.isDeleted && content.isModifiable() && !editor.isDisposed();
         }
@@ -304,7 +300,7 @@ public class TextStreamContent implements StreamContent, IStreamContentAccessor,
             return;
         }
         lineAnnotation = new Annotation(ANY_EDIT_COMPARE, false,
-                "This text is being compared with anoter one");
+        "This text is being compared with anoter one");
         IAnnotationModelExtension modelExtension = (IAnnotationModelExtension) extension;
         IAnnotationModel model = modelExtension.getAnnotationModel(TextStreamContent.class);
         if (model == null) {
