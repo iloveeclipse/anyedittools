@@ -10,12 +10,13 @@ package de.loskutov.anyedit.compare;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
+import org.eclipse.compare.ISharedDocumentAdapter;
 import org.eclipse.compare.ResourceNode;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 
@@ -27,6 +28,7 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
 
     private boolean dirty;
     private final ContentWrapper content;
+    private EditableSharedDocumentAdapter sharedDocumentAdapter;
 
     public FileStreamContent(ContentWrapper content) {
         super(content.getIFile());
@@ -50,7 +52,14 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
         if (!dirty) {
             return true;
         }
-
+        if (sharedDocumentAdapter != null) {
+            boolean documentSaved = sharedDocumentAdapter.saveDocument(
+                    sharedDocumentAdapter.getDocumentKey(this), true, pm);
+            if(documentSaved) {
+                dirty = false;
+            }
+            return documentSaved;
+        }
         byte[] bytes = getContent();
         ByteArrayInputStream is = new ByteArrayInputStream(bytes);
         IFile file = content.getIFile();
@@ -74,6 +83,9 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
 
     public void dispose() {
         discardBuffer();
+        if (sharedDocumentAdapter != null) {
+            sharedDocumentAdapter.releaseBuffer();
+        }
     }
 
     public boolean isDisposed() {
@@ -88,4 +100,30 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
         return new FileStreamContent(content);
     }
 
+    public Object getAdapter(Class adapter) {
+
+        if (adapter == ISharedDocumentAdapter.class) {
+            return getSharedDocumentAdapter();
+        }
+        if(adapter == IFile.class) {
+            return content.getIFile();
+        }
+        return Platform.getAdapterManager().getAdapter(this, adapter);
+    }
+
+    /**
+     * The code below is copy from org.eclipse.team.internal.ui.synchronize.LocalResourceTypedElement
+     * and is required to add full Java editor capabilities (content assist, navigation etc) to the compare editor
+     * @return
+     */
+    private synchronized ISharedDocumentAdapter getSharedDocumentAdapter() {
+        if (sharedDocumentAdapter == null) {
+            sharedDocumentAdapter = new EditableSharedDocumentAdapter(this);
+        }
+        return sharedDocumentAdapter;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
 }

@@ -16,11 +16,15 @@ import java.util.Iterator;
 import org.eclipse.compare.CompareUI;
 import org.eclipse.compare.IEditableContent;
 import org.eclipse.compare.IEditableContentExtension;
+import org.eclipse.compare.ISharedDocumentAdapter;
 import org.eclipse.compare.IStreamContentAccessor;
 import org.eclipse.compare.ITypedElement;
+import org.eclipse.compare.SharedDocumentAdapter;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPositionCategoryException;
@@ -65,6 +69,7 @@ IEditableContentExtension {
     private Annotation lineAnnotation;
     private AnyeditCompareInput compareInput;
     private boolean disposed;
+    private EditableSharedDocumentAdapter sharedDocumentAdapter;
 
     /**
      * @param content NOT null
@@ -138,17 +143,19 @@ IEditableContentExtension {
         }
     }
 
-    protected boolean hasDifferecesToEditor() {
-        String myText = getChangedCompareText();
-        if(myText == null){
-            boolean different = selectedText != null && !selectedText.equals(getText(position));
-            return different;
-        }
-        return myText.equals(getText(position));
-    }
-
     private String getChangedCompareText() {
         if(bytes == null){
+            if(sharedDocumentAdapter != null) {
+
+                IEditorInput editorInput = sharedDocumentAdapter.getDocumentKey(this);
+                IDocumentProvider documentProvider = SharedDocumentAdapter.getDocumentProvider(editorInput);
+                if(documentProvider != null) {
+                    IDocument document = documentProvider.getDocument(editorInput);
+                    if(document != null) {
+                        return document.get();
+                    }
+                }
+            }
             return null;
         }
         // use charset from editor
@@ -196,7 +203,11 @@ IEditableContentExtension {
         }
         dirty = false;
         if (selection == null) {
-            document.set(text);
+            if(sharedDocumentAdapter != null) {
+                sharedDocumentAdapter.saveDocument(sharedDocumentAdapter.getDocumentKey(this), true, pm);
+            } else {
+                document.set(text);
+            }
         } else {
             try {
                 document.replace(position.getOffset(), position.getLength(), text);
@@ -282,6 +293,9 @@ IEditableContentExtension {
         lineAnnotation = null;
         editor.dispose();
         dirty = false;
+        if (sharedDocumentAdapter != null) {
+            sharedDocumentAdapter.releaseBuffer();
+        }
         disposed = true;
     }
 
@@ -418,4 +432,30 @@ IEditableContentExtension {
         return Status.CANCEL_STATUS;
     }
 
+    public Object getAdapter(Class adapter) {
+
+        if (adapter == ISharedDocumentAdapter.class) {
+            return getSharedDocumentAdapter();
+        }
+        if(adapter == IFile.class) {
+            return content.getIFile();
+        }
+        return Platform.getAdapterManager().getAdapter(this, adapter);
+    }
+
+    /**
+     * The code below is copy from org.eclipse.team.internal.ui.synchronize.LocalResourceTypedElement
+     * and is required to add full Java editor capabilities (content assist, navigation etc) to the compare editor
+     * @return
+     */
+    private synchronized ISharedDocumentAdapter getSharedDocumentAdapter() {
+        if (sharedDocumentAdapter == null) {
+            sharedDocumentAdapter = new EditableSharedDocumentAdapter(this);
+        }
+        return sharedDocumentAdapter;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
 }

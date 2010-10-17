@@ -11,16 +11,19 @@ package de.loskutov.anyedit.compare;
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.compare.structuremergeviewer.IStructureComparator;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author Andrei
  *
  */
-public interface StreamContent extends ITypedElement,
-        IStructureComparator {
+public interface StreamContent extends ITypedElement, IAdaptable,
+IStructureComparator {
 
     public boolean isDirty();
+
+    public void setDirty(boolean dirty);
 
     public boolean commitChanges(IProgressMonitor pm) throws CoreException;
 

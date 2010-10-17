@@ -166,4 +166,11 @@ IEditableContent, IModificationDate, IEditableContentExtension {
         return new ExternalFileStreamContent(content);
     }
 
+    public Object getAdapter(Class adapter) {
+        return null;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
 }

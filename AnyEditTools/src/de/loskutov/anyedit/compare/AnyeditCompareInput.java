@@ -18,6 +18,7 @@ import org.eclipse.compare.ITypedElement;
 import org.eclipse.compare.contentmergeviewer.TextMergeViewer;
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -75,10 +76,19 @@ public class AnyeditCompareInput extends CompareEditorInput  {
     }
 
 
-
+    public Object getAdapter(Class adapter) {
+        if(IFile.class == adapter) {
+            Object object = left.getAdapter(adapter);
+            if(object != null) {
+                return object;
+            }
+            return right.getAdapter(adapter);
+        }
+        return super.getAdapter(adapter);
+    }
 
     protected Object prepareInput(IProgressMonitor monitor)
-            throws InvocationTargetException, InterruptedException {
+    throws InvocationTargetException, InterruptedException {
         if (right == null || left == null) {
             return null;
         }
@@ -87,10 +97,11 @@ public class AnyeditCompareInput extends CompareEditorInput  {
             left.init(this);
             right.init(this);
             Differencer differencer = new Differencer();
-            monitor.beginTask("AnyEdit: comparing...", 30);
+            String message = "Comparing " + left.getName() + " with " + right.getName();
+            monitor.beginTask(message, 30);
             IProgressMonitor sub = new SubProgressMonitor(monitor, 10);
             try {
-                sub.beginTask("AnyEdit: comparing...", 100);
+                sub.beginTask(message, 100);
 
                 differences = differencer.findDifferences(false, sub, null, null, left, right);
                 if(differences == null && createNoDiffNode) {
@@ -133,20 +144,20 @@ public class AnyeditCompareInput extends CompareEditorInput  {
     }
 
     void reuseEditor() {
-        UIJob job = new UIJob("AnyEdit: re-comparing editor selection"){
+        UIJob job = new UIJob("Updating differences"){
             public IStatus runInUIThread(IProgressMonitor monitor) {
                 if(monitor.isCanceled() || left.isDisposed() || right.isDisposed()){
                     return Status.CANCEL_STATUS;
                 }
 
                 // This causes too much flicker:
-//                AnyeditCompareInput input = new AnyeditCompareInput(left.recreate(), right
-//                        .recreate());
-//                if(monitor.isCanceled()){
-//                    input.internalDispose();
-//                    return Status.CANCEL_STATUS;
-//                }
-//                CompareUI.reuseCompareEditor(input, (IReusableEditor) getWorkbenchPart());
+                //                AnyeditCompareInput input = new AnyeditCompareInput(left.recreate(), right
+                //                        .recreate());
+                //                if(monitor.isCanceled()){
+                //                    input.internalDispose();
+                //                    return Status.CANCEL_STATUS;
+                //                }
+                //                CompareUI.reuseCompareEditor(input, (IReusableEditor) getWorkbenchPart());
 
                 AnyeditCompareInput input = AnyeditCompareInput.this;
                 // allow "no diff" result to keep the editor open
@@ -221,7 +232,7 @@ public class AnyeditCompareInput extends CompareEditorInput  {
     private boolean commit(IProgressMonitor monitor, DiffNode diffNode) {
         boolean okLeft = commitNode(monitor, diffNode.getLeft());
         boolean okRight = commitNode(monitor, diffNode.getRight());
-        return okLeft && okRight;
+        return okLeft || okRight;
     }
 
     private boolean commitNode(IProgressMonitor monitor, ITypedElement element) {
