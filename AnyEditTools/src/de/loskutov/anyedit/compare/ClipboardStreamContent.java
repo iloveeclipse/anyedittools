@@ -91,6 +91,7 @@ public class ClipboardStreamContent implements StreamContent, IStreamContentAcce
                 } catch (UnsupportedEncodingException e) {
                     bytes = clipboardContent.getBytes();
                 }
+                return;
             }
             String replaceAll = clipboardContent.replaceAll(lineSeparator, newLine);
             try {
@@ -98,6 +99,7 @@ public class ClipboardStreamContent implements StreamContent, IStreamContentAcce
             } catch (UnsupportedEncodingException e) {
                 bytes = replaceAll.getBytes();
             }
+            return;
         }
         bytes = new byte[0];
     }
@@ -110,5 +112,13 @@ public class ClipboardStreamContent implements StreamContent, IStreamContentAcce
 
     public String getFullName() {
         return getName();
+    }
+
+    public Object getAdapter(Class adapter) {
+        return null;
+    }
+
+    public void setDirty(boolean dirty) {
+        // noop
     }
 }
