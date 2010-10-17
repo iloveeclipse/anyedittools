@@ -433,9 +433,10 @@ IEditableContentExtension {
     }
 
     public Object getAdapter(Class adapter) {
-
-        if (adapter == ISharedDocumentAdapter.class) {
-            return getSharedDocumentAdapter();
+        if(selectedText == null) {
+            if (adapter == ISharedDocumentAdapter.class) {
+                return getSharedDocumentAdapter();
+            }
         }
         if(adapter == IFile.class) {
             return content.getIFile();
