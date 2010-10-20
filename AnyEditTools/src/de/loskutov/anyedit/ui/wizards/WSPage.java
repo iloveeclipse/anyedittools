@@ -189,13 +189,9 @@ public abstract class WSPage extends WizardPage {
     }
 
     protected String[] getLastUsedPaths() {
-        return (String[]) usedFiles.toArray(new String[0]);
+        return (String[]) usedFiles.toArray(new String[usedFiles.size()]);
     }
 
-    /**
-     * @param fileString
-     *
-     */
     protected void updateItems(String fileString) {
         if(fileString == null) {
             return;

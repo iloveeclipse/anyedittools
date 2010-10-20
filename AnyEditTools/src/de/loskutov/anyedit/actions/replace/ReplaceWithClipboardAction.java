@@ -40,11 +40,11 @@ public class ReplaceWithClipboardAction extends ReplaceWithAction {
         at de.loskutov.anyedit.actions.compare.CompareWithClipboardAction.selectionChanged(CompareWithClipboardAction.java:35)
         at org.eclipse.ui.internal.PluginAction.refreshEnablement(PluginAction.java:206)
         at org.eclipse.ui.internal.PluginAction.selectionChanged(PluginAction.java:277)
-            */
-//            String clipboardContent = EclipseUtils.getClipboardContent();
-//            if (clipboardContent == null || clipboardContent.length() == 0) {
-//                action.setEnabled(false);
-//            }
+             */
+            //            String clipboardContent = EclipseUtils.getClipboardContent();
+            //            if (clipboardContent == null || clipboardContent.length() == 0) {
+            //                action.setEnabled(false);
+            //            }
         }
     }
 
@@ -58,7 +58,7 @@ public class ReplaceWithClipboardAction extends ReplaceWithAction {
         IDocument document = editor.getDocument();
         if (document != null){
             newLine = EclipseUtils.getNewLineFromDocument(document);
-        } else if (selectedContent.getIFile() != null) {
+        } else if (selectedContent != null && selectedContent.getIFile() != null) {
             newLine = EclipseUtils.getNewLineFromFile(selectedContent.getIFile());
         }
         String property = System.getProperty("line.separator");

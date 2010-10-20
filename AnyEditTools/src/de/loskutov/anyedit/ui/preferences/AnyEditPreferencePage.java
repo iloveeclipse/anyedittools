@@ -847,7 +847,7 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getDefaultBoolean(IAnyEditConstants.BASE64_SPLIT_LINE));
 
         boolean convertTabsAction = AbstractTextAction.ACTION_ID_CONVERT_TABS
-        .equals(getPreferenceStore().getDefaultString(
+        .equals(store.getDefaultString(
                 IAnyEditConstants.CONVERT_ACTION_ON_SAVE));
 
         boolean isSaveHookEnabled = AnyEditToolsPlugin.isSaveHookInitialized();
@@ -1070,8 +1070,9 @@ IWorkbenchPreferencePage, SelectionListener {
                 if (event.character == SWT.CR) {
                     if (invalidEditorText != null) {
                         String infoText = Messages.pref_Invalid_file_filter;
-                        if (!invalidEditorText.equals(editorText.getText())
-                                && !infoText.equals(editorText.getText())) {
+                        String text2 = editorText.getText();
+                        if (!invalidEditorText.equals(text2)
+                                && !infoText.equals(text2)) {
                             validateChangeAndCleanup();
                         } else {
                             editorText.setText(infoText);
@@ -1091,8 +1092,9 @@ IWorkbenchPreferencePage, SelectionListener {
             public void focusLost(FocusEvent event) {
                 if (invalidEditorText != null) {
                     String infoText = Messages.pref_Invalid_file_filter;
-                    if (!invalidEditorText.equals(editorText.getText())
-                            && !infoText.equals(editorText.getText())) {
+                    String text2 = editorText.getText();
+                    if (!invalidEditorText.equals(text2)
+                            && !infoText.equals(text2)) {
                         validateChangeAndCleanup();
                     } else {
                         editorText.setText(infoText);
@@ -1439,6 +1441,9 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 class FilterViewerSorter extends WorkbenchViewerComparator {
     public int compare(Viewer viewer, Object e1, Object e2) {
+        if(!(viewer instanceof ContentViewer)) {
+            return 0;
+        }
         ILabelProvider lprov = (ILabelProvider) ((ContentViewer) viewer)
         .getLabelProvider();
         String name1 = lprov.getText(e1);

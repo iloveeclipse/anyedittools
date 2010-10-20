@@ -415,10 +415,9 @@ public final class EclipseUtils {
         ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
         ITextFileBuffer fileBuffer = null;
         try {
-            bufferManager.connect(file.getFullPath(), LocationKind.IFILE,
-                    new NullProgressMonitor());
-            fileBuffer = bufferManager
-            .getTextFileBuffer(file.getFullPath(), LocationKind.IFILE);
+            IPath fullPath = file.getFullPath();
+            bufferManager.connect(fullPath, LocationKind.IFILE, new NullProgressMonitor());
+            fileBuffer = bufferManager.getTextFileBuffer(fullPath, LocationKind.IFILE);
         } catch (CoreException e) {
             AnyEditToolsPlugin.logError(null, e);
         }

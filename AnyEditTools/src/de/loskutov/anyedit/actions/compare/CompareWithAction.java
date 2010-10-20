@@ -50,23 +50,19 @@ public abstract class CompareWithAction implements IObjectActionDelegate /*, IWo
     }
 
     public void run(IAction action) {
-        StreamContent left = null;
-        StreamContent right = null;
+        StreamContent left = createLeftContent();
+        if (left == null) {
+            return;
+        }
         try {
-            left = createLeftContent();
-            if (left == null) {
-                return;
-            }
-            right = createRightContent(left);
+            StreamContent right = createRightContent(left);
             if (right == null) {
                 left.dispose();
                 return;
             }
             compare(left, right);
         } catch (CoreException e) {
-            if(left != null) {
-                left.dispose();
-            }
+            left.dispose();
             AnyEditToolsPlugin.logError("Can't perform compare", e);
         }
     }
@@ -82,7 +78,7 @@ public abstract class CompareWithAction implements IObjectActionDelegate /*, IWo
     }
 
     protected abstract StreamContent createRightContent(StreamContent left)
-            throws CoreException;
+    throws CoreException;
 
     protected final StreamContent createContent(ContentWrapper content) {
         if (content == null) {

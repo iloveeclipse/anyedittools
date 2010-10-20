@@ -51,7 +51,7 @@ class Base64Preferences extends AbstractPreferences {
     }
 
     protected String[] childrenNamesSpi() throws BackingStoreException {
-        return null;
+        return new String[0];
     }
 
     protected void flushSpi() throws BackingStoreException {
@@ -63,7 +63,7 @@ class Base64Preferences extends AbstractPreferences {
     }
 
     protected String[] keysSpi() throws BackingStoreException {
-        return null;
+        return new String[0];
     }
 
     protected void putSpi(String key, String value1) {

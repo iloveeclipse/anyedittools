@@ -116,7 +116,7 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
      * and is required to add full Java editor capabilities (content assist, navigation etc) to the compare editor
      * @return
      */
-    private synchronized ISharedDocumentAdapter getSharedDocumentAdapter() {
+    private ISharedDocumentAdapter getSharedDocumentAdapter() {
         if (sharedDocumentAdapter == null) {
             sharedDocumentAdapter = new EditableSharedDocumentAdapter(this);
         }

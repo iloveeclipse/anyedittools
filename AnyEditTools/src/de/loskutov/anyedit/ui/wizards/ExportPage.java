@@ -108,7 +108,7 @@ public class ExportPage extends WSPage {
 
         public Object[] getElements(Object inputElement) {
             IWorkingSet[] workingSets = PlatformUI.getWorkbench().getWorkingSetManager()
-                    .getAllWorkingSets();
+            .getAllWorkingSets();
             List sets = new ArrayList();
             for (int i = 0; i < workingSets.length; i++) {
                 IWorkingSet workingSet = workingSets[i];
@@ -116,11 +116,11 @@ public class ExportPage extends WSPage {
                     sets.add(workingSet);
                 }
             }
-            return sets.toArray(new IWorkingSet[0]);
+            return sets.toArray(new IWorkingSet[sets.size()]);
         }
 
         public Object[] getChildren(Object parentElement) {
-            return null;
+            return new Object[0];
         }
 
         public Object getParent(Object element) {

@@ -74,7 +74,7 @@ public abstract class ReplaceWithAction implements IObjectActionDelegate {
     }
 
     private void replace(InputStream stream) {
-        if(!selectedContent.isModifiable()){
+        if(selectedContent == null || !selectedContent.isModifiable()){
             return;
         }
         IDocument document = editor.getDocument();
@@ -103,13 +103,12 @@ public abstract class ReplaceWithAction implements IObjectActionDelegate {
     }
 
     private void replace(ContentWrapper content, InputStream stream) {
-        IFile file = null;
-        if (content.getIFile() == null || content.getIFile().getLocation() == null) {
+        IFile file = content.getIFile();
+        if (file == null || file.getLocation() == null) {
             saveExternalFile(content, stream);
             return;
         }
         try {
-            file = content.getIFile();
             if (!file.exists()) {
                 file.create(stream, true, new NullProgressMonitor());
             } else {
@@ -175,8 +174,9 @@ public abstract class ReplaceWithAction implements IObjectActionDelegate {
     private void saveExternalFile(ContentWrapper content, InputStream stream) {
 
         File file2 = null;
-        if (content.getIFile() != null) {
-            file2 = new File(content.getIFile().getFullPath().toOSString());
+        IFile iFile = content.getIFile();
+        if (iFile != null) {
+            file2 = new File(iFile.getFullPath().toOSString());
         } else {
             file2 = content.getFile();
         }
@@ -211,11 +211,11 @@ public abstract class ReplaceWithAction implements IObjectActionDelegate {
 
         copyStreamToWriter(stream, bw);
 
-        if (content.getIFile() != null) {
+        if (iFile != null) {
             try {
-                content.getIFile().refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor());
+                iFile.refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor());
             } catch (CoreException e) {
-                AnyEditToolsPlugin.logError("Failed to refresh file: " + content.getIFile(), e);
+                AnyEditToolsPlugin.logError("Failed to refresh file: " + iFile, e);
             }
         }
     }

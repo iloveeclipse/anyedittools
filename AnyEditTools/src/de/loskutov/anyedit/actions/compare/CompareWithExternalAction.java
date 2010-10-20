@@ -78,8 +78,9 @@ public class CompareWithExternalAction extends CompareWithAction {
             return;
         }
         IPath path = new Path(lastUsedFile);
-        if(path.segmentCount() < 2) {
-            if(path.segmentCount() == 1) {
+        int segmentCount = path.segmentCount();
+        if(segmentCount < 2) {
+            if(segmentCount == 1) {
                 dialog.setFilterPath(path.toOSString());
             }
             return;

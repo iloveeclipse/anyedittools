@@ -68,7 +68,7 @@ public class SelectWorkingSetsAction extends Action implements IWSAction {
             }
             if (all.size() > 0) {
                 workingSetModel.setActiveWorkingSets((IWorkingSet[]) all
-                        .toArray(new IWorkingSet[0]));
+                        .toArray(new IWorkingSet[all.size()]));
                 TreeViewer viewer = viewPart.getTreeViewer();
                 viewer.getControl().setRedraw(false);
                 viewer.refresh();
@@ -92,12 +92,7 @@ public class SelectWorkingSetsAction extends Action implements IWSAction {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.loskutov.anyedit.ui.wizards.IWSAction#setWorkingSets(java.util.List)
-     */
     public void setWorkingSets(List sets) {
-        this.workingSets = (IWorkingSet[]) sets.toArray(new IWorkingSet[0]);
+        this.workingSets = (IWorkingSet[]) sets.toArray(new IWorkingSet[sets.size()]);
     }
 }

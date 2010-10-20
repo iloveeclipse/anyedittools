@@ -126,8 +126,8 @@ public class SpecialSaveAction extends SaveAction implements IDirtyWorkaround {
             pageActivated(activePage);
         }
         // this will remove page/window listeners but will lead to crash on 3.3 shutdown
-        if(oldAction.getWorkbenchWindow() != null){
-            IWorkbenchWindow window = oldAction.getWorkbenchWindow();
+        IWorkbenchWindow window = oldAction.getWorkbenchWindow();
+        if(window != null){
             oldAction.dispose();
             try {
                 Field field = PageEventAction.class.getDeclaredField("workbenchWindow");

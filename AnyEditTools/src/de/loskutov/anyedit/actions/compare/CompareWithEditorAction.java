@@ -68,7 +68,7 @@ public class CompareWithEditorAction extends CompareWithAction {
     protected StreamContent createRightContent(StreamContent left) throws CoreException {
         // WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
         ListDialog dialog = createSelectionDialog(editor, selectedContent,
-                "Select an opened editor to compare with current file:");
+        "Select an opened editor to compare with current file:");
 
         int result = dialog.open();
         if (result == Window.OK) {
@@ -118,14 +118,14 @@ public class CompareWithEditorAction extends CompareWithAction {
         dialog.setInput(new byte[0]);
         dialog.setDialogBoundsSettings(AnyEditToolsPlugin.getDefault()
                 .getDialogSettings(),
-            Dialog.DIALOG_PERSISTLOCATION | Dialog.DIALOG_PERSISTSIZE);
+                Dialog.DIALOG_PERSISTLOCATION | Dialog.DIALOG_PERSISTSIZE);
         return dialog;
     }
 
     static  final class EditorsLabelProvider extends LabelProvider {
         private final EditorsContentProvider contentProvider;
 
-     // TODO WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider(); ???
+        // TODO WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider(); ???
 
         public EditorsLabelProvider(EditorsContentProvider contentProvider) {
             this.contentProvider = contentProvider;
@@ -217,7 +217,7 @@ public class CompareWithEditorAction extends CompareWithAction {
                 }
                 refs.add(editorReferences[i]);
             }
-            references = (IEditorReference[]) refs.toArray(new IEditorReference[0]);
+            references = (IEditorReference[]) refs.toArray(new IEditorReference[refs.size()]);
         }
 
         private synchronized static void initEditors(final IEditorReference[] editorReferences) {
@@ -263,7 +263,8 @@ public class CompareWithEditorAction extends CompareWithAction {
                 return false;
             }
 
-            return part.getTitle()!= null && part.getTitle().equals(reference.getTitle());
+            String title = part.getTitle();
+            return title!= null && title.equals(reference.getTitle());
         }
 
         public Object[] getElements(Object inputElement) {

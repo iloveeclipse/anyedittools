@@ -72,7 +72,7 @@ public class CombinedPreferences {
         if (resultStr != null) {
             int value;
             try {
-                value = Integer.valueOf(resultStr).intValue();
+                value = Integer.parseInt(resultStr);
             } catch (NumberFormatException e) {
                 // ignore
                 if(IAnyEditConstants.EDITOR_TAB_WIDTH.equals(key)) {

@@ -72,8 +72,9 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
 
     public void init(IWorkbenchWindow window1) {
         super.init(window1);
-        window1.getActivePage().addPartListener(this);
-        IWorkbenchPart activePart = window1.getActivePage().getActivePart();
+        IWorkbenchPage activePage = window1.getActivePage();
+        activePage.addPartListener(this);
+        IWorkbenchPart activePart = activePage.getActivePart();
         if (activePart != null) {
             partActivated(activePart);
         }

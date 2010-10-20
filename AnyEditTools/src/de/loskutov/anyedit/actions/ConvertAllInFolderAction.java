@@ -147,12 +147,13 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
             for (int i = 0; i < resources.length && !monitor.isCanceled(); i++) {
                 monitor.internalWorked(1);
                 IResource resource = resources[i];
-                if (resource.getType() == IResource.FILE) {
+                int type = resource.getType();
+                if (type == IResource.FILE) {
                     if (fileList.contains(resource)) {
                         continue;
                     }
                     fileList.add(resource);
-                } else if (resource.getType() == IResource.FOLDER || resource.getType() == IResource.PROJECT) {
+                } else if (type == IResource.FOLDER || type == IResource.PROJECT) {
                     addAllFiles((IContainer) resource, fileList, monitor);
                 }
             }

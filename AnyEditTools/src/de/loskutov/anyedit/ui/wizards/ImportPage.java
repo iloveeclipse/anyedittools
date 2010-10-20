@@ -42,7 +42,7 @@ public class ImportPage extends WSPage {
 
     private static final String TITLE = "Import working sets from the local file system";
     private static final String DESCRIPTION = "Select the file path to import working " +
-    		"sets from and working sets to import";
+    "sets from and working sets to import";
 
     protected ImportPage(String pageName) {
         super(pageName, TITLE, DESCRIPTION, "icons/import_wiz.gif");
@@ -86,7 +86,7 @@ public class ImportPage extends WSPage {
             }
         }
 
-        setInput(sets.toArray(new IWorkingSet[0]));
+        setInput(sets.toArray(new IWorkingSet[sets.size()]));
 
         try {
             String lastUsedFile = file.getCanonicalPath();
@@ -112,20 +112,20 @@ public class ImportPage extends WSPage {
         if (factory == null) {
             AnyEditToolsPlugin.logError(
                     "Unable to restore working set - cannot instantiate factory: "
-                            + factoryID, null);
+                    + factoryID, null);
             return null;
         }
         IAdaptable adaptable = factory.createElement(memento);
         if (adaptable == null) {
             AnyEditToolsPlugin.logError(
                     "Unable to restore working set - cannot instantiate working set: "
-                            + factoryID, null);
+                    + factoryID, null);
             return null;
         }
         if (!(adaptable instanceof IWorkingSet)) {
             AnyEditToolsPlugin.logError(
                     "Unable to restore working set - element is not an IWorkingSet: "
-                            + factoryID, null);
+                    + factoryID, null);
             return null;
         }
         return (IWorkingSet) adaptable;
@@ -142,7 +142,7 @@ public class ImportPage extends WSPage {
             return;
         }
         IWorkingSetManager workingSetManager = PlatformUI.getWorkbench()
-                .getWorkingSetManager();
+        .getWorkingSetManager();
         List added = new ArrayList();
         for (int i = 0; i < selected.length; i++) {
             IWorkingSet workingSet = (IWorkingSet) selected[i];
@@ -185,7 +185,7 @@ public class ImportPage extends WSPage {
                 existing.add(resource);
             }
         }
-        workingSet.setElements((IAdaptable[]) existing.toArray(new IAdaptable[0]));
+        workingSet.setElements((IAdaptable[]) existing.toArray(new IAdaptable[existing.size()]));
     }
 
     public static class WorkingSetContentProvider implements ITreeContentProvider {
@@ -212,11 +212,11 @@ public class ImportPage extends WSPage {
                     sets.add(workingSet);
                 }
             }
-            return sets.toArray(new IWorkingSet[0]);
+            return sets.toArray(new IWorkingSet[sets.size()]);
         }
 
         public Object[] getChildren(Object parentElement) {
-            return null;
+            return new Object[0];
         }
 
         public Object getParent(Object element) {
