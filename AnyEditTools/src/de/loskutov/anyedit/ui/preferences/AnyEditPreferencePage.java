@@ -1044,7 +1044,7 @@ IWorkbenchPreferencePage, SelectionListener {
         // getting pushed down so that only there very tops are visible. Thus,
         // we have to specify different style constants for the different platforms.
         int textStyles = SWT.SINGLE | SWT.LEFT;
-        if (!SWT.getPlatform().equals("motif")) {
+        if (!"motif".equals(SWT.getPlatform())) {
             textStyles |= SWT.BORDER;
         }
         editorText = new Text(filterTable, textStyles);

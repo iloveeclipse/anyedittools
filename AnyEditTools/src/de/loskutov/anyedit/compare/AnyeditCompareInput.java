@@ -18,6 +18,7 @@ import org.eclipse.compare.ITypedElement;
 import org.eclipse.compare.contentmergeviewer.TextMergeViewer;
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
+import org.eclipse.compare.structuremergeviewer.ICompareInput;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -229,7 +230,7 @@ public class AnyeditCompareInput extends CompareEditorInput  {
         return null;
     }
 
-    private boolean commit(IProgressMonitor monitor, DiffNode diffNode) {
+    private boolean commit(IProgressMonitor monitor, ICompareInput diffNode) {
         boolean okLeft = commitNode(monitor, diffNode.getLeft());
         boolean okRight = commitNode(monitor, diffNode.getRight());
         return okLeft || okRight;

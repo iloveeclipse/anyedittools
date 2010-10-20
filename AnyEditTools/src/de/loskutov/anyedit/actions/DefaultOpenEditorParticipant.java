@@ -117,7 +117,7 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
         }
         String editorId = getEditorId(file2);
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-                .getActivePage();
+        .getActivePage();
         IFileStore fileStore;
         try {
             fileStore = EFS.getLocalFileSystem().getStore(
@@ -177,8 +177,11 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
             String selection) {
         TextUtil textUtil = TextUtil.getDefaultTextUtilities();
         String selectedText = textUtil.trimPath(selection);
+        if(selectedText == null) {
+            return null;
+        }
         boolean mayBeFilePath = textUtil.isFilePath(selectedText);
-        if (!mayBeFilePath && selectedText != null) {
+        if (!mayBeFilePath) {
             // try to search around caret
             if (doc != null) {
                 int caretPosition = EclipseUtils.getCaretPosition(selectionProvider);
@@ -199,8 +202,11 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
                 // virtual caret in the middle of string
                 selectedText = textUtil.findPath(selectedText, selectedText.length() / 2);
             }
+            if(selectedText == null) {
+                return null;
+            }
         }
-        if (selectedText != null && selectedText.length() == 0) {
+        if (selectedText.length() == 0) {
             selectedText = null;
         }
         return selectedText;

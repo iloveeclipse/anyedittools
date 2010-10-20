@@ -195,7 +195,7 @@ public final class EclipseUtils {
         String currentPath = null;
         if (currentInput instanceof IFileEditorInput) {
             currentPath = getRelativePath((IFileEditorInput) currentInput);
-            if (currentPath != null && currentPath.length() == 0) {
+            if (currentPath.length() == 0) {
                 currentPath = null;
             }
         }
