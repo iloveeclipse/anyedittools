@@ -18,11 +18,15 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -32,6 +36,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
@@ -42,7 +47,7 @@ import de.loskutov.anyedit.util.EclipseUtils;
 /**
  * @author Andrei
  */
-public abstract class ReplaceWithAction implements IObjectActionDelegate {
+public abstract class ReplaceWithAction extends AbstractHandler implements IObjectActionDelegate {
 
     protected ContentWrapper selectedContent;
     protected AbstractEditor editor;
@@ -50,6 +55,22 @@ public abstract class ReplaceWithAction implements IObjectActionDelegate {
     public ReplaceWithAction() {
         super();
         editor = new AbstractEditor(null);
+    }
+
+    public Object execute(final ExecutionEvent event) throws ExecutionException {
+        IWorkbenchPart activePart = HandlerUtil.getActivePart(event);
+        Action dummyAction = new Action(){
+            public String getId() {
+                return event.getCommand().getId();
+            }
+        };
+        setActivePart(dummyAction, activePart);
+        ISelection currentSelection = HandlerUtil.getCurrentSelection(event);
+        selectionChanged(dummyAction, currentSelection);
+        if(dummyAction.isEnabled()) {
+            run(dummyAction);
+        }
+        return null;
     }
 
     public void setActivePart(IAction action, IWorkbenchPart targetPart) {
@@ -60,11 +81,6 @@ public abstract class ReplaceWithAction implements IObjectActionDelegate {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-     */
     public void run(IAction action) {
         InputStream stream = createInputStream();
         if (stream == null) {

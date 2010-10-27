@@ -645,43 +645,51 @@
 
       <command
             categoryId="AnyEdit.category"
-            name="%_compareWithExternalFile"
-            id="AnyEdit.compareWith.external"/>
+            defaultHandler="de.loskutov.anyedit.actions.compare.CompareWithExternalAction"
+            id="AnyEdit.compareWith.external"
+            name="%_compareWithExternalFile"/>
 
       <command
             categoryId="AnyEdit.category"
-            name="%_compareWithFile"
-            id="AnyEdit.compareWith.file"/>
+            defaultHandler="de.loskutov.anyedit.actions.compare.CompareWithResourceAction"
+            id="AnyEdit.compareWith.file"
+            name="%_compareWithFile"/>
 
       <command
             categoryId="AnyEdit.category"
-            name="%_compareWithClipboard"
-            id="AnyEdit.compareWith.clipboard"/>
+            defaultHandler="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
+            id="AnyEdit.compareWith.clipboard"
+            name="%_compareWithClipboard"/>
 
       <command
             categoryId="AnyEdit.category"
-            name="%_compareWithEditor"
-            id="AnyEdit.compareWith.editor"/>
+            defaultHandler="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
+            id="AnyEdit.compareWith.editor"
+            name="%_compareWithEditor"/>
 
       <command
             categoryId="AnyEdit.category"
-            name="%_replaceWithExternalFile"
-            id="AnyEdit.replaceWith.external"/>
+            defaultHandler="de.loskutov.anyedit.actions.replace.ReplaceWithExternalAction"
+            id="AnyEdit.replaceWith.external"
+            name="%_replaceWithExternalFile"/>
 
       <command
             categoryId="AnyEdit.category"
-            name="%_replaceWithFile"
-            id="AnyEdit.replaceWith.file"/>
+            defaultHandler="de.loskutov.anyedit.actions.replace.ReplaceWithResourceAction"
+            id="AnyEdit.replaceWith.file"
+            name="%_replaceWithFile"/>
 
       <command
             categoryId="AnyEdit.category"
-            name="%_replaceWithClipboard"
-            id="AnyEdit.replaceWith.clipboard"/>
+            defaultHandler="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
+            id="AnyEdit.replaceWith.clipboard"
+            name="%_replaceWithClipboard"/>
 
       <command
             categoryId="AnyEdit.category"
-            name="%_replaceWithEditor"
-            id="AnyEdit.replaceWith.editor"/>
+            defaultHandler="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
+            id="AnyEdit.replaceWith.editor"
+            name="%_replaceWithEditor"/>
 
    </extension>
 
