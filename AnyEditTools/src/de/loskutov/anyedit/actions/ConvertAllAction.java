@@ -68,7 +68,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
     private final Spaces spacesAction;
 
     protected final IContentType text_type = Platform.getContentTypeManager()
-            .getContentType("org.eclipse.core.runtime.text");
+    .getContentType("org.eclipse.core.runtime.text");
 
     private Shell shell;
 
@@ -119,7 +119,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
         String filterPerf = preferences.getString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST);
         String[] filters = EclipseUtils.parseList(filterPerf);
         String actionId;
-        if (spacesAction.isDefaultTabToSpaces(preferences)) {
+        if (spacesAction.isDefaultTabToSpaces()) {
             actionId = AbstractTextAction.ACTION_ID_CONVERT_TABS;
         } else {
             actionId = AbstractTextAction.ACTION_ID_CONVERT_SPACES;
@@ -332,14 +332,14 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
     protected final class ConvertRunner implements IRunnableWithProgress {
 
         public void run(IProgressMonitor monitor) throws InvocationTargetException,
-                InterruptedException {
+        InterruptedException {
             monitor.beginTask(Messages.ConvertAll_task, selectedFiles.size());
             int filesToConvert = selectedFiles.size();
             IPreferenceStore preferenceStore = AnyEditToolsPlugin.getDefault()
-                    .getPreferenceStore();
+            .getPreferenceStore();
 
             boolean saveIfDirty = preferenceStore
-                    .getBoolean(IAnyEditConstants.SAVE_DIRTY_BUFFER);
+            .getBoolean(IAnyEditConstants.SAVE_DIRTY_BUFFER);
             int modified = 0;
             int skipped = 0;
             int errors = 0;
@@ -354,8 +354,8 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
                     int result = performAction(file, manager, saveIfDirty, monitor);
                     if (result == ERROR) {
                         AnyEditToolsPlugin
-                                .logInfo("'Tabs<->spaces' operation failed for file: "
-                                        + file);
+                        .logInfo("'Tabs<->spaces' operation failed for file: "
+                                + file);
                         errors++;
                     } else if (result == MODIFIED) {
                         modified++;
@@ -380,9 +380,9 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
                     PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
                         public void run() {
                             AnyEditToolsPlugin
-                                    .errorDialog("'Tabs<->spaces' operation failed for "
-                                            + errorCount
-                                            + " files. Please check log for details.");
+                            .errorDialog("'Tabs<->spaces' operation failed for "
+                                    + errorCount
+                                    + " files. Please check log for details.");
                         }
                     });
                 }

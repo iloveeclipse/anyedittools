@@ -33,7 +33,7 @@ import de.loskutov.anyedit.util.TextReplaceResultSet;
 import de.loskutov.anyedit.util.TextUtil;
 
 public abstract class AbstractTextAction extends AbstractAction
-    implements IEditorActionDelegate {
+implements IEditorActionDelegate {
 
     public static final String ACTION_ID_CONVERT_TABS = IAnyEditConstants.ACTION_ID_CONVERT_TABS;
     public static final String ACTION_ID_CONVERT_SPACES = IAnyEditConstants.ACTION_ID_CONVERT_SPACES;
@@ -54,7 +54,7 @@ public abstract class AbstractTextAction extends AbstractAction
     }
 
     protected final void init() {
-         textUtil = TextUtil.getDefaultTextUtilities();
+        textUtil = TextUtil.getDefaultTextUtilities();
     }
 
     public void setActiveEditor(IAction action, IEditorPart targetEditor) {
@@ -94,9 +94,9 @@ public abstract class AbstractTextAction extends AbstractAction
             currEditor.doSave(monitor);
             if(monitor.isCanceled()){
                 boolean ok = MessageDialog.openConfirm(
-                    AnyEditToolsPlugin.getShell(),
-                    Messages.title,
-                    Messages.continueOperationMessage);
+                        AnyEditToolsPlugin.getShell(),
+                        Messages.title,
+                        Messages.continueOperationMessage);
                 if(!ok){
                     return;
                 }
@@ -120,9 +120,9 @@ public abstract class AbstractTextAction extends AbstractAction
             if(!isUsedOnSave()) {
                 Shell shell = AnyEditToolsPlugin.getShell();
                 MessageDialog.openInformation(
-                    shell,
-                    Messages.title,
-                    Messages.fileIsReadOnly);
+                        shell,
+                        Messages.title,
+                        Messages.fileIsReadOnly);
             }
             return;
         }
@@ -138,20 +138,20 @@ public abstract class AbstractTextAction extends AbstractAction
             changedLinesNbr = docLinesNbr;
         }
 
-//        Map partitioners = null;
-//        if(EclipseUtils.is31Compatible()){
-//            // seems to have problems with StructuredTextReconciler in 3.0
-//            partitioners = TextUtilities.removeDocumentPartitioners(doc);
-//        }
+        //        Map partitioners = null;
+        //        if(EclipseUtils.is31Compatible()){
+        //            // seems to have problems with StructuredTextReconciler in 3.0
+        //            partitioners = TextUtilities.removeDocumentPartitioners(doc);
+        //        }
 
         /*
          * TODO think on long running operations
          */
-//        if (changedLinesNbr > 150) {
-//            Display display= getTextEditor().getEditorSite().getWorkbenchWindow().getShell().getDisplay();
-//            BusyIndicator.showWhile(display, runnable);
-//        } else
-//            runnable.run();
+        //        if (changedLinesNbr > 150) {
+        //            Display display= getTextEditor().getEditorSite().getWorkbenchWindow().getShell().getDisplay();
+        //            BusyIndicator.showWhile(display, runnable);
+        //        } else
+        //            runnable.run();
 
         try {
             for (int i = 0; i < changedLinesNbr; i++) {
@@ -167,9 +167,9 @@ public abstract class AbstractTextAction extends AbstractAction
         } finally {
             currEditor.stopSequentialRewriteMode(rewriteSession);
             // seems to have problems with StructuredTextReconciler
-//            if(partitioners != null){
-//                TextUtilities.addDocumentPartitioners(doc, partitioners);
-//            }
+            //            if(partitioners != null){
+            //                TextUtilities.addDocumentPartitioners(doc, partitioners);
+            //            }
             result.clear();
         }
     }
@@ -185,7 +185,7 @@ public abstract class AbstractTextAction extends AbstractAction
 
     protected static boolean isSaveDirtyBufferEnabled() {
         return AnyEditToolsPlugin.getDefault().getPreferenceStore().getBoolean(
-            IAnyEditConstants.SAVE_DIRTY_BUFFER);
+                IAnyEditConstants.SAVE_DIRTY_BUFFER);
     }
 
     /**
@@ -204,13 +204,4 @@ public abstract class AbstractTextAction extends AbstractAction
         this.isUsedOnSave = isUsedOnSave;
     }
 
-    public static boolean isSaveAndConvertEnabled() {
-        return AnyEditToolsPlugin.getDefault().getPreferenceStore().getBoolean(
-            IAnyEditConstants.SAVE_AND_CONVERT_ENABLED);
-    }
-
-    public static boolean isSaveAndTrimEnabled() {
-        return AnyEditToolsPlugin.getDefault().getPreferenceStore().getBoolean(
-            IAnyEditConstants.SAVE_AND_TRIM_ENABLED);
-    }
 }

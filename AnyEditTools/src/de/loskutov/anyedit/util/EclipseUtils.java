@@ -33,14 +33,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
@@ -567,31 +565,17 @@ public final class EclipseUtils {
      * @return false, if file filters are not applicable to the editor input. Return true,
      *         if at least one of filters matches the file name.
      */
-    public static boolean matchFilter(IEditorPart part) {
+    public static boolean matchFilter(IEditorPart part, CombinedPreferences prefs) {
         IEditorInput input = part.getEditorInput();
         if (input != null) {
             String name = input.getName();
-            String filterPerf = getCombinedPreferences(input)
-            .getString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST);
+            String filterPerf = prefs.getString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST);
             String[] filters = parseList(filterPerf);
             if (matchFilter(name, filters)) {
                 return true;
             }
         }
         return false;
-    }
-
-    public static CombinedPreferences getCombinedPreferences(IEditorInput input) {
-        IScopeContext context = null;
-        if (input != null) {
-            IProject project = getProject(input);
-            if (project != null) {
-                context = new ProjectScope(project);
-            }
-        }
-        CombinedPreferences combinedPreferences = new CombinedPreferences(context,
-                AnyEditToolsPlugin.getDefault().getPreferenceStore());
-        return combinedPreferences;
     }
 
     public static boolean matchFilter(String fileName, String[] filters) {

@@ -28,7 +28,6 @@ import org.eclipse.ui.internal.SaveAllAction;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
-import de.loskutov.anyedit.actions.AbstractTextAction;
 import de.loskutov.anyedit.actions.Spaces;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.util.EclipseUtils;
@@ -44,11 +43,6 @@ public class SpecialSaveAllAction extends SaveAllAction implements IDirtyWorkaro
 
     private final IAction tabsToSpaces = new DummyAction(IAnyEditConstants.ACTION_ID_CONVERT_TABS);
 
-
-
-    /**
-     * @param window
-     */
     public SpecialSaveAllAction(IWorkbenchWindow window) {
         super(window);
         spacesAction = new Spaces() {
@@ -100,70 +94,65 @@ public class SpecialSaveAllAction extends SaveAllAction implements IDirtyWorkaro
         }
     }
 
-    /* (non-Javadoc)
-     * Method declared on IAction.
-     * Performs the <code>Save</code> action by calling the
-     * <code>IEditorPart.doSave</code> method on the active editor.
-     */
     public void run() {
         runBeforeSave();
         super.run();
     }
 
-    /**
-     *
-     */
     private void runSpecial() {
         if (getWindow() == null) {
             // action has been disposed
             return;
         }
-        boolean trim = AbstractTextAction.isSaveAndTrimEnabled();
-        boolean convert = AbstractTextAction.isSaveAndConvertEnabled();
-        if (trim || convert) {
-            IWorkbenchPage page = getActivePage();
-            final IEditorPart[] dirtyEditors = page.getDirtyEditors();
+        IWorkbenchPage page = getActivePage();
+        final IEditorPart[] dirtyEditors = page.getDirtyEditors();
 
-            IRunnableWithProgress runnable = new IRunnableWithProgress() {
+        final int editorsCount = dirtyEditors.length;
+        if(editorsCount == 0) {
+            return;
+        }
+        IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
-                public void run(IProgressMonitor monitor)
-                        throws InvocationTargetException, InterruptedException {
-                    monitor.beginTask("Converting tabs <-> spaces before save",
-                            dirtyEditors.length);
-                    try {
-                        for (int i = 0; i < dirtyEditors.length; i++) {
-                            if (monitor.isCanceled()) {
-                                break;
-                            }
-                            IEditorPart part = dirtyEditors[i];
-                            if (EclipseUtils.matchFilter(part)) {
-                                monitor.worked(1);
+            public void run(IProgressMonitor monitor) throws InvocationTargetException,
+            InterruptedException {
+                monitor.beginTask("Converting tabs <-> spaces before save", editorsCount);
+                try {
+                    for (int i = 0; i < editorsCount; i++) {
+                        if (monitor.isCanceled()) {
+                            break;
+                        }
+                        monitor.worked(1);
+                        IEditorPart part = dirtyEditors[i];
+                        spacesAction.setActiveEditor(null, part);
+                        boolean trim = spacesAction.isSaveAndTrimEnabled();
+                        boolean convert = spacesAction.isSaveAndConvertEnabled();
+                        if (trim || convert) {
+                            if (EclipseUtils.matchFilter(part,
+                                    spacesAction.getCombinedPreferences())) {
                                 continue;
                             }
                             monitor.subTask(part.getTitle());
-                            spacesAction.setActiveEditor(null, part);
                             final IAction action;
-                            if(spacesAction.isDefaultTabToSpaces(spacesAction.getCombinedPreferences())){
+                            if (spacesAction.isDefaultTabToSpaces()) {
                                 action = tabsToSpaces;
                             } else {
                                 action = spacesToTabs;
                             }
                             spacesAction.run(action);
-                            monitor.worked(1);
                         }
-                    } finally {
-                        monitor.done();
                     }
+                } finally {
+                    monitor.done();
                 }
-            };
-
-            try {
-                PlatformUI.getWorkbench().getProgressService().run(false, true, runnable);
-            } catch (InvocationTargetException e) {
-                 AnyEditToolsPlugin.logError("Error during custom pre-save action", e);
-            } catch (InterruptedException e) {
-                // user cancel
             }
+        };
+
+        try {
+            PlatformUI.getWorkbench().getProgressService().run(false, true, runnable);
+        } catch (InvocationTargetException e) {
+            AnyEditToolsPlugin.logError("Error during custom pre-save action", e);
+        } catch (InterruptedException e) {
+            // user cancel
         }
     }
 
@@ -194,9 +183,6 @@ public class SpecialSaveAllAction extends SaveAllAction implements IDirtyWorkaro
 
     private static final class DummyAction extends Action {
 
-        /**
-         * @param actionId
-         */
         public DummyAction(String actionId) {
             setId(actionId);
         }

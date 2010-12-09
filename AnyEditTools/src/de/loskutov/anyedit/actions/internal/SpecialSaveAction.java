@@ -23,7 +23,6 @@ import org.eclipse.ui.internal.SaveAction;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
-import de.loskutov.anyedit.actions.AbstractTextAction;
 import de.loskutov.anyedit.actions.Spaces;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.util.EclipseUtils;
@@ -73,11 +72,6 @@ public class SpecialSaveAction extends SaveAction implements IDirtyWorkaround {
         }
     }
 
-    /* (non-Javadoc)
-     * Method declared on IAction.
-     * Performs the <code>Save</code> action by calling the
-     * <code>IEditorPart.doSave</code> method on the active editor.
-     */
     public void run() {
         runBeforeSave();
         super.run();
@@ -88,23 +82,24 @@ public class SpecialSaveAction extends SaveAction implements IDirtyWorkaround {
             // action has been disposed
             return;
         }
-        boolean trim = AbstractTextAction.isSaveAndTrimEnabled();
-        boolean convert = AbstractTextAction.isSaveAndConvertEnabled();
+        IEditorPart part = getActiveEditor();
+        if(part == null) {
+            return;
+        }
+        spacesAction.setActiveEditor(null, part);
+        boolean trim = spacesAction.isSaveAndTrimEnabled();
+        boolean convert = spacesAction.isSaveAndConvertEnabled();
         if(trim || convert){
-            IEditorPart part = getActiveEditor();
-            if (part != null) {
-                if(EclipseUtils.matchFilter(part)){
-                    return;
-                }
-                spacesAction.setActiveEditor(null, part);
-                final IAction action;
-                if(spacesAction.isDefaultTabToSpaces(spacesAction.getCombinedPreferences())){
-                    action = tabsToSpaces;
-                } else {
-                    action = spacesToTabs;
-                }
-                spacesAction.run(action);
+            if(EclipseUtils.matchFilter(part, spacesAction.getCombinedPreferences())){
+                return;
             }
+            final IAction action;
+            if(spacesAction.isDefaultTabToSpaces()){
+                action = tabsToSpaces;
+            } else {
+                action = spacesToTabs;
+            }
+            spacesAction.run(action);
         }
     }
 

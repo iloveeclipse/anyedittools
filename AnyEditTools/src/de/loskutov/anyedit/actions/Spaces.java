@@ -71,9 +71,9 @@ public class Spaces extends AbstractTextAction {
 
         boolean usedOnSave = isUsedOnSave();
         if (usedOnSave) {
-            removeTrailing = isSaveAndTrimEnabled(prefs);
-            tabsToSpaces = isDefaultTabToSpaces(prefs);
-            convertEnabled = isSaveAndConvertEnabled(prefs);
+            removeTrailing = isSaveAndTrimEnabled();
+            tabsToSpaces = isDefaultTabToSpaces();
+            convertEnabled = isSaveAndConvertEnabled();
             addLineEnabled = isSaveAndAddLineEnabled(prefs);
         } else {
             removeTrailing = isRemoveTrailingSpaceEnabled(prefs);
@@ -180,16 +180,16 @@ public class Spaces extends AbstractTextAction {
         return combinedPreferences;
     }
 
-    private boolean isSaveAndTrimEnabled(CombinedPreferences prefs) {
-        return prefs.getBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED);
+    public boolean isSaveAndTrimEnabled() {
+        return getCombinedPreferences().getBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED);
     }
 
     private boolean isSaveAndAddLineEnabled(CombinedPreferences prefs) {
         return prefs.getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE);
     }
 
-    private boolean isSaveAndConvertEnabled(CombinedPreferences prefs) {
-        return prefs.getBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED);
+    public boolean isSaveAndConvertEnabled() {
+        return getCombinedPreferences().getBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED);
     }
 
     private boolean isAddLineEnabled(CombinedPreferences prefs) {
@@ -207,8 +207,8 @@ public class Spaces extends AbstractTextAction {
         return prefs.getBoolean(IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS);
     }
 
-    public boolean isDefaultTabToSpaces(CombinedPreferences prefs) {
-        String action = prefs.getString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE);
+    public boolean isDefaultTabToSpaces() {
+        String action = getCombinedPreferences().getString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE);
         return IAnyEditConstants.ACTION_ID_CONVERT_TABS.equals(action);
     }
 
