@@ -1126,13 +1126,11 @@
          <menu icon="icons/sort.gif" id="AnyEdit.sortMenu" label="%sort">
             <command
                commandId="AnyEdit.sortAlphabeticallyCaseSensitiveAscending.command"
-               icon="icons/sort.gif"
                id="AnyEdit.sortAlphabeticallyCaseSensitiveAscending"
                label="%sortAlphabeticallyCaseSensitiveAscending"/>
 
             <command
                commandId="AnyEdit.sortAlphabeticallyCaseSensitiveDescending.command"
-               icon="icons/sort.gif"
                id="AnyEdit.sortAlphabeticallyCaseSensitiveDescending"
                label="%sortAlphabeticallyCaseSensitiveDescending"/>
 
@@ -1140,13 +1138,11 @@
 
             <command
                commandId="AnyEdit.sortAlphabeticallyCaseInsensitiveAscending.command"
-               icon="icons/sort.gif"
                id="AnyEdit.sortAlphabeticallyCaseInsensitiveAscending"
                label="%sortAlphabeticallyCaseInsensitiveAscending"/>
 
             <command
                commandId="AnyEdit.sortAlphabeticallyCaseInsensitiveDescending.command"
-               icon="icons/sort.gif"
                id="AnyEdit.sortAlphabeticallyCaseInsensitiveDescending"
                label="%sortAlphabeticallyCaseInsensitiveDescending"/>
 
@@ -1154,13 +1150,11 @@
 
             <command
                commandId="AnyEdit.sortNumericallyAscending.command"
-               icon="icons/sort.gif"
                id="AnyEdit.sortNumericallyAscending"
                label="%sortNumericallyAscending"/>
 
             <command
                commandId="AnyEdit.sortNumericallyDescending.command"
-               icon="icons/sort.gif"
                id="AnyEdit.sortNumericallyDescending"
                label="%sortNumericallyDescending"/>
 
