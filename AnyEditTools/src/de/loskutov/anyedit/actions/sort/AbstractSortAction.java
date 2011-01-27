@@ -4,7 +4,9 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Clemens Fuchslocher - initial API and implementation
+ * Contributors:
+ *      Clemens Fuchslocher - initial API and implementation
+ *      Andrei Loskutov     - bugfixes
  *******************************************************************************/
 package de.loskutov.anyedit.actions.sort;
 
@@ -38,8 +40,13 @@ public abstract class AbstractSortAction extends AbstractTextAction {
         }
 
         TextReplaceResultSet result = new TextReplaceResultSet();
-        result.setStartLine(selection.getStartLine());
-        result.setStopLine(selection.getEndLine());
+        if(selection.getLength() > 0) {
+            result.setStartLine(selection.getStartLine());
+            result.setStopLine(selection.getEndLine());
+        } else {
+            result.setStartLine(0);
+            result.setStopLine(document.getNumberOfLines() - 1);
+        }
         return result;
     }
 
@@ -53,21 +60,19 @@ public abstract class AbstractSortAction extends AbstractTextAction {
         addLines(results, lines);
     }
 
-    private List getLines(TextReplaceResultSet results, IDocument document) throws BadLocationException {
+    private List getLines(TextReplaceResultSet result, IDocument document) throws BadLocationException {
         List lines = new ArrayList();
-        int start = results.getStartLine();
-        int stop = results.getStopLine();
+        int start = result.getStartLine();
+        int stop = result.getStopLine();
 
         for (int n = start; n <= stop; n++) {
             int offset = document.getLineOffset(n);
             int length = document.getLineLength(n);
-            String text = document.get(offset, length);
-
-            // Is this the last line?
-            if (n == stop) {
-                // Yes.
-                text += getLastLineDelimiter(document, n);
+            String delimiter = document.getLineDelimiter(n);
+            if(delimiter != null) {
+                length -= delimiter.length();
             }
+            String text = document.get(offset, length);
 
             LineReplaceResult line = new LineReplaceResult();
             line.startReplaceIndex = 0;
@@ -75,29 +80,7 @@ public abstract class AbstractSortAction extends AbstractTextAction {
             line.textToReplace = text;
             lines.add(line);
         }
-
         return lines;
-    }
-
-    private String getLastLineDelimiter(IDocument document, int n) throws BadLocationException {
-        // Does the last line already contain a line delimiter?
-        String delimiter = document.getLineDelimiter(n);
-        if (delimiter != null) {
-            // Yes.
-            return "";
-        }
-
-        // Is there a previous line?
-        if (n > 1) {
-            // Yes. So get the line delimiter from there.
-            delimiter = document.getLineDelimiter(n - 1);
-            if (delimiter != null) {
-                return delimiter;
-            }
-        }
-
-        // Last resort.
-        return System.getProperty("line.separator");
     }
 
     private void sortLines(List lines) {
