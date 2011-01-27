@@ -691,6 +691,41 @@
             id="AnyEdit.replaceWith.editor"
             name="%_replaceWithEditor"/>
 
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseSensitiveAscending"
+            id="AnyEdit.sortAlphabeticallyCaseSensitiveAscending.command"
+            name="%sortAlphabeticallyCaseSensitiveAscending"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseSensitiveDescending"
+            id="AnyEdit.sortAlphabeticallyCaseSensitiveDescending.command"
+            name="%sortAlphabeticallyCaseSensitiveDescending"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseInsensitiveAscending"
+            id="AnyEdit.sortAlphabeticallyCaseInsensitiveAscending.command"
+            name="%sortAlphabeticallyCaseInsensitiveAscending"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseInsensitiveDescending"
+            id="AnyEdit.sortAlphabeticallyCaseInsensitiveDescending.command"
+            name="%sortAlphabeticallyCaseInsensitiveDescending"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.sort.SortNumericallyAscending"
+            id="AnyEdit.sortNumericallyAscending.command"
+            name="%sortNumericallyAscending"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.sort.SortNumericallyDescending"
+            id="AnyEdit.sortNumericallyDescending.command"
+            name="%sortNumericallyDescending"/>
    </extension>
 
    <extension
@@ -1087,7 +1122,55 @@
 
       </menuContribution>
 
+      <menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=AnyEdit.convertMenu">
+         <menu icon="icons/sort.gif" id="AnyEdit.sortMenu" label="%sort">
+            <command
+               commandId="AnyEdit.sortAlphabeticallyCaseSensitiveAscending.command"
+               icon="icons/sort.gif"
+               id="AnyEdit.sortAlphabeticallyCaseSensitiveAscending"
+               label="%sortAlphabeticallyCaseSensitiveAscending"/>
 
+            <command
+               commandId="AnyEdit.sortAlphabeticallyCaseSensitiveDescending.command"
+               icon="icons/sort.gif"
+               id="AnyEdit.sortAlphabeticallyCaseSensitiveDescending"
+               label="%sortAlphabeticallyCaseSensitiveDescending"/>
+
+            <separator name="AnyEdit.sortMenu.separator1" visible="true"/>
+
+            <command
+               commandId="AnyEdit.sortAlphabeticallyCaseInsensitiveAscending.command"
+               icon="icons/sort.gif"
+               id="AnyEdit.sortAlphabeticallyCaseInsensitiveAscending"
+               label="%sortAlphabeticallyCaseInsensitiveAscending"/>
+
+            <command
+               commandId="AnyEdit.sortAlphabeticallyCaseInsensitiveDescending.command"
+               icon="icons/sort.gif"
+               id="AnyEdit.sortAlphabeticallyCaseInsensitiveDescending"
+               label="%sortAlphabeticallyCaseInsensitiveDescending"/>
+
+            <separator name="AnyEdit.sortMenu.separator2" visible="true"/>
+
+            <command
+               commandId="AnyEdit.sortNumericallyAscending.command"
+               icon="icons/sort.gif"
+               id="AnyEdit.sortNumericallyAscending"
+               label="%sortNumericallyAscending"/>
+
+            <command
+               commandId="AnyEdit.sortNumericallyDescending.command"
+               icon="icons/sort.gif"
+               id="AnyEdit.sortNumericallyDescending"
+               label="%sortNumericallyDescending"/>
+
+            <visibleWhen checkEnabled="false">
+               <with variable="activePart">
+                  <test forcePluginActivation="true" property="AnyEditTools.EditorPropertyTester.hasModifiableDocument"/>
+               </with>
+            </visibleWhen>
+         </menu>
+      </menuContribution>
    </extension>
 
    <extension
