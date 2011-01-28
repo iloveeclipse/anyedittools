@@ -13,16 +13,13 @@ package de.loskutov.anyedit.util;
  * @author Andrei
  */
 public class LineReplaceResult {
-    /** relative to line start unchanged results can have index > 0 */
+    /** relative to line start, changed results must have index >= 0 */
     public int startReplaceIndex;
-    /** unchanged results can have range > 0 */
+    /** changed results must have have range > 0, to replace entire line specify "-1" for the range */
     public int rangeToReplace;
-    /** unchanged results can have not-null text to replace */
+    /** changed results must have not-null text to replace */
     public String textToReplace;
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("startIndex: ").append(startReplaceIndex);  //$NON-NLS-1$

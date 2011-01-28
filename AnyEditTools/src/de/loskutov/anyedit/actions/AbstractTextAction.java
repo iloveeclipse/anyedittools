@@ -157,9 +157,16 @@ implements IEditorActionDelegate {
             for (int i = 0; i < changedLinesNbr; i++) {
                 LineReplaceResult trr = result.get(i);
                 if(trr != null){
+
                     IRegion lineInfo = doc.getLineInformation(i + result.getStartLine());
-                    doc.replace(lineInfo.getOffset() + trr.startReplaceIndex,
-                            trr.rangeToReplace, trr.textToReplace);
+                    int startReplaceIndex = trr.startReplaceIndex;
+                    int rangeToReplace = trr.rangeToReplace;
+                    // to replace entire line we can specify "-1" for the range
+                    if(startReplaceIndex == 0 && rangeToReplace == -1) {
+                        rangeToReplace = lineInfo.getLength();
+                    }
+                    doc.replace(lineInfo.getOffset() + startReplaceIndex,
+                            rangeToReplace, trr.textToReplace);
                 }
             }
         } catch (Exception ex) {

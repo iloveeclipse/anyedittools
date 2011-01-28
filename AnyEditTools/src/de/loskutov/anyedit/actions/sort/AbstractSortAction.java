@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -66,17 +67,11 @@ public abstract class AbstractSortAction extends AbstractTextAction {
         int stop = result.getStopLine();
 
         for (int n = start; n <= stop; n++) {
-            int offset = document.getLineOffset(n);
-            int length = document.getLineLength(n);
-            String delimiter = document.getLineDelimiter(n);
-            if(delimiter != null) {
-                length -= delimiter.length();
-            }
-            String text = document.get(offset, length);
-
+            IRegion lineInfo = document.getLineInformation(n);
+            String text = document.get(lineInfo.getOffset(), lineInfo.getLength());
             LineReplaceResult line = new LineReplaceResult();
             line.startReplaceIndex = 0;
-            line.rangeToReplace = length;
+            line.rangeToReplace = -1;
             line.textToReplace = text;
             lines.add(line);
         }
