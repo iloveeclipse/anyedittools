@@ -67,6 +67,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.model.WorkbenchViewerComparator;
+import org.osgi.framework.Version;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
@@ -468,11 +469,11 @@ IWorkbenchPreferencePage, SelectionListener {
         gridData = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
         toolbarComposite.setLayoutData(gridData);
         toolbarComposite.setText(Messages.pref_toolbarIntro);
-
-        addSaveAllCheck = createLabeledCheck(Messages.pref_addSaveAll,
-                Messages.pref_addSaveAllTip,
-                store.getBoolean(IAnyEditConstants.ADD_SAVE_ALL_TO_TOOLBAR), toolbarComposite);
-
+        if(EclipseUtils.getWorkbenchVersion().compareTo(new Version(3,7,0)) < 0) {
+            addSaveAllCheck = createLabeledCheck(Messages.pref_addSaveAll,
+                    Messages.pref_addSaveAllTip,
+                    store.getBoolean(IAnyEditConstants.ADD_SAVE_ALL_TO_TOOLBAR), toolbarComposite);
+        }
         removePrintCheck = createLabeledCheck(Messages.pref_removePrint,
                 Messages.pref_removePrintTip,
                 store.getBoolean(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR), toolbarComposite);
@@ -686,8 +687,10 @@ IWorkbenchPreferencePage, SelectionListener {
                 replaceAllSpacesCheck.getSelection());
         store.setValue(IAnyEditConstants.PRESERVE_ENTITIES, preserveEntitiesCheck
                 .getSelection());
-        store.setValue(IAnyEditConstants.ADD_SAVE_ALL_TO_TOOLBAR, addSaveAllCheck
-                .getSelection());
+        if(addSaveAllCheck!=null) {
+            store.setValue(IAnyEditConstants.ADD_SAVE_ALL_TO_TOOLBAR, addSaveAllCheck
+                    .getSelection());
+        }
         store.setValue(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR, removePrintCheck
                 .getSelection());
         store.setValue(IAnyEditConstants.SAVE_AND_TRIM_ENABLED, saveAndTrimCheck
@@ -819,8 +822,10 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getDefaultBoolean(IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS));
         preserveEntitiesCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.PRESERVE_ENTITIES));
-        addSaveAllCheck.setSelection(store
-                .getDefaultBoolean(IAnyEditConstants.ADD_SAVE_ALL_TO_TOOLBAR));
+        if(addSaveAllCheck!=null) {
+            addSaveAllCheck.setSelection(store
+                    .getDefaultBoolean(IAnyEditConstants.ADD_SAVE_ALL_TO_TOOLBAR));
+        }
         removePrintCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR));
         saveAndTrimCheck.setSelection(store

@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
@@ -66,6 +67,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.internal.ide.dialogs.OpenResourceDialog;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
@@ -93,6 +96,11 @@ public final class EclipseUtils {
 
     private EclipseUtils() {
         super();
+    }
+
+    public static Version getWorkbenchVersion() {
+        Bundle bundle = Platform.getBundle("org.eclipse.ui.workbench");
+        return bundle.getVersion();
     }
 
     /**

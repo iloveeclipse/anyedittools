@@ -15,8 +15,11 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Version;
 
 import de.loskutov.anyedit.actions.internal.StartupHelper;
+import de.loskutov.anyedit.actions.internal.StartupHelper2;
+import de.loskutov.anyedit.util.EclipseUtils;
 
 
 /**
@@ -110,12 +113,13 @@ public class AnyEditToolsPlugin extends AbstractUIPlugin implements IStartup {
         return isSaveHookInitialized;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ui.IStartup#earlyStartup()
-     */
     public void earlyStartup() {
         // hooks into the global toolbar/menu
-        new StartupHelper().init();
+        if(EclipseUtils.getWorkbenchVersion().compareTo(new Version(3,7,0)) >= 0) {
+            new StartupHelper2().init();
+        } else {
+            new StartupHelper().init();
+        }
         setSaveHookInitialized(true);
     }
 }
