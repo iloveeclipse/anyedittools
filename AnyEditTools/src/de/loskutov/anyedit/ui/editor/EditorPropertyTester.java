@@ -103,7 +103,9 @@ public class EditorPropertyTester extends PropertyTester {
              */
             Method method = page.getClass().getDeclaredMethod("getViewer", null);
             method.setAccessible(true);
-            return (ITextViewer) method.invoke(page, null);
+            if(ITextViewer.class.isAssignableFrom(method.getReturnType())) {
+                return (ITextViewer) method.invoke(page, null);
+            }
         } catch (Exception e) {
             // AnyEditToolsPlugin.logError("Can't get page viewer from the console page", e);
         }
