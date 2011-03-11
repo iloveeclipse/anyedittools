@@ -27,7 +27,6 @@ import de.loskutov.anyedit.util.EclipseUtils;
  */
 public class AnyEditToolsPlugin extends AbstractUIPlugin implements IStartup {
 
-    // The shared instance.
     private static AnyEditToolsPlugin plugin;
 
     private static boolean isSaveHookInitialized;
