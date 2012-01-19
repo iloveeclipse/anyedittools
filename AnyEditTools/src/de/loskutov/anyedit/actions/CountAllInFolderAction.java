@@ -101,33 +101,45 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
     }
 
     private void printSummary(final CountingVisitor v) {
-        long filesPerFolder = v.folders + v.teamFolders == 0 ? 0 : (v.files + v.teamFiles)
-                / (v.folders + v.teamFolders);
-        long resPerProject = v.projects == 0 ? 0
-                : (v.files + v.folders + v.teamFiles + v.teamFolders) / v.projects;
+        long filesPerFolder = v.folders == 0 ? 0 : v.files / v.folders;
+        long resPerProject = v.projects == 0 ? 0 : (v.files + v.folders) / v.projects;
 
         String message = selectedResources.isEmpty() ? "Workspace" : "Selection";
-        message += " contains " + (v.files + v.folders + v.projects + v.teamFiles + v.teamFolders)
-                + " resources:\n" + (v.files + v.teamFiles) + " files in "
-                + (v.folders + v.teamFolders) + " folders and " + v.projects + " projects.";
+        message += " contains "
+                + (v.files + v.folders + v.projects) + " resources:\n" + v.files
+                + " files in " + v.folders + " folders and " + v.projects + " projects.";
 
         message += "\n\nIn average each folder contains " + filesPerFolder
-                + " files, and each project " + resPerProject + " resources.";
+                + " files, and each project " + resPerProject + " resources.\n";
 
-        if (v.teamFiles > 0 || v.teamFolders > 0) {
-            message += "\n\nThere are also " + v.teamFiles + " hidden team files" + " and "
+        boolean hasDerived = v.derivedFiles > 0 || v.derivedFolders > 0;
+        if (hasDerived) {
+            message += "\nThere are " + v.derivedFiles + " derived files" + " and "
+                    + v.derivedFolders + " derived folders.";
+        }
+        boolean hasTeam = v.teamFiles > 0 || v.teamFolders > 0;
+        if (hasTeam) {
+            message += "\nThere are " + v.teamFiles + " hidden team files" + " and "
                     + v.teamFolders + " hidden team folders.";
+        }
 
-            filesPerFolder = v.folders == 0 ? 0 : v.files / v.folders;
-            resPerProject = v.projects == 0 ? 0 : (v.files + v.folders) / v.projects;
+        if (hasDerived || hasTeam) {
+            filesPerFolder = v.folders + v.teamFolders + v.derivedFolders == 0 ? 0 : (v.files + v.teamFiles + v.derivedFiles)
+                    / (v.folders + v.teamFolders + v.derivedFolders);
+            resPerProject = v.projects == 0 ? 0
+                    : (v.files + v.folders + v.derivedFolders + v.derivedFiles + v.teamFiles + v.teamFolders) / v.projects;
 
-            message += "\n\n*Without* team resources selection would contain "
-                    + (v.files + v.folders + v.projects) + " resources:\n" + v.files
-                    + " files in " + v.folders + " folders and " + v.projects + " projects.";
-
+            message += "\n\nWith derived and team files ";
+            message += selectedResources.isEmpty() ? "workspace" : "selection";
+            message += " would contain "
+                    + (v.files + v.folders + v.projects + v.derivedFolders + v.derivedFiles + v.teamFiles + v.teamFolders)
+                    + " resources:\n"
+                    + (v.files + v.teamFiles + v.derivedFiles) + " files in "
+                    + (v.folders + v.teamFolders + v.derivedFolders) + " folders and " + v.projects + " projects.";
             message += "\n\nIn average each folder would contain " + filesPerFolder
                     + " files, and each project " + resPerProject + " resources.";
         }
+
         AnyEditToolsPlugin.logInfo(message);
         MessageDialog.openInformation(null, "Count all resources", message);
     }
@@ -138,6 +150,8 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
         long projects;
         long teamFolders;
         long teamFiles;
+        long derivedFolders;
+        long derivedFiles;
 
         public boolean visit(IResource resource) throws CoreException {
             if(!resource.isAccessible()){
@@ -147,7 +161,11 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
                 if(resource.isTeamPrivateMember(IResource.CHECK_ANCESTORS)){
                     teamFiles ++;
                 } else {
-                    files ++;
+                    if(resource.isDerived(IResource.CHECK_ANCESTORS)) {
+                        derivedFiles ++;
+                    } else {
+                        files ++;
+                    }
                 }
                 return false;
             }
@@ -155,7 +173,11 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
                 if(resource.isTeamPrivateMember(IResource.CHECK_ANCESTORS)){
                     teamFolders ++;
                 } else {
-                    folders ++;
+                    if(resource.isDerived(IResource.CHECK_ANCESTORS)) {
+                        derivedFolders ++;
+                    } else {
+                        folders ++;
+                    }
                 }
                 return true;
             }
