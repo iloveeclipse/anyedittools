@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2009 Andrei Loskutov.
+ * Copyright (c) 2012 Andrey.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 package de.loskutov.anyedit.ui.wizards;
 
@@ -15,15 +15,24 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IElementFactory;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IWorkingSet;
@@ -34,6 +43,7 @@ import org.eclipse.ui.internal.IWorkbenchConstants;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
+import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
  * @author Andrei
@@ -42,12 +52,31 @@ public class ImportPage extends WSPage {
 
     private static final String TITLE = "Import working sets from the local file system";
     private static final String DESCRIPTION = "Select the file path to import working " +
-    "sets from and working sets to import";
+            "sets from and working sets to import";
+
+    protected boolean isMerge;
 
     protected ImportPage(String pageName) {
         super(pageName, TITLE, DESCRIPTION, "icons/import_wiz.gif");
+        isMerge = true;
     }
 
+    public void createControl(Composite parent) {
+        super.createControl(parent);
+        final Button chooserBtn = new Button(comp, SWT.CHECK);
+        chooserBtn.setSelection(isMerge);
+        chooserBtn.setText("Merge with existing working sets");
+        chooserBtn.addSelectionListener(new SelectionListener() {
+            public void widgetDefaultSelected(SelectionEvent e) {
+                // ignored
+            }
+
+            public void widgetSelected(SelectionEvent e) {
+                isMerge = chooserBtn.getSelection();
+            }
+        });
+    }
+    
     private String readSets() {
         String pathname = getFileString();
         if (pathname == null) {
@@ -112,20 +141,20 @@ public class ImportPage extends WSPage {
         if (factory == null) {
             AnyEditToolsPlugin.logError(
                     "Unable to restore working set - cannot instantiate factory: "
-                    + factoryID, null);
+                            + factoryID, null);
             return null;
         }
         IAdaptable adaptable = factory.createElement(memento);
         if (adaptable == null) {
             AnyEditToolsPlugin.logError(
                     "Unable to restore working set - cannot instantiate working set: "
-                    + factoryID, null);
+                            + factoryID, null);
             return null;
         }
         if (!(adaptable instanceof IWorkingSet)) {
             AnyEditToolsPlugin.logError(
                     "Unable to restore working set - element is not an IWorkingSet: "
-                    + factoryID, null);
+                            + factoryID, null);
             return null;
         }
         return (IWorkingSet) adaptable;
@@ -142,14 +171,18 @@ public class ImportPage extends WSPage {
             return;
         }
         IWorkingSetManager workingSetManager = PlatformUI.getWorkbench()
-        .getWorkingSetManager();
+                .getWorkingSetManager();
         List added = new ArrayList();
         for (int i = 0; i < selected.length; i++) {
             IWorkingSet workingSet = (IWorkingSet) selected[i];
-            if (workingSetManager.getWorkingSet(workingSet.getName()) == null) {
+            IWorkingSet oldWorkingSet = workingSetManager.getWorkingSet(workingSet.getName());
+            if (oldWorkingSet == null) {
                 removeNonExistingChildren(workingSet);
                 workingSetManager.addWorkingSet(workingSet);
                 added.add(workingSet);
+            } else if(isMerge) {
+                removeNonExistingChildren(workingSet);
+                mergeWorkingSets(oldWorkingSet, workingSet);
             }
         }
         if (added.size() > 0) {
@@ -228,11 +261,6 @@ public class ImportPage extends WSPage {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.loskutov.anyedit.ui.wizards.WSPage#createContentProvider()
-     */
     protected IStructuredContentProvider createContentProvider() {
         return new WorkingSetContentProvider();
     }
@@ -246,11 +274,6 @@ public class ImportPage extends WSPage {
         setPageComplete(errorMessage == null);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.loskutov.anyedit.ui.wizards.WSPage#validateInput()
-     */
     protected boolean validateInput() {
         String errorMessage = null;
         String text = getFileString();
@@ -278,4 +301,43 @@ public class ImportPage extends WSPage {
         return errorMessage == null;
     }
 
+    public void setInitialSelection(IStructuredSelection selection) {
+        if(selection == null) {
+            return;
+        }
+        IResource resource = EclipseUtils.getResource(selection);
+        if(resource == null) {
+            return;
+        }
+        IPath location = resource.getLocation();
+        if(location != null && "wst".equals(location.getFileExtension()) &&
+                location.toFile().isFile()) {
+            usedFiles.add(location.toOSString());
+        }
+    }
+
+    private void mergeWorkingSets(IWorkingSet oldWorkingSet, IWorkingSet newWorkingSet) {
+        if(!oldWorkingSet.isEditable()) {
+            return;
+        }
+        IAdaptable[] elementsOld = oldWorkingSet.getElements();
+        IAdaptable[] elementsNew = newWorkingSet.getElements();
+        if(elementsNew == null || elementsOld == null || elementsNew.length == 0) {
+            return;
+        }
+        LinkedHashSet/*<IAdaptable>*/ set = new LinkedHashSet(Arrays.asList(elementsOld));
+        ArrayList newList = new ArrayList(Arrays.asList(elementsNew));
+        newList.removeAll(set);
+        if(newList.size() == 0) {
+            return;
+        }
+        elementsNew = oldWorkingSet.adaptElements((IAdaptable[]) newList.toArray(new IAdaptable[newList.size()]));
+        newList = new ArrayList(Arrays.asList(elementsNew));
+        newList.removeAll(set);
+        if(newList.size() == 0) {
+            return;
+        }
+        set.addAll(newList);
+        oldWorkingSet.setElements((IAdaptable[]) set.toArray(new IAdaptable[set.size()]));
+    }
 }

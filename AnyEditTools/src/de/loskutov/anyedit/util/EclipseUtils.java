@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2009 Andrei Loskutov.
+ * Copyright (c) 2012 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 package de.loskutov.anyedit.util;
 
@@ -35,6 +35,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -50,6 +51,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.widgets.Composite;
@@ -173,7 +175,7 @@ public final class EclipseUtils {
                 String label = process.getLabel();
                 IPath ipath = new Path(label);
                 IFile[] files = ResourcesPlugin.getWorkspace().getRoot()
-                .findFilesForLocation(ipath);
+                        .findFilesForLocation(ipath);
                 if (files != null && files.length == 1) {
                     project = files[0].getProject();
                 }
@@ -181,6 +183,39 @@ public final class EclipseUtils {
         }
 
         return project;
+    }
+
+    /**
+     * @param o
+     *     selection or some object which is or can be adapted to resource
+     * @return given object as resource, may return null
+     */
+    public static IResource getResource(Object o) {
+        if(o instanceof IStructuredSelection) {
+            IStructuredSelection selection = (IStructuredSelection) o;
+            if(selection.isEmpty()) {
+                return null;
+            }
+            o = selection.getFirstElement();
+        }
+        if(o == null) {
+            return null;
+        }
+        if (o instanceof IResource) {
+            return (IResource) o;
+        }
+        if (o instanceof IAdaptable) {
+            IAdaptable adaptable = (IAdaptable) o;
+            IResource adapter = (IResource) adaptable.getAdapter(IResource.class);
+            if (adapter != null) {
+                return adapter;
+            }
+            adapter = (IResource) adaptable.getAdapter(IFile.class);
+            if (adapter != null) {
+                return adapter;
+            }
+        }
+        return (IResource) Platform.getAdapterManager().getAdapter(o, IResource.class);
     }
 
     public static IFile getResource(IProject project, IEditorInput currentInput,
@@ -213,7 +248,7 @@ public final class EclipseUtils {
         List resultList = new ArrayList();
         IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
         boolean useWorkspaceScope = AnyEditToolsPlugin.getDefault().getPreferenceStore()
-        .getBoolean(IAnyEditConstants.USE_WORKSPACE_SCOPE_FOR_SEARCH);
+                .getBoolean(IAnyEditConstants.USE_WORKSPACE_SCOPE_FOR_SEARCH);
         if (project != null) {
             resource = findInProject(currentPath, project, selectedText, resultList);
             if (resource != null) {
@@ -291,7 +326,7 @@ public final class EclipseUtils {
     }
 
     private static IFile findAbsoluteFile(String selectedText)
-    throws OperationCanceledException {
+            throws OperationCanceledException {
         IPath iPath = new Path(selectedText);
         File file = iPath.toFile();
         if (!file.isFile() || !file.canRead()) {
@@ -324,7 +359,7 @@ public final class EclipseUtils {
 
     private static IFile findInProjects(IProject[] projects, String currentPath,
             String selectedText, List checkedProjects, List resultList)
-    throws OperationCanceledException {
+                    throws OperationCanceledException {
         for (int i = 0; i < projects.length; i++) {
             IFile resource = findInProject(currentPath, projects[i], selectedText,
                     resultList);
@@ -490,7 +525,7 @@ public final class EclipseUtils {
             return;
         }
         ITextFileBufferManager bufferManager = FileBuffers
-        .getTextFileBufferManager();
+                .getTextFileBufferManager();
         try {
             bufferManager.disconnect(buffer.getLocation(), LocationKind.IFILE,
                     new NullProgressMonitor());
@@ -650,7 +685,7 @@ public final class EclipseUtils {
         try {
             // here we could exclude derived resources
             boolean includeDerived = AnyEditToolsPlugin.getDefault().getPreferenceStore()
-            .getBoolean(IAnyEditConstants.INCLUDE_DERIVED_RESOURCES);
+                    .getBoolean(IAnyEditConstants.INCLUDE_DERIVED_RESOURCES);
             if (includeDerived) {
                 resources = container.members();
             } else {
@@ -678,7 +713,7 @@ public final class EclipseUtils {
      * @throws OperationCanceledException if user cancels the dialog
      */
     public static IFile queryFile(String path, IContainer input)
-    throws OperationCanceledException {
+            throws OperationCanceledException {
         Shell parent = AnyEditToolsPlugin.getShell();
 
         MyOpenResourceDialog dialog = new MyOpenResourceDialog(parent, input,
@@ -722,7 +757,7 @@ public final class EclipseUtils {
 
     public static IEditorPart getActiveEditor() {
         IWorkbenchWindow window = AnyEditToolsPlugin.getDefault().getWorkbench()
-        .getActiveWorkbenchWindow();
+                .getActiveWorkbenchWindow();
         if (window != null) {
             IWorkbenchPage page = window.getActivePage();
             if (page != null) {
@@ -734,7 +769,7 @@ public final class EclipseUtils {
 
     public static IEditorReference[] getEditors() {
         IWorkbenchWindow window = AnyEditToolsPlugin.getDefault().getWorkbench()
-        .getActiveWorkbenchWindow();
+                .getActiveWorkbenchWindow();
         if (window != null) {
             IWorkbenchPage page = window.getActivePage();
             if (page != null) {
@@ -761,7 +796,7 @@ public final class EclipseUtils {
         }
 
         public void accept(IResourceProxyVisitor visitor, int memberFlags)
-        throws CoreException {
+                throws CoreException {
             for (int i = 0; i < resources.size(); i++) {
                 ((IResource) resources.get(i)).accept(visitor, memberFlags);
             }

@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2009 Andrei Loskutov.
+ * Copyright (c) 2012 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 package de.loskutov.anyedit.ui.wizards;
 
@@ -15,29 +15,25 @@ import org.eclipse.ui.IWorkbench;
 
 public class WorkingSetImportWizard extends Wizard implements IImportWizard {
 
-	public WorkingSetImportWizard() {
-		super();
-	}
     private ImportPage mainPage;
+    private IStructuredSelection selection;
 
-
-    /* (non-Javadoc)
-     * @see org.eclipse.jface.wizard.Wizard#performFinish()
-     */
-    public boolean performFinish() {
-        return mainPage.finish();
+    public WorkingSetImportWizard() {
+        super();
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
-     */
-    public void init(IWorkbench workbench, IStructuredSelection selection) {
-    	// noop
+    public boolean performFinish() {
+        return mainPage != null? mainPage.finish() : false;
+    }
+
+    public void init(IWorkbench workbench, IStructuredSelection sel) {
+        this.selection = sel;
     }
 
     public void addPages() {
         super.addPages();
         mainPage = new ImportPage("Working Set Import");
+        mainPage.setInitialSelection(selection);
         addPage(mainPage);
     }
 }

@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2009 Andrei Loskutov.
+ * Copyright (c) 2012 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 package de.loskutov.anyedit.ui.wizards;
 
@@ -41,7 +41,7 @@ import de.loskutov.anyedit.IAnyEditConstants;
 public abstract class WSPage extends WizardPage {
 
     private CheckboxTableViewer tv;
-    private Composite comp;
+    protected Composite comp;
     protected List/* <String> */usedFiles;
     private Combo dest;
 
@@ -54,11 +54,6 @@ public abstract class WSPage extends WizardPage {
         usedFiles = new ArrayList();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-     */
     public void createControl(Composite parent) {
         comp = new Composite(parent, SWT.BORDER);
         GridLayout layout = new GridLayout();
@@ -118,6 +113,7 @@ public abstract class WSPage extends WizardPage {
                 validateInput();
             }
         });
+
         validateInput();
     }
 
