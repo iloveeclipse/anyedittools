@@ -423,7 +423,7 @@
          </action>
          <action
                class="de.loskutov.anyedit.actions.CountAllInFolderAction"
-               icon="platform:/plugin/org.eclipse.ui.ide/icons/full/markers/help_small.gif"
+               icon="icons/count_resources.gif"
                id="de.loskutov.anyedit.countAllInFolder"
                label="%countAll"
                menubarPath="file/save.ext"
