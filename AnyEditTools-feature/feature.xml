@@ -3,7 +3,7 @@
       id="AnyEditTools"
       label="AnyEditTools"
       version="2.4.1.qualifier"
-      provider-name="Andrei Loskutov"
+      provider-name="Andrey Loskutov"
       plugin="de.loskutov.anyedit.AnyEditTools"
       image="loskutov32.gif">
 
@@ -23,7 +23,7 @@
    </license>
 
    <url>
-      <update label="Andrei Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
+      <update label="Andrey Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
       <discovery label="Andrei Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
    </url>
 
