@@ -14,6 +14,7 @@ import java.net.URI;
 
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentRewriteSession;
@@ -127,7 +128,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         }
 
         IDocumentProvider docProvider =
-            (IDocumentProvider) editorPart.getAdapter(IDocumentProvider.class);
+                (IDocumentProvider) editorPart.getAdapter(IDocumentProvider.class);
         return docProvider;
     }
 
@@ -192,6 +193,17 @@ public class AbstractEditor implements ITextEditorExtension2 {
     }
 
     public String computeEncoding() {
+        IFile file = getFile();
+        if(file != null) {
+            try {
+                String charset = file.getCharset();
+                if(charset != null) {
+                    return charset;
+                }
+            } catch (CoreException e) {
+                // ignore;
+            }
+        }
         IDocumentProvider provider = getDocumentProvider();
         if(provider instanceof IStorageDocumentProvider) {
             IStorageDocumentProvider docProvider = (IStorageDocumentProvider) provider;
@@ -361,10 +373,10 @@ public class AbstractEditor implements ITextEditorExtension2 {
             IDocumentExtension4 extension= (IDocumentExtension4) document;
             if (normalized) {
                 rewriteSession = extension
-                .startRewriteSession(DocumentRewriteSessionType.STRICTLY_SEQUENTIAL);
+                        .startRewriteSession(DocumentRewriteSessionType.STRICTLY_SEQUENTIAL);
             } else {
                 rewriteSession = extension
-                .startRewriteSession(DocumentRewriteSessionType.SEQUENTIAL);
+                        .startRewriteSession(DocumentRewriteSessionType.SEQUENTIAL);
             }
         } else if (document instanceof IDocumentExtension) {
             IDocumentExtension extension = (IDocumentExtension) document;

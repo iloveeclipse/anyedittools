@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
@@ -28,7 +29,7 @@ import de.loskutov.anyedit.Messages;
  */
 public class TextUtil {
 
-    public static final String SYSTEM_CHARSET = System.getProperty("file.encoding", "utf-8");
+    public static final String SYSTEM_CHARSET = ResourcesPlugin.getEncoding();
 
     /** The predefined line delimiters */
     private static final char[] CR = { '\r' };
@@ -605,7 +606,7 @@ public class TextUtil {
      * from given text
      */
     public String fromUnicode(String charset, String input)
-    throws UnsupportedOperationException {
+            throws UnsupportedOperationException {
         StringBuffer ret = new StringBuffer();
         Matcher matcher = UNICODE_PATTERN.matcher(input);
         String error = null;
@@ -1206,7 +1207,7 @@ public class TextUtil {
                     return unescapeText(s); // recursive call
                 } else if (k == arraySize) {
                     s = new StringBuffer(s.substring(0, i)).append('&')
-                    .append(unescapeText(s.substring(i + 1))).toString();
+                            .append(unescapeText(s.substring(i + 1))).toString();
                     return s;
                 }
             }
