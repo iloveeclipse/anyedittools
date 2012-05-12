@@ -18,7 +18,7 @@ public class SortAlphabeticallyCaseSensitiveDescending extends AbstractSortActio
     protected Comparator getComparator() {
         return new AbstractSortComparator() {
             public int compare(Object left, Object right) {
-                return -line(left).compareTo(line(right));
+                return line(right).compareTo(line(left));
             }
         };
     }
