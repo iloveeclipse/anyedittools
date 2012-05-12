@@ -159,7 +159,7 @@ public abstract class ReplaceWithAction extends AbstractHandler implements IObje
     private void copyStreamToWriter(InputStream stream, Writer writer){
         InputStreamReader in = null;
         try {
-            in = new InputStreamReader(stream);
+            in = new InputStreamReader(stream, editor.computeEncoding());
             BufferedReader br = new BufferedReader(in);
 
             int i;
@@ -212,6 +212,7 @@ public abstract class ReplaceWithAction extends AbstractHandler implements IObje
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(file2));
+            copyStreamToWriter(stream, bw);
         } catch (IOException e) {
             AnyEditToolsPlugin.logError("Error on saving to file: " + file2, e);
             return;
@@ -225,7 +226,6 @@ public abstract class ReplaceWithAction extends AbstractHandler implements IObje
             }
         }
 
-        copyStreamToWriter(stream, bw);
 
         if (iFile != null) {
             try {

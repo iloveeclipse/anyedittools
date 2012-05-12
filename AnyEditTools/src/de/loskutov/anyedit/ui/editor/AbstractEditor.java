@@ -39,6 +39,7 @@ import org.eclipse.ui.texteditor.ITextEditorExtension2;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.util.EclipseUtils;
+import de.loskutov.anyedit.util.TextUtil;
 
 /**
  * @author Andrei
@@ -208,9 +209,11 @@ public class AbstractEditor implements ITextEditorExtension2 {
         if(provider instanceof IStorageDocumentProvider) {
             IStorageDocumentProvider docProvider = (IStorageDocumentProvider) provider;
             String encoding = docProvider.getEncoding(getInput());
-            return encoding;
+            if(encoding != null) {
+                return encoding;
+            }
         }
-        return null;
+        return TextUtil.SYSTEM_CHARSET;
     }
 
     public ISelectionProvider getSelectionProvider() {

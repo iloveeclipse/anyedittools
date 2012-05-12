@@ -9,6 +9,7 @@
 
 package de.loskutov.anyedit.util;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
@@ -535,7 +536,7 @@ public class TextUtil {
         useRequiredInPathChars = b;
     }
 
-    public String base64decode(String base64) {
+    public String base64decode(String base64, String charset) {
         Base64Preferences prefs = new Base64Preferences();
         prefs.put(null, base64);
         byte[] byteArray = prefs.getByteArray(null, null);
@@ -543,10 +544,14 @@ public class TextUtil {
             // not base64 encoded => return input back
             return base64;
         }
-        return new String(byteArray);
+        try {
+            return new String(byteArray, charset);
+        } catch (UnsupportedEncodingException e) {
+            return new String(byteArray);
+        }
     }
 
-    public String base64encode(String plainText) {
+    public String base64encode(String plainText, String charset) {
         Base64Preferences prefs = new Base64Preferences();
         prefs.putByteArray(null, plainText.getBytes());
         return prefs.get(null, null);

@@ -51,7 +51,6 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
-import de.loskutov.anyedit.util.TextUtil;
 
 public class TextStreamContent implements StreamContent, IStreamContentAccessor, IEditableContent,
 IEditableContentExtension {
@@ -160,9 +159,6 @@ IEditableContentExtension {
         }
         // use charset from editor
         String charset = editor.computeEncoding();
-        if(charset == null){
-            charset = TextUtil.SYSTEM_CHARSET;
-        }
         try {
             return new String(bytes, charset);
         } catch (UnsupportedEncodingException e) {
@@ -230,9 +226,6 @@ IEditableContentExtension {
 
     public InputStream getContents() throws CoreException {
         String charset = editor.computeEncoding();
-        if(charset == null){
-            charset = TextUtil.SYSTEM_CHARSET;
-        }
         if (selectedText != null) {
             byte[] bytes2;
             try {
@@ -314,7 +307,7 @@ IEditableContentExtension {
             return;
         }
         lineAnnotation = new Annotation(ANY_EDIT_COMPARE, false,
-        "This text is being compared with anoter one");
+                "This text is being compared with anoter one");
         IAnnotationModelExtension modelExtension = (IAnnotationModelExtension) extension;
         IAnnotationModel model = modelExtension.getAnnotationModel(TextStreamContent.class);
         if (model == null) {

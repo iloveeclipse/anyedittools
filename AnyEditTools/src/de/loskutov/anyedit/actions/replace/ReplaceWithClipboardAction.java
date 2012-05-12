@@ -10,6 +10,7 @@ package de.loskutov.anyedit.actions.replace;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.IDocument;
@@ -62,10 +63,19 @@ public class ReplaceWithClipboardAction extends ReplaceWithAction {
             newLine = EclipseUtils.getNewLineFromFile(selectedContent.getIFile());
         }
         String property = System.getProperty("line.separator");
-        if(newLine == null || newLine.equals(property)){
-            return new ByteArrayInputStream(clipbContent.getBytes());
+        if (newLine == null || newLine.equals(property)) {
+            try {
+                return new ByteArrayInputStream(clipbContent.getBytes(editor.computeEncoding()));
+            } catch (UnsupportedEncodingException e) {
+                return new ByteArrayInputStream(clipbContent.getBytes());
+            }
         }
-        return new ByteArrayInputStream(clipbContent.replaceAll(property, newLine).getBytes());
+        try {
+            return new ByteArrayInputStream(clipbContent.replaceAll(property, newLine).getBytes(
+                    editor.computeEncoding()));
+        } catch (UnsupportedEncodingException e) {
+            return new ByteArrayInputStream(clipbContent.replaceAll(property, newLine).getBytes());
+        }
     }
 
 }

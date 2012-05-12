@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 
 import org.eclipse.core.resources.IFile;
@@ -96,7 +97,12 @@ public class ReplaceWithEditorAction extends ReplaceWithAction {
                         if(document != null) {
                             String content = document.get();
                             if (content != null) {
-                                return new ByteArrayInputStream(content.getBytes());
+                                try {
+                                    return new ByteArrayInputStream(content.getBytes(editor1
+                                            .computeEncoding()));
+                                } catch (UnsupportedEncodingException e) {
+                                    return new ByteArrayInputStream(content.getBytes());
+                                }
                             }
                         }
                     }

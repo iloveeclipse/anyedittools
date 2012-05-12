@@ -24,34 +24,24 @@ public class Base64UnEncode extends AbstractReplaceAction {
 
     private boolean splitLines;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.loskutov.anyedit.actions.AbstractReplaceAction#getActionKey(java.lang.String)
-     */
     protected int getActionKey(String actionID) {
         return actionID.startsWith(AbstractTextAction.ACTION_ID_ENCODE) ? KEY_ENCODE
                 : KEY_DECODE;
     }
 
-    /* (non-Javadoc)
-     * @see de.loskutov.anyedit.actions.AbstractReplaceAction#doTextOperation(org.eclipse.jface.text.IDocument, java.lang.String, de.loskutov.anyedit.util.TextReplaceResultSet)
-     */
     protected void doTextOperation(IDocument doc, String actionID,
             TextReplaceResultSet resultSet) throws BadLocationException {
         splitLines = splitLinesEnabled();
         super.doTextOperation(doc, actionID, resultSet);
     }
 
-    /**
-     * @return
-     */
     private boolean splitLinesEnabled() {
         return AnyEditToolsPlugin.getDefault().getPreferenceStore().getBoolean(
                 IAnyEditConstants.BASE64_SPLIT_LINE);
     }
 
     protected String performReplace(String line, int actionKey) {
+        String charset = getEditor().computeEncoding();
         if (actionKey == KEY_DECODE) {
             // not portable code
             // try {
@@ -59,15 +49,15 @@ public class Base64UnEncode extends AbstractReplaceAction {
             // } catch (IOException e) {
             // e.printStackTrace();
             // }
-            return textUtil.base64decode(line);
+            return textUtil.base64decode(line, charset);
         }
         // not portable code
         // return trimBase64Encoded(new BASE64Encoder().encode(line.getBytes()));
         if(splitLines) {
-            return textUtil.base64trim(textUtil.base64encode(line), getEditor()
+            return textUtil.base64trim(textUtil.base64encode(line, charset), getEditor()
                     .getDocument().getLegalLineDelimiters()[0]);
         }
-        return textUtil.base64encode(line);
+        return textUtil.base64encode(line, charset);
     }
 
 }
