@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2009 Andrei Loskutov.
+ * Copyright (c) 2009-2012 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * Contributor:  Andrei Loskutov - initial API and implementation
+ * Contributor:  Andrey Loskutov - initial API and implementation
  *******************************************************************************/
 package de.loskutov.anyedit.compare;
 
@@ -147,6 +147,9 @@ IEditableContentExtension {
             if(sharedDocumentAdapter != null) {
 
                 IEditorInput editorInput = sharedDocumentAdapter.getDocumentKey(this);
+                if(editorInput == null) {
+                    return null;
+                }
                 IDocumentProvider documentProvider = SharedDocumentAdapter.getDocumentProvider(editorInput);
                 if(documentProvider != null) {
                     IDocument document = documentProvider.getDocument(editorInput);
@@ -199,9 +202,14 @@ IEditableContentExtension {
         }
         dirty = false;
         if (selection == null) {
+            boolean sharedSaveOk = false;
             if(sharedDocumentAdapter != null) {
-                sharedDocumentAdapter.saveDocument(sharedDocumentAdapter.getDocumentKey(this), true, pm);
-            } else {
+                IEditorInput editorInput = sharedDocumentAdapter.getDocumentKey(this);
+                if(editorInput != null) {
+                    sharedSaveOk = sharedDocumentAdapter.saveDocument(editorInput, true, pm);
+                }
+            }
+            if(!sharedSaveOk){
                 document.set(text);
             }
         } else {
