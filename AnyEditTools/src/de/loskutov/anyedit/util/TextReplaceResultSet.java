@@ -10,19 +10,20 @@
 package de.loskutov.anyedit.util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Andrei
  */
 public final class TextReplaceResultSet {
 
-    private ArrayList delegate;
+    private final List<LineReplaceResult> delegate;
     private int startLine = -1;
     private int stopLine = -1;
     private Exception exception;
 
     public TextReplaceResultSet(){
-        delegate = new ArrayList();
+        delegate = new ArrayList<LineReplaceResult>();
     }
 
     /**
@@ -34,12 +35,14 @@ public final class TextReplaceResultSet {
     }
 
     /**
-     *
-     * @param index
-     * @return if true, then the line at given index is not changed
+     * @param index line index in the document
+     * @return null if index is out of range
      */
     public LineReplaceResult get(int index) {
-        return (LineReplaceResult)delegate.get(index);
+        if(index >= delegate.size()) {
+            return null;
+        }
+        return delegate.get(index);
     }
 
     public boolean areResultsChanged(){
