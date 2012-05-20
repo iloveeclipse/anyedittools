@@ -297,7 +297,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return editorPart.isDirty();
     }
 
-    private Object getAdapter(Class clazz){
+    private Object getAdapter(Class<?> clazz){
         if (editorPart == null) {
             return null;
         }

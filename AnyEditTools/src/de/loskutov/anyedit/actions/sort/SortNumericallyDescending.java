@@ -10,13 +10,15 @@ package de.loskutov.anyedit.actions.sort;
 
 import java.util.Comparator;
 
+import de.loskutov.anyedit.util.LineReplaceResult;
+
 /**
  * @author Clemens Fuchslocher
  */
 public class SortNumericallyDescending extends AbstractSortAction {
 
     @Override
-    protected Comparator getComparator() {
+    protected Comparator<LineReplaceResult> getComparator() {
         return new AbstractSortComparator() {
             public int compare(Object left, Object right) {
                 return -compareNumber(left, right);

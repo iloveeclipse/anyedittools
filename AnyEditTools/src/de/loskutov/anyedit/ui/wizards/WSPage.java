@@ -42,7 +42,7 @@ public abstract class WSPage extends WizardPage {
 
     private CheckboxTableViewer tv;
     protected Composite comp;
-    protected List/* <String> */usedFiles;
+    protected List/* <String> */<String> usedFiles;
     private Combo dest;
 
     protected WSPage(String pageName, String title, String descr,
@@ -51,7 +51,7 @@ public abstract class WSPage extends WizardPage {
                 AbstractUIPlugin.imageDescriptorFromPlugin(AnyEditToolsPlugin.getId(),
                         imagePath));
         setDescription(descr);
-        usedFiles = new ArrayList();
+        usedFiles = new ArrayList<String>();
     }
 
     public void createControl(Composite parent) {
@@ -186,7 +186,7 @@ public abstract class WSPage extends WizardPage {
     }
 
     protected String[] getLastUsedPaths() {
-        return (String[]) usedFiles.toArray(new String[usedFiles.size()]);
+        return usedFiles.toArray(new String[usedFiles.size()]);
     }
 
     protected void updateItems(String fileString) {

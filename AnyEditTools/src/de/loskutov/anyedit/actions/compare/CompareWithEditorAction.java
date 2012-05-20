@@ -188,7 +188,7 @@ public class CompareWithEditorAction extends CompareWithAction {
             } else {
                 initEditor = true;
             }
-            List refs = new ArrayList();
+            List<IEditorReference> refs = new ArrayList<IEditorReference>();
             for (int i = 0; i < editorReferences.length; i++) {
                 IEditorReference reference = editorReferences[i];
                 if(COMPARE_EDITOR_ID.equals(reference.getId())){
@@ -221,7 +221,7 @@ public class CompareWithEditorAction extends CompareWithAction {
                 }
                 refs.add(editorReferences[i]);
             }
-            references = (IEditorReference[]) refs.toArray(new IEditorReference[refs.size()]);
+            references = refs.toArray(new IEditorReference[refs.size()]);
         }
 
         private synchronized static void initEditors(final IEditorReference[] editorReferences) {

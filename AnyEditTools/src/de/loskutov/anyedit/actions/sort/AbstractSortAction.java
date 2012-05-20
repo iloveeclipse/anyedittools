@@ -32,7 +32,7 @@ import de.loskutov.anyedit.util.TextReplaceResultSet;
  */
 public abstract class AbstractSortAction extends AbstractTextAction {
 
-    protected abstract Comparator getComparator();
+    protected abstract Comparator<LineReplaceResult> getComparator();
 
     @Override
     protected TextReplaceResultSet estimateActionRange(IDocument document) {
@@ -54,7 +54,7 @@ public abstract class AbstractSortAction extends AbstractTextAction {
 
     @Override
     protected void doTextOperation(IDocument document, String action, TextReplaceResultSet results) throws BadLocationException {
-        List lines = getLines(results, document);
+        List<LineReplaceResult> lines = getLines(results, document);
         if (lines.isEmpty() || lines.size() == 1) {
             return;
         }
@@ -63,8 +63,8 @@ public abstract class AbstractSortAction extends AbstractTextAction {
         addLines(results, lines);
     }
 
-    private List getLines(TextReplaceResultSet result, IDocument document) throws BadLocationException {
-        List lines = new ArrayList();
+    private List<LineReplaceResult> getLines(TextReplaceResultSet result, IDocument document) throws BadLocationException {
+        List<LineReplaceResult> lines = new ArrayList<LineReplaceResult>();
         int start = result.getStartLine();
         int stop = result.getStopLine();
 
@@ -80,14 +80,14 @@ public abstract class AbstractSortAction extends AbstractTextAction {
         return lines;
     }
 
-    private void sortLines(List lines) {
+    private void sortLines(List<LineReplaceResult> lines) {
         Collections.sort(lines, getComparator());
     }
 
-    private void addLines(TextReplaceResultSet results, List lineList) {
-        Iterator lines = lineList.iterator();
+    private void addLines(TextReplaceResultSet results, List<LineReplaceResult> lineList) {
+        Iterator<LineReplaceResult> lines = lineList.iterator();
         while (lines.hasNext()) {
-            results.add((LineReplaceResult) lines.next());
+            results.add(lines.next());
         }
     }
 

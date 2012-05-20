@@ -340,7 +340,7 @@ IEditableContentExtension {
         if(model == null){
             return;
         }
-        for (Iterator iterator = model.getAnnotationIterator(); iterator.hasNext();) {
+        for (Iterator<?> iterator = model.getAnnotationIterator(); iterator.hasNext();) {
             Annotation ann = (Annotation) iterator.next();
             if (lineAnnotation == ann) {
                 model.removeAnnotation(ann);

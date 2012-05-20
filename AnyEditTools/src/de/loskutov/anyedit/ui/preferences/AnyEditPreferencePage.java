@@ -1243,13 +1243,13 @@ IWorkbenchPreferencePage, SelectionListener {
 
         private final CheckboxTableViewer fViewer;
 
-        private final List fFilters;
+        private final List<Filter> fFilters;
 
         public FilterContentProvider(CheckboxTableViewer viewer) {
             fViewer = viewer;
-            List active = createActiveStepFiltersList();
-            List inactive = createInactiveStepFiltersList();
-            fFilters = new ArrayList(active.size() + inactive.size());
+            List<String> active = createActiveStepFiltersList();
+            List<String> inactive = createInactiveStepFiltersList();
+            fFilters = new ArrayList<Filter>(active.size() + inactive.size());
             populateList(inactive, false);
             populateList(active, true);
             updateActions();
@@ -1257,15 +1257,15 @@ IWorkbenchPreferencePage, SelectionListener {
 
         public void setDefaults() {
             fViewer.remove(fFilters.toArray());
-            List defaultlist = createDefaultStepFiltersList();
+            List<String> defaultlist = createDefaultStepFiltersList();
             fFilters.clear();
             populateList(defaultlist, true);
         }
 
-        protected final void populateList(List list, boolean checked) {
-            Iterator iterator = list.iterator();
+        protected final void populateList(List<String> list, boolean checked) {
+            Iterator<String> iterator = list.iterator();
             while (iterator.hasNext()) {
-                String name = (String) iterator.next();
+                String name = iterator.next();
                 addFilter(name, checked);
             }
         }
@@ -1275,7 +1275,7 @@ IWorkbenchPreferencePage, SelectionListener {
          *
          * @return list
          */
-        protected final List createActiveStepFiltersList() {
+        protected final List<String> createActiveStepFiltersList() {
             String[] strings = EclipseUtils.parseList(getPreferenceStore().getString(
                     IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
@@ -1286,7 +1286,7 @@ IWorkbenchPreferencePage, SelectionListener {
          *
          * @return list
          */
-        protected List createDefaultStepFiltersList() {
+        protected List<String> createDefaultStepFiltersList() {
             String[] strings = EclipseUtils.parseList(getPreferenceStore()
                     .getDefaultString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
@@ -1297,7 +1297,7 @@ IWorkbenchPreferencePage, SelectionListener {
          *
          * @return list
          */
-        protected final List createInactiveStepFiltersList() {
+        protected final List<String> createInactiveStepFiltersList() {
             String[] strings = EclipseUtils.parseList(getPreferenceStore().getString(
                     IAnyEditConstants.PREF_INACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
@@ -1317,11 +1317,11 @@ IWorkbenchPreferencePage, SelectionListener {
         public void saveFilters() {
 
             int filtersSize = fFilters.size();
-            List active = new ArrayList(filtersSize);
-            List inactive = new ArrayList(filtersSize);
-            Iterator iterator = fFilters.iterator();
+            List<String> active = new ArrayList<String>(filtersSize);
+            List<String> inactive = new ArrayList<String>(filtersSize);
+            Iterator<Filter> iterator = fFilters.iterator();
             while (iterator.hasNext()) {
-                Filter filter = (Filter) iterator.next();
+                Filter filter = iterator.next();
                 String name = filter.getName();
                 if (filter.isChecked()) {
                     active.add(name);
@@ -1329,12 +1329,12 @@ IWorkbenchPreferencePage, SelectionListener {
                     inactive.add(name);
                 }
             }
-            String pref = serializeList((String[]) active.toArray(new String[active
+            String pref = serializeList(active.toArray(new String[active
                                                                              .size()]));
             IPreferenceStore prefStore = getPreferenceStore();
             prefStore.setValue(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST,
                     pref);
-            pref = serializeList((String[]) inactive.toArray(new String[inactive.size()]));
+            pref = serializeList(inactive.toArray(new String[inactive.size()]));
             prefStore.setValue(IAnyEditConstants.PREF_INACTIVE_FILTERS_LIST,
                     pref);
         }

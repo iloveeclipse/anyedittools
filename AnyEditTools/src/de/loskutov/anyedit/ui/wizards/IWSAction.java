@@ -10,11 +10,13 @@ package de.loskutov.anyedit.ui.wizards;
 
 import java.util.List;
 
+import org.eclipse.ui.IWorkingSet;
+
 /**
  * @author Andrei
  *
  */
 public interface IWSAction {
-    void setWorkingSets(List/* <IWorkingSet> */workingSets);
+    void setWorkingSets(List/* <IWorkingSet> */<IWorkingSet> workingSets);
     void run();
 }

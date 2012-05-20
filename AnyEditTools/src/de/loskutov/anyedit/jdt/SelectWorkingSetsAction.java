@@ -55,7 +55,7 @@ public class SelectWorkingSetsAction extends Action implements IWSAction {
             }
             WorkingSetModel workingSetModel = viewPart.getWorkingSetModel();
             IWorkingSet[] active = workingSetModel.getActiveWorkingSets();
-            List all = new ArrayList();
+            List<IWorkingSet> all = new ArrayList<IWorkingSet>();
             for (int i = 0; i < active.length; i++) {
                 all.add(active[i]);
             }
@@ -68,7 +68,7 @@ public class SelectWorkingSetsAction extends Action implements IWSAction {
                 }
             }
             if (all.size() > 0) {
-                workingSetModel.setActiveWorkingSets((IWorkingSet[]) all
+                workingSetModel.setActiveWorkingSets(all
                         .toArray(new IWorkingSet[all.size()]));
                 TreeViewer viewer = viewPart.getTreeViewer();
                 viewer.getControl().setRedraw(false);
@@ -93,7 +93,7 @@ public class SelectWorkingSetsAction extends Action implements IWSAction {
         return null;
     }
 
-    public void setWorkingSets(List sets) {
-        this.workingSets = (IWorkingSet[]) sets.toArray(new IWorkingSet[sets.size()]);
+    public void setWorkingSets(List<IWorkingSet> sets) {
+        this.workingSets = sets.toArray(new IWorkingSet[sets.size()]);
     }
 }

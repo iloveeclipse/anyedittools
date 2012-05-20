@@ -110,7 +110,7 @@ public class ExportPage extends WSPage {
         public Object[] getElements(Object inputElement) {
             IWorkingSet[] workingSets = PlatformUI.getWorkbench().getWorkingSetManager()
                     .getAllWorkingSets();
-            List sets = new ArrayList();
+            List<IWorkingSet> sets = new ArrayList<IWorkingSet>();
             for (int i = 0; i < workingSets.length; i++) {
                 IWorkingSet workingSet = workingSets[i];
                 if (!workingSet.isAggregateWorkingSet()) {

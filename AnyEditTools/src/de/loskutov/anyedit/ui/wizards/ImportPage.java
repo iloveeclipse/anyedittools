@@ -108,7 +108,7 @@ public class ImportPage extends WSPage {
         }
 
         IMemento[] mementos = memento.getChildren("workingSet");
-        List sets = new ArrayList();
+        List<IWorkingSet> sets = new ArrayList<IWorkingSet>();
         for (int i = 0; i < mementos.length; i++) {
             IWorkingSet set = restoreWorkingSet(mementos[i]);
             if (set != null) {
@@ -173,7 +173,7 @@ public class ImportPage extends WSPage {
         }
         IWorkingSetManager workingSetManager = PlatformUI.getWorkbench()
                 .getWorkingSetManager();
-        List added = new ArrayList();
+        List<IWorkingSet> added = new ArrayList<IWorkingSet>();
         for (int i = 0; i < selected.length; i++) {
             IWorkingSet workingSet = (IWorkingSet) selected[i];
             IWorkingSet oldWorkingSet = workingSetManager.getWorkingSet(workingSet.getName());
@@ -193,7 +193,7 @@ public class ImportPage extends WSPage {
                  * thus current class would not be loaded at all with the direct reference
                  * to the action
                  */
-                Class actClass = Class.forName(
+                Class<?> actClass = Class.forName(
                         "de.loskutov.anyedit.jdt.SelectWorkingSetsAction", true,
                         getClass().getClassLoader());
                 IWSAction action = (IWSAction) actClass.newInstance();
@@ -212,14 +212,14 @@ public class ImportPage extends WSPage {
 
     private void removeNonExistingChildren(IWorkingSet workingSet) {
         IAdaptable[] elements = workingSet.getElements();
-        List existing = new ArrayList();
+        List<IResource> existing = new ArrayList<IResource>();
         for (int i = 0; i < elements.length; i++) {
             IResource resource = (IResource) elements[i].getAdapter(IResource.class);
             if (resource != null && resource.exists()) {
                 existing.add(resource);
             }
         }
-        workingSet.setElements((IAdaptable[]) existing.toArray(new IAdaptable[existing.size()]));
+        workingSet.setElements(existing.toArray(new IAdaptable[existing.size()]));
     }
 
     public static class WorkingSetContentProvider implements ITreeContentProvider {
@@ -239,7 +239,7 @@ public class ImportPage extends WSPage {
             if (workingSets == null) {
                 return new Object[0];
             }
-            List sets = new ArrayList();
+            List<IWorkingSet> sets = new ArrayList<IWorkingSet>();
             for (int i = 0; i < workingSets.length; i++) {
                 IWorkingSet workingSet = workingSets[i];
                 if (!workingSet.isAggregateWorkingSet()) {
@@ -329,19 +329,19 @@ public class ImportPage extends WSPage {
         if(elementsNew == null || elementsOld == null || elementsNew.length == 0) {
             return;
         }
-        LinkedHashSet/*<IAdaptable>*/ set = new LinkedHashSet(Arrays.asList(elementsOld));
-        ArrayList newList = new ArrayList(Arrays.asList(elementsNew));
+        LinkedHashSet/*<IAdaptable>*/<IAdaptable> set = new LinkedHashSet<IAdaptable>(Arrays.asList(elementsOld));
+        ArrayList<IAdaptable> newList = new ArrayList<IAdaptable>(Arrays.asList(elementsNew));
         newList.removeAll(set);
         if(newList.size() == 0) {
             return;
         }
-        elementsNew = oldWorkingSet.adaptElements((IAdaptable[]) newList.toArray(new IAdaptable[newList.size()]));
-        newList = new ArrayList(Arrays.asList(elementsNew));
+        elementsNew = oldWorkingSet.adaptElements(newList.toArray(new IAdaptable[newList.size()]));
+        newList = new ArrayList<IAdaptable>(Arrays.asList(elementsNew));
         newList.removeAll(set);
         if(newList.size() == 0) {
             return;
         }
         set.addAll(newList);
-        oldWorkingSet.setElements((IAdaptable[]) set.toArray(new IAdaptable[set.size()]));
+        oldWorkingSet.setElements(set.toArray(new IAdaptable[set.size()]));
     }
 }

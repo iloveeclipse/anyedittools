@@ -44,14 +44,14 @@ import de.loskutov.anyedit.IAnyEditConstants;
  */
 public class StartupHelper implements IWindowListener {
 
-    private final List/*<PreExecutionHandler>*/ commandListeners;
+    private final List/*<PreExecutionHandler>*/<PreExecutionHandler> commandListeners;
 
     /**
      * Will be run after workbench is started and w.window is opened
      */
     public StartupHelper() {
         super();
-        commandListeners = new ArrayList();
+        commandListeners = new ArrayList<PreExecutionHandler>();
     }
 
     public void init() {
@@ -110,9 +110,9 @@ public class StartupHelper implements IWindowListener {
      */
     public void windowClosed(IWorkbenchWindow window) {
         // ignored
-        List list = commandListeners;
+        List<PreExecutionHandler> list = commandListeners;
         for (int i = 0; i < list.size(); i++) {
-            PreExecutionHandler listener = (PreExecutionHandler) list.get(i);
+            PreExecutionHandler listener = list.get(i);
             if(listener.myAction.getWindow() == window) {
                 unHookFromCommand(listener);
             }

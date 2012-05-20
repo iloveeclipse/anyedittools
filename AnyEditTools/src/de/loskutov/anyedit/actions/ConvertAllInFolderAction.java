@@ -39,7 +39,7 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
     public void selectionChanged(IAction action, ISelection selection) {
         if (selection instanceof IStructuredSelection) {
             IStructuredSelection ssel = (IStructuredSelection) selection;
-            Iterator iterator = ssel.iterator();
+            Iterator<?> iterator = ssel.iterator();
             selectedFiles.clear();
             selectedResources.clear();
             while (iterator.hasNext()) {
@@ -143,7 +143,7 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
         super.run(action);
     }
 
-    protected void addAllFiles(IContainer container, List fileList, IProgressMonitor monitor) {
+    protected void addAllFiles(IContainer container, List<Object> fileList, IProgressMonitor monitor) {
         try {
             IResource[] resources = container.members();
             for (int i = 0; i < resources.length && !monitor.isCanceled(); i++) {

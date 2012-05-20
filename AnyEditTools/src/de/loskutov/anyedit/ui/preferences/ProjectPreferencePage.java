@@ -759,13 +759,13 @@ public class ProjectPreferencePage extends PropertyPage {
 
         private final CheckboxTableViewer fViewer;
 
-        private final List fFilters;
+        private final List<Filter> fFilters;
 
         public FilterContentProvider(CheckboxTableViewer viewer) {
             fViewer = viewer;
-            List active = createActiveStepFiltersList();
-            List inactive = createInactiveStepFiltersList();
-            fFilters = new ArrayList(active.size() + inactive.size());
+            List<String> active = createActiveStepFiltersList();
+            List<String> inactive = createInactiveStepFiltersList();
+            fFilters = new ArrayList<Filter>(active.size() + inactive.size());
             populateList(inactive, false);
             populateList(active, true);
             updateActions();
@@ -773,15 +773,15 @@ public class ProjectPreferencePage extends PropertyPage {
 
         public void setDefaults() {
             fViewer.remove(fFilters.toArray());
-            List defaultlist = createDefaultStepFiltersList();
+            List<String> defaultlist = createDefaultStepFiltersList();
             fFilters.clear();
             populateList(defaultlist, true);
         }
 
-        protected final void populateList(List list, boolean checked) {
-            Iterator iterator = list.iterator();
+        protected final void populateList(List<String> list, boolean checked) {
+            Iterator<String> iterator = list.iterator();
             while (iterator.hasNext()) {
-                String name = (String) iterator.next();
+                String name = iterator.next();
                 addFilter(name, checked);
             }
         }
@@ -791,7 +791,7 @@ public class ProjectPreferencePage extends PropertyPage {
          *
          * @return list
          */
-        protected final List createActiveStepFiltersList() {
+        protected final List<String> createActiveStepFiltersList() {
             IPreferenceStore defaultStore = AnyEditToolsPlugin.getDefault()
                     .getPreferenceStore();
             String[] strings = EclipseUtils.parseList(prefs.get(
@@ -805,7 +805,7 @@ public class ProjectPreferencePage extends PropertyPage {
          *
          * @return list
          */
-        protected List createDefaultStepFiltersList() {
+        protected List<String> createDefaultStepFiltersList() {
             IPreferenceStore defaultStore = AnyEditToolsPlugin.getDefault()
                     .getPreferenceStore();
             String[] strings = EclipseUtils.parseList(defaultStore
@@ -818,7 +818,7 @@ public class ProjectPreferencePage extends PropertyPage {
          *
          * @return list
          */
-        protected final List createInactiveStepFiltersList() {
+        protected final List<String> createInactiveStepFiltersList() {
             IPreferenceStore defaultStore = AnyEditToolsPlugin.getDefault()
                     .getPreferenceStore();
             String[] strings = EclipseUtils.parseList(prefs.get(
@@ -841,11 +841,11 @@ public class ProjectPreferencePage extends PropertyPage {
         public void saveFilters() {
 
             int filtersSize = fFilters.size();
-            List active = new ArrayList(filtersSize);
-            List inactive = new ArrayList(filtersSize);
-            Iterator iterator = fFilters.iterator();
+            List<String> active = new ArrayList<String>(filtersSize);
+            List<String> inactive = new ArrayList<String>(filtersSize);
+            Iterator<Filter> iterator = fFilters.iterator();
             while (iterator.hasNext()) {
-                Filter filter = (Filter) iterator.next();
+                Filter filter = iterator.next();
                 String name = filter.getName();
                 if (filter.isChecked()) {
                     active.add(name);
@@ -853,11 +853,11 @@ public class ProjectPreferencePage extends PropertyPage {
                     inactive.add(name);
                 }
             }
-            String pref = AnyEditPreferencePage.serializeList((String[]) active
+            String pref = AnyEditPreferencePage.serializeList(active
                     .toArray(new String[active.size()]));
 
             prefs.put(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST, pref);
-            pref = AnyEditPreferencePage.serializeList((String[]) inactive
+            pref = AnyEditPreferencePage.serializeList(inactive
                     .toArray(new String[inactive.size()]));
             prefs.put(IAnyEditConstants.PREF_INACTIVE_FILTERS_LIST, pref);
         }

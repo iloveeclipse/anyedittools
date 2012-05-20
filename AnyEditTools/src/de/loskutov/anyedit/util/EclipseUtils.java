@@ -244,8 +244,8 @@ public final class EclipseUtils {
         /*
          * search througth current project and related projects
          */
-        List checkedProjects = new ArrayList();
-        List resultList = new ArrayList();
+        List<IProject> checkedProjects = new ArrayList<IProject>();
+        List<IResource> resultList = new ArrayList<IResource>();
         IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
         boolean useWorkspaceScope = AnyEditToolsPlugin.getDefault().getPreferenceStore()
                 .getBoolean(IAnyEditConstants.USE_WORKSPACE_SCOPE_FOR_SEARCH);
@@ -358,7 +358,7 @@ public final class EclipseUtils {
     }
 
     private static IFile findInProjects(IProject[] projects, String currentPath,
-            String selectedText, List checkedProjects, List resultList)
+            String selectedText, List<IProject> checkedProjects, List<IResource> resultList)
                     throws OperationCanceledException {
         for (int i = 0; i < projects.length; i++) {
             IFile resource = findInProject(currentPath, projects[i], selectedText,
@@ -377,7 +377,7 @@ public final class EclipseUtils {
     }
 
     private static IFile findInProject(String currentPath, IContainer project,
-            String selectedText, List resultList) throws OperationCanceledException {
+            String selectedText, List<IResource> resultList) throws OperationCanceledException {
         if (project == null || !project.isAccessible()) {
             return null;
         }
@@ -434,12 +434,12 @@ public final class EclipseUtils {
         IPath location = new Path(file.getAbsolutePath()); // Path.fromOSString();
         IFile[] files = workspace.getRoot().findFilesForLocationURI(
                 URIUtil.toURI(location.makeAbsolute()));
-        List filesList = filterNonExistentFiles(files);
+        List<IFile> filesList = filterNonExistentFiles(files);
         if (filesList == null || filesList.isEmpty()) {
             return null;
         }
         if (filesList.size() == 1) {
-            return (IFile) filesList.get(0);
+            return filesList.get(0);
         }
         return queryFile(file.getName(), workspace.getRoot());
     }
@@ -534,13 +534,13 @@ public final class EclipseUtils {
         }
     }
 
-    private static List filterNonExistentFiles(IFile[] files) {
+    private static List<IFile> filterNonExistentFiles(IFile[] files) {
         if (files == null) {
             return null;
         }
 
         int length = files.length;
-        ArrayList existentFiles = new ArrayList(length);
+        ArrayList<IFile> existentFiles = new ArrayList<IFile>(length);
         for (int i = 0; i < length; i++) {
             if (files[i].exists()) {
                 existentFiles.add(files[i]);
@@ -656,13 +656,13 @@ public final class EclipseUtils {
         if (listString == null || listString.length() == 0) {
             return new String[] {};
         }
-        List list = new ArrayList(10);
+        List<String> list = new ArrayList<String>(10);
         StringTokenizer tokenizer = new StringTokenizer(listString, ",");
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             list.add(token);
         }
-        return (String[]) list.toArray(new String[list.size()]);
+        return list.toArray(new String[list.size()]);
     }
 
     /**
@@ -670,7 +670,7 @@ public final class EclipseUtils {
      * will be added to resultList
      */
     public static void searchForPathFragment(IContainer container, String pathFragment,
-            List resultList, boolean searchInRoot) {
+            List<IResource> resultList, boolean searchInRoot) {
 
         // test directly under container root
         if (searchInRoot) {
@@ -780,7 +780,7 @@ public final class EclipseUtils {
     }
 
     static class DummyContainer extends Container {
-        List resources;
+        List<IResource> resources;
 
         protected DummyContainer(IResource[] resources) {
             super(new Path(""), (Workspace) ResourcesPlugin.getWorkspace());
@@ -800,7 +800,7 @@ public final class EclipseUtils {
         public void accept(IResourceProxyVisitor visitor, int memberFlags)
                 throws CoreException {
             for (int i = 0; i < resources.size(); i++) {
-                ((IResource) resources.get(i)).accept(visitor, memberFlags);
+                resources.get(i).accept(visitor, memberFlags);
             }
         }
 

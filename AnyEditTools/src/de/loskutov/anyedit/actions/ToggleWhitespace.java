@@ -54,14 +54,14 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
 
     private static final String TABS = "AnyEditTools.tabs";
 
-    private Map/*<Integer,Boolean>*/partToggleState;
+    private Map/*<Integer,Boolean>*/<Integer, Boolean> partToggleState;
 
     private IAction proxyAction;
 
 
     public ToggleWhitespace() {
         super();
-        partToggleState = new HashMap();
+        partToggleState = new HashMap<Integer, Boolean>();
     }
 
     @Override
@@ -255,7 +255,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         enableButton();
         part.addPropertyListener(this);
         if (partToggleState.get(cookie) != null) {
-            boolean checked = ((Boolean) partToggleState.get(cookie)).booleanValue();
+            boolean checked = partToggleState.get(cookie).booleanValue();
             setChecked(checked);
         } else {
             partToggleState.put(cookie, Boolean.FALSE);
