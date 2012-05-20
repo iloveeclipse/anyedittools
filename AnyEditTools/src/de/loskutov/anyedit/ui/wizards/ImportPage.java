@@ -329,7 +329,7 @@ public class ImportPage extends WSPage {
         if(elementsNew == null || elementsOld == null || elementsNew.length == 0) {
             return;
         }
-        LinkedHashSet/*<IAdaptable>*/<IAdaptable> set = new LinkedHashSet<IAdaptable>(Arrays.asList(elementsOld));
+        LinkedHashSet<IAdaptable> set = new LinkedHashSet<IAdaptable>(Arrays.asList(elementsOld));
         ArrayList<IAdaptable> newList = new ArrayList<IAdaptable>(Arrays.asList(elementsNew));
         newList.removeAll(set);
         if(newList.size() == 0) {

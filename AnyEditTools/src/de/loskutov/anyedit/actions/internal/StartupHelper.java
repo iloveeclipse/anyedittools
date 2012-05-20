@@ -44,7 +44,7 @@ import de.loskutov.anyedit.IAnyEditConstants;
  */
 public class StartupHelper implements IWindowListener {
 
-    private final List/*<PreExecutionHandler>*/<PreExecutionHandler> commandListeners;
+    private final List<PreExecutionHandler> commandListeners;
 
     /**
      * Will be run after workbench is started and w.window is opened
@@ -83,31 +83,19 @@ public class StartupHelper implements IWindowListener {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ui.IWindowListener#windowOpened(org.eclipse.ui.IWorkbenchWindow)
-     */
     public void windowOpened(IWorkbenchWindow window) {
         DirtyHookRunnable dh = new DirtyHookRunnable();
         dh.run(window);
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ui.IWindowListener#windowActivated(org.eclipse.ui.IWorkbenchWindow)
-     */
     public void windowActivated(IWorkbenchWindow window) {
         // ignored
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ui.IWindowListener#windowDeactivated(org.eclipse.ui.IWorkbenchWindow)
-     */
     public void windowDeactivated(IWorkbenchWindow window) {
         // ignored
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ui.IWindowListener#windowClosed(org.eclipse.ui.IWorkbenchWindow)
-     */
     public void windowClosed(IWorkbenchWindow window) {
         // ignored
         List<PreExecutionHandler> list = commandListeners;
@@ -119,9 +107,6 @@ public class StartupHelper implements IWindowListener {
         }
     }
 
-    /**
-     * @param listener
-     */
     private void unHookFromCommand(PreExecutionHandler listener) {
         ICommandService service = (ICommandService) PlatformUI.getWorkbench().getService(
                 ICommandService.class);
@@ -272,10 +257,6 @@ public class StartupHelper implements IWindowListener {
         return store.getBoolean(prefkey);
     }
 
-    /**
-     * @param myAction
-     * @param manager
-     */
     private static int insert(IDirtyWorkaround myAction, ToolBarManager manager,
             int controlIdx) {
         IContributionItem item;
@@ -312,10 +293,6 @@ public class StartupHelper implements IWindowListener {
         return controlIdx;
     }
 
-    /**
-     * @param myAction
-     * @param menu
-     */
     private static void insert(IDirtyWorkaround myAction, MenuManager menu) {
         IContributionItem item;
         String id = myAction.getId();

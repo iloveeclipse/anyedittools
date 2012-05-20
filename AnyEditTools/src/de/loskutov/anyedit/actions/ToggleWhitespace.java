@@ -54,7 +54,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
 
     private static final String TABS = "AnyEditTools.tabs";
 
-    private Map/*<Integer,Boolean>*/<Integer, Boolean> partToggleState;
+    private Map<Integer, Boolean> partToggleState;
 
     private IAction proxyAction;
 
@@ -345,9 +345,6 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
-     */
     @Override
     public void selectionChanged(IAction action, ISelection selection) {
         this.proxyAction = action;
