@@ -34,6 +34,7 @@ public class CompareWithExternalAction extends CompareWithAction {
         super();
     }
 
+    @Override
     protected StreamContent createRightContent(StreamContent left) throws CoreException {
         FileDialog dialog = new FileDialog(AnyEditToolsPlugin.getShell());
 

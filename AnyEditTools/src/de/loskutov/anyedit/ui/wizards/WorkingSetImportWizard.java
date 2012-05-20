@@ -22,6 +22,7 @@ public class WorkingSetImportWizard extends Wizard implements IImportWizard {
         super();
     }
 
+    @Override
     public boolean performFinish() {
         return mainPage != null? mainPage.finish() : false;
     }
@@ -30,6 +31,7 @@ public class WorkingSetImportWizard extends Wizard implements IImportWizard {
         this.selection = sel;
     }
 
+    @Override
     public void addPages() {
         super.addPages();
         mainPage = new ImportPage("Working Set Import");

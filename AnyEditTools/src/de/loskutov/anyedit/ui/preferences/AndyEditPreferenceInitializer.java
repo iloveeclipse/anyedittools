@@ -27,6 +27,7 @@ AbstractPreferenceInitializer {
      * @see org.eclipse.core.runtime.Plugin#initializeDefaultPluginPreferences()
      * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
      */
+    @Override
     public void initializeDefaultPreferences() {
         IPreferenceStore store = AnyEditToolsPlugin.getDefault().getPreferenceStore();
         store.setDefault(IAnyEditConstants.EDITOR_TAB_WIDTH, "2");
@@ -37,8 +38,8 @@ AbstractPreferenceInitializer {
                 IAnyEditConstants.CHARACTERS_REQUIRED_IN_PATH,
                 TextUtil.DEFAULT_CHARACTERS_REQUIRED_IN_PATH);
         store.setDefault(
-        		IAnyEditConstants.LINE_SEPARATOR_REGEX,
-        		TextUtil.DEFAULT_LINE_SEPARATOR_REGEX);
+                IAnyEditConstants.LINE_SEPARATOR_REGEX,
+                TextUtil.DEFAULT_LINE_SEPARATOR_REGEX);
         store.setDefault(
                 IAnyEditConstants.BASE64_LINE_LENGTH,
                 TextUtil.DEFAULT_BASE64_LINE_LENGTH);

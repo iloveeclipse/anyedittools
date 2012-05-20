@@ -35,6 +35,7 @@ public class OpenFile extends AbstractOpenAction {
         super();
     }
 
+    @Override
     protected void handleAction(IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput) {
         List participants = getParticipants();

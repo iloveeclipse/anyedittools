@@ -35,6 +35,7 @@ public class ReplaceWithExternalAction extends ReplaceWithAction {
     /* (non-Javadoc)
      * @see de.loskutov.anyedit.actions.replace.ReplaceWithAction#createInputStream()
      */
+    @Override
     protected InputStream createInputStream() {
         FileDialog dialog = new FileDialog(AnyEditToolsPlugin.getShell());
 

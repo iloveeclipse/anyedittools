@@ -48,6 +48,7 @@ public abstract class CompareWithAction extends AbstractHandler implements IObje
     public Object execute(final ExecutionEvent event) throws ExecutionException {
         IWorkbenchPart activePart = HandlerUtil.getActivePart(event);
         Action dummyAction = new Action(){
+            @Override
             public String getId() {
                 return event.getCommand().getId();
             }
@@ -99,7 +100,7 @@ public abstract class CompareWithAction extends AbstractHandler implements IObje
     }
 
     protected abstract StreamContent createRightContent(StreamContent left)
-    throws CoreException;
+            throws CoreException;
 
     protected final StreamContent createContent(ContentWrapper content) {
         if (content == null) {

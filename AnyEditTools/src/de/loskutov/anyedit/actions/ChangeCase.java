@@ -26,37 +26,39 @@ public class ChangeCase extends AbstractReplaceAction {
     /* (non-Javadoc)
      * @see de.loskutov.anyedit.actions.AbstractReplaceAction#performReplace(java.lang.String, int)
      */
+    @Override
     protected String performReplace(String line, int actionKey) {
 
         switch (actionKey) {
-            case KEY_TO_LOWER :{
-                return line.toLowerCase();
+        case KEY_TO_LOWER :{
+            return line.toLowerCase();
+        }
+        case KEY_TO_UPPER :{
+            return line.toUpperCase();
+        }
+        case KEY_CAPITALIZE :{
+            return TextUtil.capitalize(line);
+        }
+        case KEY_CAMEL :{
+            if(line.indexOf('_') < 0) {
+                return TextUtil.fromCamelToUnderscore(line);
             }
-            case KEY_TO_UPPER :{
-                return line.toUpperCase();
-            }
-            case KEY_CAPITALIZE :{
-                return TextUtil.capitalize(line);
-            }
-            case KEY_CAMEL :{
-                if(line.indexOf('_') < 0) {
-                    return TextUtil.fromCamelToUnderscore(line);
-                }
-                return TextUtil.fromUnderscoreToCamel(line);
-            }
+            return TextUtil.fromUnderscoreToCamel(line);
+        }
 
-            default :
-                // fall througth
+        default :
+            // fall througth
 
-            case KEY_INVERT_CASE :{
-                return TextUtil.invertCase(line);
-            }
+        case KEY_INVERT_CASE :{
+            return TextUtil.invertCase(line);
+        }
         }
     }
 
     /* (non-Javadoc)
      * @see de.loskutov.anyedit.actions.AbstractReplaceAction#getActionKey(java.lang.String)
      */
+    @Override
     protected int getActionKey(String actionID) {
         if(actionID.startsWith(ACTION_ID_TO_LOWER)){
             return KEY_TO_LOWER;

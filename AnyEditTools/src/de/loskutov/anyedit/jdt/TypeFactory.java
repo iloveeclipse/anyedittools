@@ -234,7 +234,7 @@ public class TypeFactory {
                 IType declaringType = type.getDeclaringType();
                 if (declaringType != null) {
                     return getTypeQualifiedName(declaringType) + '.'
-                    + type.getElementName();
+                            + type.getElementName();
                 }
             }
         } catch (JavaModelException e) {
@@ -282,7 +282,7 @@ public class TypeFactory {
         }
 
         private IJavaElement getContainer(IJavaSearchScope scope)
-        throws JavaModelException {
+                throws JavaModelException {
             IJavaModel jmodel = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());
             IPath[] enclosedPaths = scope.enclosingProjectsAndJars();
 

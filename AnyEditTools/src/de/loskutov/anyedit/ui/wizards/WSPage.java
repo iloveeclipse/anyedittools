@@ -146,6 +146,7 @@ public abstract class WSPage extends WizardPage {
         return errorMessage == null;
     }
 
+    @Override
     public void dispose() {
         tv = null;
         comp.dispose();

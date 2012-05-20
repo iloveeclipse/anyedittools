@@ -27,6 +27,7 @@ public class WorkingSetExportWizard extends Wizard implements IExportWizard {
     /* (non-Javadoc)
      * @see org.eclipse.jface.wizard.Wizard#performFinish()
      */
+    @Override
     public boolean performFinish() {
         return mainPage.finish();
     }
@@ -38,6 +39,7 @@ public class WorkingSetExportWizard extends Wizard implements IExportWizard {
         // noop
     }
 
+    @Override
     public void addPages() {
         super.addPages();
         mainPage = new ExportPage("Working Set Export");

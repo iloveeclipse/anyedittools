@@ -35,6 +35,7 @@ import de.loskutov.anyedit.Messages;
 // TODO check how we could reuse ConvertLineDelimitersAction etc
 public class ConvertAllInFolderAction extends ConvertAllAction {
 
+    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         if (selection instanceof IStructuredSelection) {
             IStructuredSelection ssel = (IStructuredSelection) selection;
@@ -74,6 +75,7 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
         return null;
     }
 
+    @Override
     public void run(final IAction action) {
 
         IPreferenceStore preferenceStore = AnyEditToolsPlugin.getDefault()
@@ -102,30 +104,30 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
             // starting main action, which will be executed in separated thread
             PlatformUI.getWorkbench().getProgressService().run(true, true,
                     new IRunnableWithProgress() {
-                        public void run(IProgressMonitor monitor)
-                                throws InvocationTargetException, InterruptedException {
-                            monitor.beginTask(Messages.ConvertAllInFolder_task,
-                                    selectedResources.size() * 10);
-                            try {
-                                for (int i = 0; i < selectedResources.size()
-                                        && !monitor.isCanceled(); i++) {
+                public void run(IProgressMonitor monitor)
+                        throws InvocationTargetException, InterruptedException {
+                    monitor.beginTask(Messages.ConvertAllInFolder_task,
+                            selectedResources.size() * 10);
+                    try {
+                        for (int i = 0; i < selectedResources.size()
+                                && !monitor.isCanceled(); i++) {
 
-                                    Object o = selectedResources.get(i);
-                                    if(o instanceof IContainer) {
-                                        addAllFiles((IContainer) o,
-                                                selectedFiles, monitor);
-                                    } else if(o instanceof IFile){
-                                        if (selectedFiles.contains(o)) {
-                                            continue;
-                                        }
-                                        selectedFiles.add(o);
-                                    }
+                            Object o = selectedResources.get(i);
+                            if(o instanceof IContainer) {
+                                addAllFiles((IContainer) o,
+                                        selectedFiles, monitor);
+                            } else if(o instanceof IFile){
+                                if (selectedFiles.contains(o)) {
+                                    continue;
                                 }
-                            } finally {
-                                monitor.done();
+                                selectedFiles.add(o);
                             }
                         }
-                    });
+                    } finally {
+                        monitor.done();
+                    }
+                }
+            });
         } catch (InvocationTargetException e) {
             AnyEditToolsPlugin.logError("'Convert all' operation: not all files converted", e);
         } catch (InterruptedException e) {

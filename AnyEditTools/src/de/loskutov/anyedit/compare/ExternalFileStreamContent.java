@@ -50,6 +50,7 @@ IEditableContent, IModificationDate, IEditableContentExtension {
         this.content = content;
     }
 
+    @Override
     public void setContent(byte[] contents) {
         dirty = true;
         super.setContent(contents);
@@ -85,6 +86,7 @@ IEditableContent, IModificationDate, IEditableContentExtension {
         return false;
     }
 
+    @Override
     protected InputStream createStream() throws CoreException {
         FileInputStream fis;
         try {

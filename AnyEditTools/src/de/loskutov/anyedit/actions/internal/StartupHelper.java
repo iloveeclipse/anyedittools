@@ -44,7 +44,7 @@ import de.loskutov.anyedit.IAnyEditConstants;
  */
 public class StartupHelper implements IWindowListener {
 
-    private List/*<PreExecutionHandler>*/ commandListeners;
+    private final List/*<PreExecutionHandler>*/ commandListeners;
 
     /**
      * Will be run after workbench is started and w.window is opened

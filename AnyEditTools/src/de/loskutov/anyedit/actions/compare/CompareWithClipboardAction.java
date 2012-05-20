@@ -49,6 +49,7 @@ public class CompareWithClipboardAction extends CompareWithAction {
     //        }
     // }
 
+    @Override
     protected StreamContent createRightContent(StreamContent left) throws CoreException {
         String type = left.getType();
         String content = EclipseUtils.getClipboardContent();

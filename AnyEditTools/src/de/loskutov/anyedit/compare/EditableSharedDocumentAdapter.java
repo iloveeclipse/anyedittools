@@ -98,6 +98,7 @@ IElementStateListener {
         this.listener = new SharedDocumentAdapterListener(content);
     }
 
+    @Override
     public void connect(IDocumentProvider provider, IEditorInput documentKey) throws CoreException {
         super.connect(provider, documentKey);
         connectionCount++;
@@ -107,6 +108,7 @@ IElementStateListener {
         }
     }
 
+    @Override
     public void disconnect(IDocumentProvider provider, IEditorInput documentKey) {
         try {
             super.disconnect(provider, documentKey);
@@ -144,7 +146,7 @@ IElementStateListener {
      * @throws CoreException
      */
     public boolean saveDocument(IEditorInput input, boolean overwrite, IProgressMonitor monitor)
-    throws CoreException {
+            throws CoreException {
         if (isConnected()) {
             IDocumentProvider provider = SharedDocumentAdapter.getDocumentProvider(input);
             try {

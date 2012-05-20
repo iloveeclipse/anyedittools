@@ -117,7 +117,7 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
         }
         String editorId = getEditorId(file2);
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-        .getActivePage();
+                .getActivePage();
         IFileStore fileStore;
         try {
             fileStore = EFS.getLocalFileSystem().getStore(

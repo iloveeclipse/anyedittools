@@ -42,6 +42,7 @@ implements IEditorActionDelegate {
         setEditor(new AbstractEditor(targetEditor));
     }
 
+    @Override
     public void run(IAction action) {
         super.run(action);
         if (getViewPart() != null) {

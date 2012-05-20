@@ -60,6 +60,7 @@ public abstract class ReplaceWithAction extends AbstractHandler implements IObje
     public Object execute(final ExecutionEvent event) throws ExecutionException {
         IWorkbenchPart activePart = HandlerUtil.getActivePart(event);
         Action dummyAction = new Action(){
+            @Override
             public String getId() {
                 return event.getCommand().getId();
             }

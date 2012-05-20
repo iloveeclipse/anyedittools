@@ -23,6 +23,7 @@ public abstract class AbstractReplaceAction extends AbstractTextAction {
     /** contains possible error information during replace */
     protected boolean shouldStopReplace;
 
+    @Override
     protected TextReplaceResultSet estimateActionRange(IDocument doc){
         TextReplaceResultSet result = new TextReplaceResultSet();
         if (doc == null || getEditor().getSelectionProvider() == null) {
@@ -44,9 +45,10 @@ public abstract class AbstractReplaceAction extends AbstractTextAction {
     /* (non-Javadoc)
      * @see de.loskutov.anyedit.actions.AbstractTextAction#doTextOperation(org.eclipse.jface.text.IDocument, java.lang.String, int, int)
      */
+    @Override
     protected void doTextOperation(IDocument doc,
             String actionID, TextReplaceResultSet resultSet)
-            throws BadLocationException {
+                    throws BadLocationException {
 
         ITextSelection textSelection = (ITextSelection) getEditor()
                 .getSelectionProvider().getSelection();
@@ -85,7 +87,7 @@ public abstract class AbstractReplaceAction extends AbstractTextAction {
             }
 
             String line = doc.get(
-                lineInfo.getOffset() + startReplaceIndex, rangeToReplace);
+                    lineInfo.getOffset() + startReplaceIndex, rangeToReplace);
             if(line == null){
                 resultSet.add(null);
                 continue;

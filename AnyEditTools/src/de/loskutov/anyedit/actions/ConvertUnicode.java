@@ -32,6 +32,7 @@ public class ConvertUnicode extends AbstractReplaceAction {
     /* (non-Javadoc)
      * @see de.loskutov.anyedit.actions.AbstractReplaceAction#doTextOperation(org.eclipse.jface.text.IDocument, java.lang.String, de.loskutov.anyedit.util.TextReplaceResultSet)
      */
+    @Override
     protected void doTextOperation(IDocument doc, String actionID,
             TextReplaceResultSet resultSet) throws BadLocationException {
         warnAboutUnsupportedUnicode = warnAboutUnsupportedUnicode();
@@ -53,6 +54,7 @@ public class ConvertUnicode extends AbstractReplaceAction {
      * @see de.loskutov.anyedit.actions.AbstractReplaceAction#performReplace(java.lang.String,
      *      int)
      */
+    @Override
     protected String performReplace(String line, int actionKey) {
         if (KEY_ESCAPE == actionKey) {
             return textUtil.toUnicode(line);
@@ -88,6 +90,7 @@ public class ConvertUnicode extends AbstractReplaceAction {
      *
      * @see de.loskutov.anyedit.actions.AbstractReplaceAction#getActionKey(java.lang.String)
      */
+    @Override
     protected int getActionKey(String actionID) {
         return actionID.startsWith(ACTION_ID_UNICODIFY) ? KEY_ESCAPE : KEY_UNESCAPE;
     }

@@ -49,6 +49,7 @@ public class SaveToFileAction extends AbstractOpenAction {
         super();
     }
 
+    @Override
     protected void handleAction(IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput) {
 
@@ -75,8 +76,8 @@ public class SaveToFileAction extends AbstractOpenAction {
                             Messages.SaveTo_ShouldOpen,
                             hasSelection ? Messages.SaveTo_MessageSelection
                                     : Messages.SaveTo_MessageNoSelection,
-                            Messages.SaveTo_MessageToggle, false, prefs,
-                            IAnyEditConstants.SAVE_TO_SHOW_OPTIONS);
+                                    Messages.SaveTo_MessageToggle, false, prefs,
+                                    IAnyEditConstants.SAVE_TO_SHOW_OPTIONS);
 
             int returnCode = dialogWithToggle.getReturnCode();
             if (returnCode != IDialogConstants.YES_ID
@@ -239,7 +240,7 @@ public class SaveToFileAction extends AbstractOpenAction {
             MessageDialog md = new MessageDialog(AnyEditToolsPlugin.getShell(),
                     Messages.SaveTo_ShouldOpen, null, Messages.SaveTo_FileExists,
                     MessageDialog.WARNING, new String[] { Messages.SaveTo_Append,
-                            Messages.SaveTo_Override, "Cancel" }, 0);
+                Messages.SaveTo_Override, "Cancel" }, 0);
             int result = md.open();
             switch (result) {
             case APPEND: // Append btn index

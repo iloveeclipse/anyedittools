@@ -77,6 +77,7 @@ public class AnyeditCompareInput extends CompareEditorInput  {
     }
 
 
+    @Override
     public Object getAdapter(Class adapter) {
         if(IFile.class == adapter) {
             Object object = left.getAdapter(adapter);
@@ -88,8 +89,9 @@ public class AnyeditCompareInput extends CompareEditorInput  {
         return super.getAdapter(adapter);
     }
 
+    @Override
     protected Object prepareInput(IProgressMonitor monitor)
-    throws InvocationTargetException, InterruptedException {
+            throws InvocationTargetException, InterruptedException {
         if (right == null || left == null) {
             return null;
         }
@@ -121,6 +123,7 @@ public class AnyeditCompareInput extends CompareEditorInput  {
         }
     }
 
+    @Override
     public void saveChanges(IProgressMonitor monitor) throws CoreException {
         super.saveChanges(monitor);
         if (differences instanceof DiffNode) {
@@ -136,6 +139,7 @@ public class AnyeditCompareInput extends CompareEditorInput  {
         }
     }
 
+    @Override
     public Object getCompareResult() {
         Object compareResult = super.getCompareResult();
         if(compareResult == null){
@@ -146,6 +150,7 @@ public class AnyeditCompareInput extends CompareEditorInput  {
 
     void reuseEditor() {
         UIJob job = new UIJob("Updating differences"){
+            @Override
             public IStatus runInUIThread(IProgressMonitor monitor) {
                 if(monitor.isCanceled() || left.isDisposed() || right.isDisposed()){
                     return Status.CANCEL_STATUS;
@@ -194,6 +199,7 @@ public class AnyeditCompareInput extends CompareEditorInput  {
                 }
                 return Status.OK_STATUS;
             }
+            @Override
             public boolean belongsTo(Object family) {
                 return AnyeditCompareInput.this == family;
             }
@@ -270,6 +276,7 @@ public class AnyeditCompareInput extends CompareEditorInput  {
         setTitle("Compare (" + nameLeft + " - " + nameRight + ")");
     }
 
+    @Override
     protected void handleDispose() {
         internalDispose();
         super.handleDispose();

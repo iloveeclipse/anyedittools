@@ -20,6 +20,7 @@ public class LineReplaceResult {
     /** changed results must have not-null text to replace */
     public String textToReplace;
 
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("startIndex: ").append(startReplaceIndex);  //$NON-NLS-1$

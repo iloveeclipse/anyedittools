@@ -57,7 +57,7 @@ public interface IOpenEditorParticipant {
      */
     IFile guessFile(IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput, IWorkbenchPart currentPart)
-            throws OperationCanceledException;
+                    throws OperationCanceledException;
 
     /**
      * Opens editor

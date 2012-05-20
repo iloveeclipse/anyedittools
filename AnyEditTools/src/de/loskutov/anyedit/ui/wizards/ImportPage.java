@@ -61,6 +61,7 @@ public class ImportPage extends WSPage {
         isMerge = true;
     }
 
+    @Override
     public void createControl(Composite parent) {
         super.createControl(parent);
         final Button chooserBtn = new Button(comp, SWT.CHECK);
@@ -76,7 +77,7 @@ public class ImportPage extends WSPage {
             }
         });
     }
-    
+
     private String readSets() {
         String pathname = getFileString();
         if (pathname == null) {
@@ -261,10 +262,12 @@ public class ImportPage extends WSPage {
         }
     }
 
+    @Override
     protected IStructuredContentProvider createContentProvider() {
         return new WorkingSetContentProvider();
     }
 
+    @Override
     protected void selectionChanged() {
         String errorMessage = null;
         if (getSelectedWorkingSets().length == 0) {
@@ -274,6 +277,7 @@ public class ImportPage extends WSPage {
         setPageComplete(errorMessage == null);
     }
 
+    @Override
     protected boolean validateInput() {
         String errorMessage = null;
         String text = getFileString();

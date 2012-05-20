@@ -188,6 +188,7 @@ IWorkbenchPreferencePage, SelectionListener {
     /*
      * @see PreferencePage#createContents(Composite)
      */
+    @Override
     protected Control createContents(Composite parent) {
 
         tabFolder = new TabFolder(parent, SWT.TOP);
@@ -548,7 +549,7 @@ IWorkbenchPreferencePage, SelectionListener {
         convertChoiceComposite.setText(Messages.pref_convertChoiceIntro);
 
         boolean convertTabsAction = AbstractTextAction.ACTION_ID_CONVERT_TABS
-        .equals(store.getString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE));
+                .equals(store.getString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE));
 
         convertTabsOnSaveRadio = createLabeledRadio(Messages.pref_convertTabsOnSave,
                 Messages.pref_convertTabsOnSaveTip,
@@ -644,6 +645,7 @@ IWorkbenchPreferencePage, SelectionListener {
         // ignored
     }
 
+    @Override
     public boolean performOk() {
         IPreferenceStore store = getPreferenceStore();
 
@@ -781,6 +783,7 @@ IWorkbenchPreferencePage, SelectionListener {
      *
      * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
      */
+    @Override
     protected void performDefaults() {
         super.performDefaults();
 
@@ -852,8 +855,8 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getDefaultBoolean(IAnyEditConstants.BASE64_SPLIT_LINE));
 
         boolean convertTabsAction = AbstractTextAction.ACTION_ID_CONVERT_TABS
-        .equals(store.getDefaultString(
-                IAnyEditConstants.CONVERT_ACTION_ON_SAVE));
+                .equals(store.getDefaultString(
+                        IAnyEditConstants.CONVERT_ACTION_ON_SAVE));
 
         boolean isSaveHookEnabled = AnyEditToolsPlugin.isSaveHookInitialized();
         convertTabsOnSaveRadio.setSelection(convertTabsAction);
@@ -867,6 +870,7 @@ IWorkbenchPreferencePage, SelectionListener {
                 && saveAndConvertCheck.getSelection());
     }
 
+    @Override
     public void dispose() {
         if (tabFolder != null) {
             tabFolder.dispose();
@@ -1071,6 +1075,7 @@ IWorkbenchPreferencePage, SelectionListener {
     private void setEditorListeners(Text text) {
         // CR means commit the changes, ESC means abort and don't commit
         text.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyReleased(KeyEvent event) {
                 if (event.character == SWT.CR) {
                     if (invalidEditorText != null) {
@@ -1094,6 +1099,7 @@ IWorkbenchPreferencePage, SelectionListener {
         });
         // Consider loss of focus on the editor to mean the same as CR
         text.addFocusListener(new FocusAdapter() {
+            @Override
             public void focusLost(FocusEvent event) {
                 if (invalidEditorText != null) {
                     String infoText = Messages.pref_Invalid_file_filter;
@@ -1197,7 +1203,7 @@ IWorkbenchPreferencePage, SelectionListener {
 
     protected void removeFilters() {
         IStructuredSelection selection = (IStructuredSelection) filterViewer
-        .getSelection();
+                .getSelection();
         fileFilterContentProvider.removeFilters(selection.toArray());
     }
 
@@ -1396,6 +1402,7 @@ final class Filter {
         fChecked = checked;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o instanceof Filter) {
             Filter other = (Filter) o;
@@ -1406,6 +1413,7 @@ final class Filter {
         return false;
     }
 
+    @Override
     public int hashCode() {
         return getName().hashCode();
     }
@@ -1417,7 +1425,7 @@ final class Filter {
 class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
 
     private final Image imgPkg = PlatformUI.getWorkbench().getSharedImages()
-    .getImage(ISharedImages.IMG_OBJ_FILE);
+            .getImage(ISharedImages.IMG_OBJ_FILE);
 
     /**
      * @see ITableLabelProvider#getColumnText(Object, int)
@@ -1432,6 +1440,7 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
     /**
      * @see ILabelProvider#getText(Object)
      */
+    @Override
     public String getText(Object element) {
         return ((Filter) element).getName();
     }
@@ -1445,12 +1454,13 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
 }
 
 class FilterViewerSorter extends WorkbenchViewerComparator {
+    @Override
     public int compare(Viewer viewer, Object e1, Object e2) {
         if(!(viewer instanceof ContentViewer)) {
             return 0;
         }
         ILabelProvider lprov = (ILabelProvider) ((ContentViewer) viewer)
-        .getLabelProvider();
+                .getLabelProvider();
         String name1 = lprov.getText(e1);
         String name2 = lprov.getText(e2);
         if (name1 == null) {

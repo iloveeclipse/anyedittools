@@ -42,6 +42,7 @@ public class ReplaceWithEditorAction extends ReplaceWithAction {
         super();
     }
 
+    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         // restore disabled state and let us re-test enablement
         action.setEnabled(true);
@@ -52,6 +53,7 @@ public class ReplaceWithEditorAction extends ReplaceWithAction {
         }
     }
 
+    @Override
     protected InputStream createInputStream() {
 
         ListDialog dialog = CompareWithEditorAction.createSelectionDialog(editor,

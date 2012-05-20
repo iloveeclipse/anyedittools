@@ -39,6 +39,7 @@ public class Spaces extends AbstractTextAction {
         super();
     }
 
+    @Override
     protected TextReplaceResultSet estimateActionRange(IDocument doc) {
         TextReplaceResultSet result = new TextReplaceResultSet();
         if (doc == null) {
@@ -57,6 +58,7 @@ public class Spaces extends AbstractTextAction {
      * @param actionID
      * @param resultSet cannot be null
      */
+    @Override
     protected void doTextOperation(IDocument doc, String actionID,
             TextReplaceResultSet resultSet) throws BadLocationException {
         int maxNbr = resultSet.getStartLine() + resultSet.getNumberOfLines();
@@ -148,16 +150,19 @@ public class Spaces extends AbstractTextAction {
         }
     }
 
+    @Override
     public void setFile(IFile file) {
         super.setFile(file);
         combinedPreferences = null;
     }
 
+    @Override
     public void setActiveEditor(IAction action, IEditorPart targetEditor) {
         super.setActiveEditor(action, targetEditor);
         combinedPreferences = null;
     }
 
+    @Override
     public void setEditor(AbstractEditor editor) {
         super.setEditor(editor);
         combinedPreferences = null;

@@ -53,7 +53,7 @@ public final class JdtUtils {
      *             if user doesnt select founded types
      */
     public static int searchAndOpenType(String typeName)
-    throws OperationCanceledException {
+            throws OperationCanceledException {
         if(typeName == null) {
             return 0;
         }
@@ -92,12 +92,13 @@ public final class JdtUtils {
      */
     private static IType[] getTypeForName(String simpleTypeName,
             final IJavaSearchScope searchScope, IProgressMonitor monitor)
-    throws JavaModelException {
+                    throws JavaModelException {
         final IType[] result = new IType[1];
         final TypeFactory fFactory = new TypeFactory();
         TypeNameRequestor requestor = new TypeNameRequestor() {
             boolean done;
             boolean found;
+            @Override
             public void acceptType(int modifiers, char[] packageName,
                     char[] simpleTypeName1, char[][] enclosingTypeNames, String path) {
                 if(done){
@@ -168,7 +169,7 @@ public final class JdtUtils {
         String tabOption;
         if (javaProject == null || JavaCore.getJavaCore() == null) {
             tabOption = JavaCore
-            .getOption(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE);
+                    .getOption(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE);
         } else {
             tabOption = javaProject.getOption(
                     DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, true);

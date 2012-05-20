@@ -30,6 +30,7 @@ public class CompareWithResourceAction extends CompareWithAction {
      *
      * @see de.loskutov.anyedit.actions.CompareWithAction#createRightContent()
      */
+    @Override
     protected StreamContent createRightContent(StreamContent left) throws CoreException {
         IFile file = EclipseUtils.getWorkspaceFile();
         if (file == null) {

@@ -37,13 +37,14 @@ public class SelectWorkingSetsAction extends Action implements IWSAction {
         super();
     }
 
+    @Override
     public void run() {
         if (workingSets == null || workingSets.length == 0) {
             return;
         }
         try {
             IViewPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-            .getActivePage().showView(JavaUI.ID_PACKAGES);
+                    .getActivePage().showView(JavaUI.ID_PACKAGES);
             if (!(part instanceof PackageExplorerPart)) {
                 return;
             }

@@ -27,6 +27,7 @@ public class ReplaceWithClipboardAction extends ReplaceWithAction {
         super();
     }
 
+    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         super.selectionChanged(action, selection);
         if (action.isEnabled()) {
@@ -49,6 +50,7 @@ public class ReplaceWithClipboardAction extends ReplaceWithAction {
         }
     }
 
+    @Override
     protected InputStream createInputStream() {
         String clipbContent = EclipseUtils.getClipboardContent();
         if (clipbContent == null || clipbContent.length() == 0) {

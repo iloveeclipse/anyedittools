@@ -69,6 +69,7 @@ implements IEditorActionDelegate {
     /**
      * @see IActionDelegate#run(IAction)
      */
+    @Override
     public final void run(IAction action) {
         super.run(action);
         if(getEditor() == null){
@@ -131,7 +132,7 @@ implements IEditorActionDelegate {
         int changedLinesNbr = result.getNumberOfLines();
         boolean rewriteWholeDoc = changedLinesNbr >= docLinesNbr;
         DocumentRewriteSession rewriteSession =
-            currEditor.startSequentialRewriteMode(rewriteWholeDoc);
+                currEditor.startSequentialRewriteMode(rewriteWholeDoc);
 
         // some oddities with document??? prevent overflow in changedLinesNbr
         if(rewriteWholeDoc){

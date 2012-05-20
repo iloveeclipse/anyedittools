@@ -15,6 +15,7 @@ import java.util.Comparator;
  */
 public class SortAlphabeticallyCaseInsensitiveAscending extends AbstractSortAction {
 
+    @Override
     protected Comparator getComparator() {
         return new AbstractSortComparator() {
             public int compare(Object left, Object right) {

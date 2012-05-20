@@ -35,6 +35,7 @@ import de.loskutov.anyedit.Messages;
 
 public class CountAllInFolderAction extends ConvertAllInFolderAction implements IHandler {
 
+    @Override
     protected IResource getResource(Object selection) {
         if(selection instanceof IContainer) {
             return (IResource)selection;
@@ -53,13 +54,16 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
         return null;
     }
 
+    @Override
     protected boolean getEnablement() {
         return true;
     }
 
+    @Override
     public void run(final IAction action) {
 
         Job job = new Job("Counting resources") {
+            @Override
             protected IStatus run(IProgressMonitor monitor) {
                 monitor.beginTask(Messages.CollectAllInFolder_task, IProgressMonitor.UNKNOWN);
                 final CountingVisitor v = new CountingVisitor();
@@ -200,10 +204,12 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
         // noop
     }
 
+    @Override
     public boolean isEnabled() {
         return true;
     }
 
+    @Override
     public boolean isHandled() {
         return true;
     }

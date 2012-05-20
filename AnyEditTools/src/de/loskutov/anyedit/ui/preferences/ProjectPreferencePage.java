@@ -136,6 +136,7 @@ public class ProjectPreferencePage extends PropertyPage {
                 .getSymbolicName());
     }
 
+    @Override
     protected Control createContents(Composite parent) {
         initPreferences();
 
@@ -202,6 +203,7 @@ public class ProjectPreferencePage extends PropertyPage {
         return link;
     }
 
+    @Override
     public boolean performOk() {
         prefs.putBoolean(IAnyEditConstants.PROJECT_PROPS_ENABLED, enableProjectCheck.getSelection());
 
@@ -244,6 +246,7 @@ public class ProjectPreferencePage extends PropertyPage {
         return true;
     }
 
+    @Override
     protected void performDefaults() {
         if (!enableProjectCheck.getSelection()) {
             return;
@@ -253,7 +256,7 @@ public class ProjectPreferencePage extends PropertyPage {
 
 
         IPreferenceStore defaultStore = AnyEditToolsPlugin.getDefault()
-        .getPreferenceStore();
+                .getPreferenceStore();
         tabWidthText.setText(defaultStore
                 .getDefaultString(IAnyEditConstants.EDITOR_TAB_WIDTH));
 
@@ -282,8 +285,8 @@ public class ProjectPreferencePage extends PropertyPage {
                 .getDefaultBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED));
 
         boolean convertTabsAction = AbstractTextAction.ACTION_ID_CONVERT_TABS
-        .equals(defaultStore
-                .getDefaultString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE));
+                .equals(defaultStore
+                        .getDefaultString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE));
 
         boolean isSaveHookEnabled = AnyEditToolsPlugin.isSaveHookInitialized();
         convertTabsOnSaveRadio.setSelection(convertTabsAction);
@@ -332,7 +335,7 @@ public class ProjectPreferencePage extends PropertyPage {
         firstRow.setLayoutData(gridData);
 
         IPreferenceStore defaultStore = AnyEditToolsPlugin.getDefault()
-        .getPreferenceStore();
+                .getPreferenceStore();
 
         saveAndTrimCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_saveAndTrim, Messages.pref_saveAndTrimTip, prefs
@@ -363,8 +366,8 @@ public class ProjectPreferencePage extends PropertyPage {
         convertChoiceComposite.setText(Messages.pref_convertChoiceIntro);
 
         boolean convertTabsAction = AbstractTextAction.ACTION_ID_CONVERT_TABS
-        .equals(prefs.get(IAnyEditConstants.CONVERT_ACTION_ON_SAVE, defaultStore
-                .getString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE)));
+                .equals(prefs.get(IAnyEditConstants.CONVERT_ACTION_ON_SAVE, defaultStore
+                        .getString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE)));
 
         convertTabsOnSaveRadio = AnyEditPreferencePage.createLabeledRadio(
                 Messages.pref_convertTabsOnSave, Messages.pref_convertTabsOnSaveTip,
@@ -598,7 +601,7 @@ public class ProjectPreferencePage extends PropertyPage {
 
     protected void removeFilters() {
         IStructuredSelection selection = (IStructuredSelection) fFilterViewer
-        .getSelection();
+                .getSelection();
         fStepFilterContentProvider.removeFilters(selection.toArray());
     }
 
@@ -692,6 +695,7 @@ public class ProjectPreferencePage extends PropertyPage {
     private void setEditorListeners(Text text) {
         // CR means commit the changes, ESC means abort and don't commit
         text.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyReleased(KeyEvent event) {
                 if (event.character == SWT.CR) {
                     if (fInvalidEditorText != null) {
@@ -714,6 +718,7 @@ public class ProjectPreferencePage extends PropertyPage {
         });
         // Consider loss of focus on the editor to mean the same as CR
         text.addFocusListener(new FocusAdapter() {
+            @Override
             public void focusLost(FocusEvent event) {
                 if (fInvalidEditorText != null) {
                     String infoText = Messages.pref_Invalid_file_filter;
@@ -788,7 +793,7 @@ public class ProjectPreferencePage extends PropertyPage {
          */
         protected final List createActiveStepFiltersList() {
             IPreferenceStore defaultStore = AnyEditToolsPlugin.getDefault()
-            .getPreferenceStore();
+                    .getPreferenceStore();
             String[] strings = EclipseUtils.parseList(prefs.get(
                     IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST, defaultStore
                     .getString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST)));
@@ -802,7 +807,7 @@ public class ProjectPreferencePage extends PropertyPage {
          */
         protected List createDefaultStepFiltersList() {
             IPreferenceStore defaultStore = AnyEditToolsPlugin.getDefault()
-            .getPreferenceStore();
+                    .getPreferenceStore();
             String[] strings = EclipseUtils.parseList(defaultStore
                     .getDefaultString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST));
             return Arrays.asList(strings);
@@ -815,7 +820,7 @@ public class ProjectPreferencePage extends PropertyPage {
          */
         protected final List createInactiveStepFiltersList() {
             IPreferenceStore defaultStore = AnyEditToolsPlugin.getDefault()
-            .getPreferenceStore();
+                    .getPreferenceStore();
             String[] strings = EclipseUtils.parseList(prefs.get(
                     IAnyEditConstants.PREF_INACTIVE_FILTERS_LIST, defaultStore
                     .getString(IAnyEditConstants.PREF_INACTIVE_FILTERS_LIST)));
@@ -906,7 +911,7 @@ public class ProjectPreferencePage extends PropertyPage {
         spacesComposite.setText(Messages.pref_spacesIntro);
 
         IPreferenceStore defaultStore = AnyEditToolsPlugin.getDefault()
-        .getPreferenceStore();
+                .getPreferenceStore();
 
         tabWidthText = AnyEditPreferencePage.createLabeledText(Messages.pref_tabWidth,
                 Messages.pref_tabWidthTip, prefs.get(IAnyEditConstants.EDITOR_TAB_WIDTH,
@@ -915,26 +920,26 @@ public class ProjectPreferencePage extends PropertyPage {
         tabWidthText.setTextLimit(2);
 
         useJavaTabsCheck = AnyEditPreferencePage
-        .createLabeledCheck(
-                Messages.pref_javaTabWidthForJava,
-                Messages.pref_javaTabWidthForJavaTip,
-                prefs
-                .getBoolean(
-                        IAnyEditConstants.USE_JAVA_TAB_WIDTH_FOR_JAVA,
-                        defaultStore
-                        .getBoolean(IAnyEditConstants.USE_JAVA_TAB_WIDTH_FOR_JAVA)),
-                        spacesComposite);
+                .createLabeledCheck(
+                        Messages.pref_javaTabWidthForJava,
+                        Messages.pref_javaTabWidthForJavaTip,
+                        prefs
+                        .getBoolean(
+                                IAnyEditConstants.USE_JAVA_TAB_WIDTH_FOR_JAVA,
+                                defaultStore
+                                .getBoolean(IAnyEditConstants.USE_JAVA_TAB_WIDTH_FOR_JAVA)),
+                                spacesComposite);
 
         useModulo4TabsCheck = AnyEditPreferencePage
-        .createLabeledCheck(
-                Messages.pref_useModulo4Tabs,
-                Messages.pref_useModulo4TabsTip,
-                prefs
-                .getBoolean(
-                        IAnyEditConstants.USE_MODULO_CALCULATION_FOR_TABS_REPLACE,
-                        defaultStore
-                        .getBoolean(IAnyEditConstants.USE_MODULO_CALCULATION_FOR_TABS_REPLACE)),
-                        spacesComposite);
+                .createLabeledCheck(
+                        Messages.pref_useModulo4Tabs,
+                        Messages.pref_useModulo4TabsTip,
+                        prefs
+                        .getBoolean(
+                                IAnyEditConstants.USE_MODULO_CALCULATION_FOR_TABS_REPLACE,
+                                defaultStore
+                                .getBoolean(IAnyEditConstants.USE_MODULO_CALCULATION_FOR_TABS_REPLACE)),
+                                spacesComposite);
 
         removeTrailingSpacesCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_removeTrailingSpaces,
@@ -951,25 +956,25 @@ public class ProjectPreferencePage extends PropertyPage {
                         spacesComposite);
 
         replaceAllTabsCheck = AnyEditPreferencePage
-        .createLabeledCheck(
-                Messages.pref_replaceAllTabs,
-                Messages.pref_replaceAllTabsTip,
-                prefs
-                .getBoolean(
-                        IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES,
-                        defaultStore
-                        .getBoolean(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES)),
-                        spacesComposite);
+                .createLabeledCheck(
+                        Messages.pref_replaceAllTabs,
+                        Messages.pref_replaceAllTabsTip,
+                        prefs
+                        .getBoolean(
+                                IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES,
+                                defaultStore
+                                .getBoolean(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES)),
+                                spacesComposite);
         replaceAllSpacesCheck = AnyEditPreferencePage
-        .createLabeledCheck(
-                Messages.pref_replaceAllSpaces,
-                Messages.pref_replaceAllSpacesTip,
-                prefs
-                .getBoolean(
-                        IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS,
-                        defaultStore
-                        .getBoolean(IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS)),
-                        spacesComposite);
+                .createLabeledCheck(
+                        Messages.pref_replaceAllSpaces,
+                        Messages.pref_replaceAllSpacesTip,
+                        prefs
+                        .getBoolean(
+                                IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS,
+                                defaultStore
+                                .getBoolean(IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS)),
+                                spacesComposite);
 
     }
 }

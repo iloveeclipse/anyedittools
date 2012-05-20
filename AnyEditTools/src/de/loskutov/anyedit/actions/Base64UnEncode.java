@@ -24,11 +24,13 @@ public class Base64UnEncode extends AbstractReplaceAction {
 
     private boolean splitLines;
 
+    @Override
     protected int getActionKey(String actionID) {
         return actionID.startsWith(AbstractTextAction.ACTION_ID_ENCODE) ? KEY_ENCODE
                 : KEY_DECODE;
     }
 
+    @Override
     protected void doTextOperation(IDocument doc, String actionID,
             TextReplaceResultSet resultSet) throws BadLocationException {
         splitLines = splitLinesEnabled();
@@ -40,6 +42,7 @@ public class Base64UnEncode extends AbstractReplaceAction {
                 IAnyEditConstants.BASE64_SPLIT_LINE);
     }
 
+    @Override
     protected String performReplace(String line, int actionKey) {
         String charset = getEditor().computeEncoding();
         if (actionKey == KEY_DECODE) {

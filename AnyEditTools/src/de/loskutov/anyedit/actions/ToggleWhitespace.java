@@ -64,12 +64,14 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         partToggleState = new HashMap();
     }
 
+    @Override
     public void run(IAction action) {
         super.run(action);
         this.proxyAction = action;
         toggleEditorAnnotations(action.isChecked());
     }
 
+    @Override
     public void init(IWorkbenchWindow window1) {
         super.init(window1);
         IWorkbenchPage activePage = window1.getActivePage();
@@ -81,6 +83,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         // TODO if we are activated on startup, should get the action from toolbar and set the state
     }
 
+    @Override
     public void dispose() {
         // causes NPE if no active page is there but dispose is called
         // window.getActivePage().removePartListener(this);
@@ -149,6 +152,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         final int lines = doc.getNumberOfLines();
         final Job job = new Job("Toggle whitespace") {
 
+            @Override
             public IStatus run(IProgressMonitor monitor) {
                 //                long start = System.currentTimeMillis();
                 monitor.beginTask("Whitespace annotation ...", lines);
@@ -217,6 +221,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
 
     private void removeAnnotations(final IAnnotationModelExtension extension) {
         final Job job = new Job("Toggle whitespace") {
+            @Override
             public IStatus run(IProgressMonitor monitor) {
                 monitor.beginTask("Removing whitespace annotations",
                         IProgressMonitor.UNKNOWN);
@@ -343,6 +348,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
     /* (non-Javadoc)
      * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
      */
+    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         this.proxyAction = action;
     }

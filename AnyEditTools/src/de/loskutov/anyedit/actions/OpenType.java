@@ -25,6 +25,7 @@ public class OpenType extends AbstractOpenAction {
 
     private InternalOpenType defaultAction;
 
+    @Override
     protected void handleAction(IDocument doc,
             ISelectionProvider selectionProvider, IEditorInput currentInput) {
 
@@ -78,7 +79,7 @@ public class OpenType extends AbstractOpenAction {
         if (!textUtil.isJavaType(selectedText) && doc != null) {
             // try to search around caret
             int caretPosition = EclipseUtils
-            .getCaretPosition(selectionProvider);
+                    .getCaretPosition(selectionProvider);
             try {
                 IRegion line = doc.getLineInformation(doc
                         .getLineOfOffset(caretPosition));

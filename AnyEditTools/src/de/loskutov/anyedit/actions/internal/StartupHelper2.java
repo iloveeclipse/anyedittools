@@ -113,10 +113,12 @@ public class StartupHelper2 {
         PreExecutionHandler(String commandId) {
             this.commandId = commandId;
             spacesAction = new Spaces(){
+                @Override
                 protected AbstractEditor createActiveEditorDelegate() {
                     // this just returns the editor instance we already know, see runSpecial()
                     return getEditor();
                 }
+                @Override
                 public void setEditor(AbstractEditor editor) {
                     if(editor == null && getEditor() != null){
                         getEditor().dispose();

@@ -399,6 +399,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return editorPart == null;
     }
 
+    @Override
     public int hashCode() {
         IDocumentProvider provider = getDocumentProvider();
         IEditorInput input = getInput();
@@ -412,6 +413,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return code;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if(obj == this){
             return true;

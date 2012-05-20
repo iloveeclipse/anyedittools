@@ -12,8 +12,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
@@ -21,6 +21,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.handlers.HandlerUtil;
+
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.util.EclipseUtils;
 
@@ -43,6 +44,7 @@ public abstract class AbstractAction extends AbstractHandler implements IWorkben
         if (window != null && isEnabled()) {
             part = HandlerUtil.getActivePart(event);
             run(new Action(){
+                @Override
                 public String getId() {
                     return event.getCommand().getId();
                 }
@@ -68,6 +70,7 @@ public abstract class AbstractAction extends AbstractHandler implements IWorkben
         return new AbstractEditor(EclipseUtils.getActiveEditor());
     }
 
+    @Override
     public void dispose() {
         if(editor != null){
             editor.dispose();

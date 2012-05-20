@@ -32,6 +32,7 @@ class Base64Preferences extends AbstractPreferences {
      * @see java.util.prefs.AbstractPreferences#put(java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public void put(String key, String value1) {
         this.value = value1;
     }
@@ -42,42 +43,52 @@ class Base64Preferences extends AbstractPreferences {
      * @see java.util.prefs.AbstractPreferences#get(java.lang.String,
      *      java.lang.String)
      */
+    @Override
     public String get(String key, String def) {
         return value;
     }
 
+    @Override
     protected AbstractPreferences childSpi(String name) {
         return null;
     }
 
+    @Override
     protected String[] childrenNamesSpi() throws BackingStoreException {
         return new String[0];
     }
 
+    @Override
     protected void flushSpi() throws BackingStoreException {
         // noop
     }
 
+    @Override
     protected String getSpi(String key) {
         return null;
     }
 
+    @Override
     protected String[] keysSpi() throws BackingStoreException {
         return new String[0];
     }
 
+    @Override
     protected void putSpi(String key, String value1) {
         // noop
     }
 
+    @Override
     protected void removeNodeSpi() throws BackingStoreException {
         // noop
     }
 
+    @Override
     protected void removeSpi(String key) {
         // noop
     }
 
+    @Override
     protected void syncSpi() throws BackingStoreException {
         // noop
     }

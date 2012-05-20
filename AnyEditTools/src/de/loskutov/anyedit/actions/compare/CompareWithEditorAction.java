@@ -55,6 +55,7 @@ public class CompareWithEditorAction extends CompareWithAction {
         super();
     }
 
+    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         // restore disabled state and let us re-test enablement
         action.setEnabled(true);
@@ -65,10 +66,11 @@ public class CompareWithEditorAction extends CompareWithAction {
         }
     }
 
+    @Override
     protected StreamContent createRightContent(StreamContent left) throws CoreException {
         // WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
         ListDialog dialog = createSelectionDialog(editor, selectedContent,
-        "Select an opened editor to compare with current file:");
+                "Select an opened editor to compare with current file:");
 
         int result = dialog.open();
         if (result == Window.OK) {
@@ -131,6 +133,7 @@ public class CompareWithEditorAction extends CompareWithAction {
             this.contentProvider = contentProvider;
         }
 
+        @Override
         public Image getImage(Object element) {
             if (element instanceof IEditorReference) {
                 IEditorReference reference = (IEditorReference) element;
@@ -139,6 +142,7 @@ public class CompareWithEditorAction extends CompareWithAction {
             return super.getImage(element);
         }
 
+        @Override
         public String getText(Object element) {
             if (element instanceof IEditorReference) {
                 IEditorReference ref = (IEditorReference) element;
@@ -222,6 +226,7 @@ public class CompareWithEditorAction extends CompareWithAction {
 
         private synchronized static void initEditors(final IEditorReference[] editorReferences) {
             Job initJob = new UIJob("Initializing editor parts"){
+                @Override
                 public IStatus runInUIThread(IProgressMonitor monitor) {
                     monitor.beginTask("Initializing editor parts", editorReferences.length);
                     for (int i = 0; i < editorReferences.length; i++) {

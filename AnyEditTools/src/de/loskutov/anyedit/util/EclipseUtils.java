@@ -787,6 +787,7 @@ public final class EclipseUtils {
             this.resources = Arrays.asList(resources);
         }
 
+        @Override
         public int getType() {
             return 0;
         }
@@ -795,6 +796,7 @@ public final class EclipseUtils {
             return null;
         }
 
+        @Override
         public void accept(IResourceProxyVisitor visitor, int memberFlags)
                 throws CoreException {
             for (int i = 0; i < resources.size(); i++) {
@@ -825,6 +827,7 @@ public final class EclipseUtils {
          * Hook for creating dialog area to set text on protected "Text" field from
          * dialog.
          */
+        @Override
         public void create() {
             super.create();
             if (patternStr != null && myPattern != null) {
@@ -835,6 +838,7 @@ public final class EclipseUtils {
         /**
          * Hook for creating dialog area to fetch protected "Text" field from dialog.
          */
+        @Override
         protected Control createDialogArea(Composite parent) {
             Control c = super.createDialogArea(parent);
             Composite myDialogArea = (Composite) c;

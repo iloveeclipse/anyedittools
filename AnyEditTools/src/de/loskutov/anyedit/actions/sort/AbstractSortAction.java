@@ -34,6 +34,7 @@ public abstract class AbstractSortAction extends AbstractTextAction {
 
     protected abstract Comparator getComparator();
 
+    @Override
     protected TextReplaceResultSet estimateActionRange(IDocument document) {
         ITextSelection selection = getSelection();
         if (selection == null || selection.isEmpty()) {
@@ -51,6 +52,7 @@ public abstract class AbstractSortAction extends AbstractTextAction {
         return result;
     }
 
+    @Override
     protected void doTextOperation(IDocument document, String action, TextReplaceResultSet results) throws BadLocationException {
         List lines = getLines(results, document);
         if (lines.isEmpty() || lines.size() == 1) {

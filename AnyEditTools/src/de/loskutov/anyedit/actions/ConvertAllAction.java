@@ -68,7 +68,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
     private final Spaces spacesAction;
 
     protected final IContentType text_type = Platform.getContentTypeManager()
-    .getContentType("org.eclipse.core.runtime.text");
+            .getContentType("org.eclipse.core.runtime.text");
 
     private Shell shell;
 
@@ -336,10 +336,10 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
             monitor.beginTask(Messages.ConvertAll_task, selectedFiles.size());
             int filesToConvert = selectedFiles.size();
             IPreferenceStore preferenceStore = AnyEditToolsPlugin.getDefault()
-            .getPreferenceStore();
+                    .getPreferenceStore();
 
             boolean saveIfDirty = preferenceStore
-            .getBoolean(IAnyEditConstants.SAVE_DIRTY_BUFFER);
+                    .getBoolean(IAnyEditConstants.SAVE_DIRTY_BUFFER);
             int modified = 0;
             int skipped = 0;
             int errors = 0;

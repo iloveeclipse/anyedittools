@@ -35,6 +35,7 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
         this.content = content;
     }
 
+    @Override
     public void setContent(byte[] contents) {
         dirty = true;
         super.setContent(contents);

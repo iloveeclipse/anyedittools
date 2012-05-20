@@ -42,10 +42,11 @@ IConsolePageParticipant {
     public void init(IPageBookViewPage myPage, IConsole console) {
         page = myPage;
         IToolBarManager toolBarManager = page.getSite().getActionBars()
-        .getToolBarManager();
+                .getToolBarManager();
         toolBarManager.appendToGroup(IConsoleConstants.OUTPUT_GROUP, new Separator());
         toolBarManager.appendToGroup(IConsoleConstants.OUTPUT_GROUP, new Action(
                 "Save to file", getImageDescriptor()) {
+            @Override
             public void run() {
                 SaveToFileParticipant.this.run(this);
             }
@@ -54,7 +55,7 @@ IConsolePageParticipant {
 
     private ImageDescriptor getImageDescriptor() {
         ImageDescriptor descriptor = AnyEditToolsPlugin.getDefault().getImageRegistry()
-        .getDescriptor("icons/saveToFile.gif");
+                .getDescriptor("icons/saveToFile.gif");
         if (descriptor == null) {
             descriptor = AbstractUIPlugin.imageDescriptorFromPlugin(AnyEditToolsPlugin
                     .getId(), "icons/saveToFile.gif");
@@ -70,11 +71,13 @@ IConsolePageParticipant {
         return null;
     }
 
+    @Override
     public void dispose() {
         page = null;
         super.dispose();
     }
 
+    @Override
     public void run(IAction action) {
         if (page != null) {
             runWithViewer(EditorPropertyTester.getViewer(page));

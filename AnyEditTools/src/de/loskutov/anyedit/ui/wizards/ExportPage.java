@@ -88,6 +88,7 @@ public class ExportPage extends WSPage {
      *
      * @see de.loskutov.anyedit.ui.wizards.WSPage#createContentProvider()
      */
+    @Override
     protected IStructuredContentProvider createContentProvider() {
         return new WorkingSetContentProvider();
     }
@@ -108,7 +109,7 @@ public class ExportPage extends WSPage {
 
         public Object[] getElements(Object inputElement) {
             IWorkingSet[] workingSets = PlatformUI.getWorkbench().getWorkingSetManager()
-            .getAllWorkingSets();
+                    .getAllWorkingSets();
             List sets = new ArrayList();
             for (int i = 0; i < workingSets.length; i++) {
                 IWorkingSet workingSet = workingSets[i];

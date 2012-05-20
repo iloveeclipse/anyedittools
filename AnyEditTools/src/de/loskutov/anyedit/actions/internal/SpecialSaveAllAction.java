@@ -46,11 +46,13 @@ public class SpecialSaveAllAction extends SaveAllAction implements IDirtyWorkaro
     public SpecialSaveAllAction(IWorkbenchWindow window) {
         super(window);
         spacesAction = new Spaces() {
+            @Override
             protected AbstractEditor createActiveEditorDelegate() {
                 // this just returns the editor instance we already know, see runSpecial()
                 return getEditor();
             }
 
+            @Override
             public void setEditor(AbstractEditor editor) {
                 if (editor == null && getEditor() != null) {
                     getEditor().dispose();
@@ -94,6 +96,7 @@ public class SpecialSaveAllAction extends SaveAllAction implements IDirtyWorkaro
         }
     }
 
+    @Override
     public void run() {
         runBeforeSave();
         super.run();
