@@ -114,7 +114,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         if (rememberEditor) {
             setEditor(aEditor);
         }
-        return new Integer(aEditor.hashCode());
+        return Integer.valueOf(aEditor.hashCode());
     }
 
     private void toggleEditorAnnotations(boolean on) {
@@ -128,7 +128,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
             disableButton();
             return;
         }
-        Integer editorCookie = new Integer(aEditor.hashCode());
+        Integer editorCookie = Integer.valueOf(aEditor.hashCode());
         partToggleState.put(editorCookie, Boolean.valueOf(on));
         IEditorInput input = aEditor.getInput();
         IAnnotationModel annotationModel = documentProvider.getAnnotationModel(input);
