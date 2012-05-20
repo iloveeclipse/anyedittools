@@ -22,7 +22,7 @@ import de.loskutov.anyedit.AnyEditToolsPlugin;
 
 /**
  * Content for workspace files without document support.
- * @author Andrei
+ * @author Andrey
  */
 public class FileStreamContent extends ResourceNode implements StreamContent {
 

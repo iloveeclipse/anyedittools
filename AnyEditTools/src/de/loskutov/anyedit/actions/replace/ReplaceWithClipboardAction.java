@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.ISelection;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class ReplaceWithClipboardAction extends ReplaceWithAction {
 

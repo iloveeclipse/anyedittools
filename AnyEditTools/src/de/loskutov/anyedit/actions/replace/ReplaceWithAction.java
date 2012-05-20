@@ -45,7 +45,7 @@ import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public abstract class ReplaceWithAction extends AbstractHandler implements IObjectActionDelegate {
 

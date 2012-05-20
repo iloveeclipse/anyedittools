@@ -23,7 +23,7 @@ import de.loskutov.anyedit.actions.compare.CompareWithExternalAction;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
- * @author Andrei
+ * @author Andrey
  *
  */
 public class ReplaceWithExternalAction extends ReplaceWithAction {

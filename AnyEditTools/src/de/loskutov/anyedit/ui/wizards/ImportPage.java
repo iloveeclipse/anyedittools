@@ -46,7 +46,7 @@ import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class ImportPage extends WSPage {
 

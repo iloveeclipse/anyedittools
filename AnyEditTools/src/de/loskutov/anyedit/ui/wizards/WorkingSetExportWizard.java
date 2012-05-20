@@ -14,7 +14,7 @@ import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class WorkingSetExportWizard extends Wizard implements IExportWizard {
 

@@ -25,7 +25,7 @@ import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.ui.editor.EditorPropertyTester;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public abstract class AbstractOpenAction
 extends AbstractAction

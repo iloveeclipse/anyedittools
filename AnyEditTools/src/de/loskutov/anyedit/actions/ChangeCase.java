@@ -13,7 +13,7 @@ import de.loskutov.anyedit.util.TextUtil;
 
 /**
  * Initiated by Ray Vanderborght.
- * @author Andrei
+ * @author Andrey
  */
 public class ChangeCase extends AbstractReplaceAction {
 

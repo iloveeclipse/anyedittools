@@ -10,7 +10,7 @@
 package de.loskutov.anyedit.util;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class LineReplaceResult {
     /** relative to line start, changed results must have index >= 0 */

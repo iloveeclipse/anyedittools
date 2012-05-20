@@ -36,7 +36,7 @@ import de.loskutov.anyedit.AnyEditToolsPlugin;
 
 /**
  * Content for external files without document support.
- * @author Andrei
+ * @author Andrey
  */
 public class ExternalFileStreamContent extends BufferedContent implements StreamContent,
 IEditableContent, IModificationDate, IEditableContentExtension {

@@ -26,7 +26,7 @@ import de.loskutov.anyedit.compare.StreamContent;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class CompareWithExternalAction extends CompareWithAction {
 

@@ -17,7 +17,7 @@ import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
- * @author Andrei
+ * @author Andrey
  *
  */
 public class ReplaceWithResourceAction extends ReplaceWithAction {

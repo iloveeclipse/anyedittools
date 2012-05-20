@@ -18,7 +18,7 @@ import de.loskutov.anyedit.util.EclipseUtils;
 import de.loskutov.anyedit.util.TextUtil;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class CompareWithClipboardAction extends CompareWithAction {
 

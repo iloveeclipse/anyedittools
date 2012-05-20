@@ -27,7 +27,7 @@ import de.loskutov.anyedit.ui.wizards.IWSAction;
 /**
  * Thic class is a dirty way to activate imported working sets into the Package Explorer
  *
- * @author Andrei
+ * @author Andrey
  */
 public class SelectWorkingSetsAction extends Action implements IWSAction {
 

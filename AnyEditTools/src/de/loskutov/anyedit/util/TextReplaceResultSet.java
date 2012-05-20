@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public final class TextReplaceResultSet {
 

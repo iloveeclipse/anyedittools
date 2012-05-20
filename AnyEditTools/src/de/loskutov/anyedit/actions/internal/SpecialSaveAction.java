@@ -29,7 +29,7 @@ import de.loskutov.anyedit.util.EclipseUtils;
 
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class SpecialSaveAction extends SaveAction implements IDirtyWorkaround {
 

@@ -12,7 +12,7 @@ package de.loskutov.anyedit;
 /**
  * Some constant names copied from org.eclipse.jdt.ui.PreferenceConstants
  *
- * @author Andrei
+ * @author Andrey
  */
 public interface IAnyEditConstants {
 

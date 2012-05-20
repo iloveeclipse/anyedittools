@@ -17,7 +17,7 @@ import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.util.TextUtil;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class AndyEditPreferenceInitializer
 extends

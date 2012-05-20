@@ -45,7 +45,7 @@ import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class CompareWithEditorAction extends CompareWithAction {
 
@@ -167,7 +167,7 @@ public class CompareWithEditorAction extends CompareWithAction {
     /**
      * This provider must not be re-used for more then one execution, as it creates cache
      * of editors
-     * @author Andrei
+     * @author Andrey
      */
     public static final class EditorsContentProvider implements IStructuredContentProvider {
 

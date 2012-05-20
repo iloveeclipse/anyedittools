@@ -13,7 +13,7 @@ import java.util.List;
 import org.eclipse.ui.IWorkingSet;
 
 /**
- * @author Andrei
+ * @author Andrey
  *
  */
 public interface IWSAction {

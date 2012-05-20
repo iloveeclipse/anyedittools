@@ -35,7 +35,7 @@ import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
 
 /**
- * @author Andrei
+ * @author Andrey
  *
  */
 public final class JdtUtils {

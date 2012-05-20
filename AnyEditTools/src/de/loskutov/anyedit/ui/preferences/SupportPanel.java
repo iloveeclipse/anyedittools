@@ -29,7 +29,7 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class SupportPanel {
 

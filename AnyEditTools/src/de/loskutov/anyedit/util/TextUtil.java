@@ -26,7 +26,7 @@ import de.loskutov.anyedit.Messages;
 
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class TextUtil {
 

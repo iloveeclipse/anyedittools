@@ -25,7 +25,7 @@ import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class ContentWrapper implements IActionFilter {
 

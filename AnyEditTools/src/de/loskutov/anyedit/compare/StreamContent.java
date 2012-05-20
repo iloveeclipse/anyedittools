@@ -15,7 +15,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * @author Andrei
+ * @author Andrey
  *
  */
 public interface StreamContent extends ITypedElement, IAdaptable,

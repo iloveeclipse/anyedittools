@@ -34,7 +34,7 @@ import org.eclipse.ui.progress.UIJob;
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 /*implements IContentChangeNotifier*/
 public class AnyeditCompareInput extends CompareEditorInput  {

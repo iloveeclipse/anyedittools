@@ -78,7 +78,7 @@ import de.loskutov.anyedit.jdt.JdtUtils;
 import de.loskutov.anyedit.ui.preferences.CombinedPreferences;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public final class EclipseUtils {
 

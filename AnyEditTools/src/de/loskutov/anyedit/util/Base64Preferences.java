@@ -16,7 +16,7 @@ import java.util.prefs.BackingStoreException;
  * java.util.Base64 class. Unfortunately sun.misc.BASE64Encoder might be not available
  * on non-Sun JDK's too.
  *
- * @author Andrei
+ * @author Andrey
  */
 class Base64Preferences extends AbstractPreferences {
 

@@ -42,7 +42,7 @@ import de.loskutov.anyedit.util.EclipseUtils;
 import de.loskutov.anyedit.util.TextUtil;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class AbstractEditor implements ITextEditorExtension2 {
     private IEditorPart editorPart;

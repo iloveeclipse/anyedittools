@@ -27,7 +27,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * might be undefined. If one of participants was successful in guessing the file/opening
  * the editor, other participants would be ignored.
  *
- * @author Andrei
+ * @author Andrey
  */
 public interface IOpenEditorParticipant {
 

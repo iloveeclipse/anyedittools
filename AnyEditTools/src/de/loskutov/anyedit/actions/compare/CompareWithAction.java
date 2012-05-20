@@ -32,7 +32,7 @@ import de.loskutov.anyedit.compare.TextStreamContent;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
 
 /**
- * @author Andrei
+ * @author Andrey
  *
  */
 public abstract class CompareWithAction extends AbstractHandler implements IObjectActionDelegate /*, IWorkbenchWindowActionDelegate*/ {

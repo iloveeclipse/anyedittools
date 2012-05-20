@@ -26,7 +26,7 @@ import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public abstract class AbstractAction extends AbstractHandler implements IWorkbenchWindowActionDelegate, IViewActionDelegate {
 

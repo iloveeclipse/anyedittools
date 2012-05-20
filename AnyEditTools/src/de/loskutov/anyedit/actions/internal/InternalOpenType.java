@@ -24,7 +24,7 @@ import org.eclipse.ui.PlatformUI;
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 
 /**
- * @author Andrei
+ * @author Andrey
  */
 public class InternalOpenType extends OpenTypeAction {
 
