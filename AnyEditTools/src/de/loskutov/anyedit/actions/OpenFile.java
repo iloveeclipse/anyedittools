@@ -38,7 +38,7 @@ public class OpenFile extends AbstractOpenAction {
     @Override
     protected void handleAction(IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput) {
-        List participants = getParticipants();
+        List<IOpenEditorParticipant> participants = getParticipants();
         IFile file;
         try {
             file = guessFile(participants, doc, selectionProvider, currentInput);
@@ -54,11 +54,10 @@ public class OpenFile extends AbstractOpenAction {
         }
     }
 
-    private IFile guessFile(List/* <IOpenEditorParticipant> */participants, IDocument doc,
+    private IFile guessFile(List<IOpenEditorParticipant> participants, IDocument doc,
             ISelectionProvider selectionProvider, IEditorInput currentInput) {
         for (int i = 0; i < participants.size(); i++) {
-            IOpenEditorParticipant participant = (IOpenEditorParticipant) participants
-                    .get(i);
+            IOpenEditorParticipant participant = participants.get(i);
             IFile file;
             try {
                 file = participant.guessFile(doc, selectionProvider, currentInput,
@@ -78,13 +77,12 @@ public class OpenFile extends AbstractOpenAction {
         return null;
     }
 
-    private IEditorPart openEditor(List/* <IOpenEditorParticipant> */participants,
+    private IEditorPart openEditor(List<IOpenEditorParticipant> participants,
             IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput, IFile file) {
 
         for (int i = 0; i < participants.size(); i++) {
-            IOpenEditorParticipant participant = (IOpenEditorParticipant) participants
-                    .get(i);
+            IOpenEditorParticipant participant = participants.get(i);
             IEditorPart part = null;
             try {
                 part = participant.openEditor(doc, selectionProvider, currentInput, file);
@@ -102,12 +100,11 @@ public class OpenFile extends AbstractOpenAction {
         return null;
     }
 
-    private void goToLine(List/* <IOpenEditorParticipant> */participants, IDocument doc,
+    private void goToLine(List<IOpenEditorParticipant> participants, IDocument doc,
             ISelectionProvider selectionProvider, IEditorPart editorPart) {
 
         for (int i = 0; i < participants.size(); i++) {
-            IOpenEditorParticipant participant = (IOpenEditorParticipant) participants
-                    .get(i);
+            IOpenEditorParticipant participant = participants.get(i);
             int line = -1;
             try {
                 line = participant.guessLine(doc, selectionProvider, editorPart);
@@ -128,8 +125,8 @@ public class OpenFile extends AbstractOpenAction {
         }
     }
 
-    private List getParticipants() {
-        List participants = new ArrayList();
+    private List<IOpenEditorParticipant> getParticipants() {
+        List<IOpenEditorParticipant> participants = new ArrayList<IOpenEditorParticipant>();
         IExtensionRegistry registry = Platform.getExtensionRegistry();
         IExtensionPoint point = registry.getExtensionPoint(AnyEditToolsPlugin.getId()
                 + ".openEditorParticipants");
@@ -149,23 +146,20 @@ public class OpenFile extends AbstractOpenAction {
                     continue;
                 }
                 if (object instanceof IOpenEditorParticipant) {
-                    participants.add(object);
+                    participants.add((IOpenEditorParticipant) object);
                 }
             }
         }
         if (participants.size() <= 1) {
             return participants;
         }
-        Collections.sort(participants, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                if (!(o1 instanceof IOpenEditorParticipant)
-                        || !(o2 instanceof IOpenEditorParticipant)) {
+        Collections.sort(participants, new Comparator<IOpenEditorParticipant>() {
+            public int compare(IOpenEditorParticipant o1, IOpenEditorParticipant o2) {
+                if (o1 == null || o2 == null) {
                     return 0;
                 }
-                IOpenEditorParticipant pa1 = (IOpenEditorParticipant) o1;
-                IOpenEditorParticipant pa2 = (IOpenEditorParticipant) o2;
                 // inverted order
-                return getPrio(pa2).compareTo(getPrio(pa1));
+                return getPrio(o2).compareTo(getPrio(o1));
             }
         });
         return participants;
@@ -176,7 +170,7 @@ public class OpenFile extends AbstractOpenAction {
         prio = prio > IOpenEditorParticipant.PRIO_HIGH ? IOpenEditorParticipant.PRIO_HIGH
                 : prio < IOpenEditorParticipant.PRIO_LOW ? IOpenEditorParticipant.PRIO_LOW
                         : prio;
-        return new Integer(prio);
+        return Integer.valueOf(prio);
     }
 
 }
