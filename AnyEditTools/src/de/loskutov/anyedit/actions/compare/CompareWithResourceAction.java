@@ -17,7 +17,6 @@ import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
  * @author Andrey
- *
  */
 public class CompareWithResourceAction extends CompareWithAction {
 
@@ -25,11 +24,6 @@ public class CompareWithResourceAction extends CompareWithAction {
         super();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.loskutov.anyedit.actions.CompareWithAction#createRightContent()
-     */
     @Override
     protected StreamContent createRightContent(StreamContent left) throws CoreException {
         IFile file = EclipseUtils.getWorkspaceFile();

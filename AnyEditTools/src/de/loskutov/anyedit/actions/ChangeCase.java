@@ -23,9 +23,6 @@ public class ChangeCase extends AbstractReplaceAction {
     private static final int KEY_CAPITALIZE = 3;
     private static final int KEY_CAMEL = 4;
 
-    /* (non-Javadoc)
-     * @see de.loskutov.anyedit.actions.AbstractReplaceAction#performReplace(java.lang.String, int)
-     */
     @Override
     protected String performReplace(String line, int actionKey) {
 
@@ -55,9 +52,6 @@ public class ChangeCase extends AbstractReplaceAction {
         }
     }
 
-    /* (non-Javadoc)
-     * @see de.loskutov.anyedit.actions.AbstractReplaceAction#getActionKey(java.lang.String)
-     */
     @Override
     protected int getActionKey(String actionID) {
         if(actionID.startsWith(ACTION_ID_TO_LOWER)){

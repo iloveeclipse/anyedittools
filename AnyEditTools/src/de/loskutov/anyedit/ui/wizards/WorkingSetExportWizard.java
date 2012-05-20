@@ -24,17 +24,11 @@ public class WorkingSetExportWizard extends Wizard implements IExportWizard {
         super();
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.jface.wizard.Wizard#performFinish()
-     */
     @Override
     public boolean performFinish() {
         return mainPage.finish();
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
-     */
     public void init(IWorkbench workbench, IStructuredSelection selection) {
         // noop
     }

@@ -23,7 +23,7 @@ public class AndyEditPreferenceInitializer
 extends
 AbstractPreferenceInitializer {
 
-    /* (non-Javadoc)
+    /*
      * @see org.eclipse.core.runtime.Plugin#initializeDefaultPluginPreferences()
      * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
      */

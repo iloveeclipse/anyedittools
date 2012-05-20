@@ -83,11 +83,6 @@ public class ExportPage extends WSPage {
         return storeSets();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.loskutov.anyedit.ui.wizards.WSPage#createContentProvider()
-     */
     @Override
     protected IStructuredContentProvider createContentProvider() {
         return new WorkingSetContentProvider();

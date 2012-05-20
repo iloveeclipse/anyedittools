@@ -42,9 +42,6 @@ public abstract class AbstractReplaceAction extends AbstractTextAction {
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see de.loskutov.anyedit.actions.AbstractTextAction#doTextOperation(org.eclipse.jface.text.IDocument, java.lang.String, int, int)
-     */
     @Override
     protected void doTextOperation(IDocument doc,
             String actionID, TextReplaceResultSet resultSet)

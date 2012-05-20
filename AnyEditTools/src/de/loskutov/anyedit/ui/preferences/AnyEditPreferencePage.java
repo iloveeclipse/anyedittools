@@ -778,11 +778,6 @@ IWorkbenchPreferencePage, SelectionListener {
         return fButton;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
-     */
     @Override
     protected void performDefaults() {
         super.performDefaults();
@@ -1330,7 +1325,7 @@ IWorkbenchPreferencePage, SelectionListener {
                 }
             }
             String pref = serializeList(active.toArray(new String[active
-                                                                             .size()]));
+                                                                  .size()]));
             IPreferenceStore prefStore = getPreferenceStore();
             prefStore.setValue(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST,
                     pref);

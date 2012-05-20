@@ -23,9 +23,6 @@ public class UnEscape extends AbstractReplaceAction {
     private static final int KEY_ESCAPE = 1;
     private boolean preserveEntities;
 
-    /* (non-Javadoc)
-     * @see de.loskutov.anyedit.actions.AbstractReplaceAction#doTextOperation(org.eclipse.jface.text.IDocument, java.lang.String, de.loskutov.anyedit.util.TextReplaceResultSet)
-     */
     @Override
     protected void doTextOperation(IDocument doc, String actionID,
             TextReplaceResultSet resultSet) throws BadLocationException {
@@ -38,9 +35,6 @@ public class UnEscape extends AbstractReplaceAction {
                 IAnyEditConstants.PRESERVE_ENTITIES);
     }
 
-    /* (non-Javadoc)
-     * @see de.loskutov.anyedit.actions.AbstractReplaceAction#performReplace(java.lang.String, int)
-     */
     @Override
     protected String performReplace(String line, int actionKey) {
         if(KEY_UNESCAPE == actionKey){
@@ -55,9 +49,6 @@ public class UnEscape extends AbstractReplaceAction {
         return TextUtil.escapeText(line);
     }
 
-    /* (non-Javadoc)
-     * @see de.loskutov.anyedit.actions.AbstractReplaceAction#getActionKey(java.lang.String)
-     */
     @Override
     protected int getActionKey(String actionID) {
         return actionID.startsWith(ACTION_ID_UNESCAPE)? KEY_UNESCAPE : KEY_ESCAPE;

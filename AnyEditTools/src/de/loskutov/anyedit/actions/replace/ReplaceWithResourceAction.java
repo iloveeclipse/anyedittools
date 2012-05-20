@@ -26,9 +26,6 @@ public class ReplaceWithResourceAction extends ReplaceWithAction {
         super();
     }
 
-    /* (non-Javadoc)
-     * @see de.loskutov.anyedit.actions.replace.ReplaceWithAction#createInputStream()
-     */
     @Override
     protected InputStream createInputStream() {
         IFile file = EclipseUtils.getWorkspaceFile();
