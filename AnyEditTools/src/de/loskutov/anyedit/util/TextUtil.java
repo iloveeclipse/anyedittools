@@ -715,11 +715,11 @@ public class TextUtil {
     }
 
     public static boolean convertTabsToSpaces(StringBuffer line, int tabWidth,
-            boolean removeTrailing, boolean replaceAllTabs, boolean useModulo4Tabs) {
+            boolean removeTrailing, boolean ignoreBlankLines, boolean replaceAllTabs, boolean useModulo4Tabs) {
         char lastChar;
         boolean changed = false;
         if (removeTrailing) {
-            changed = removeTrailingSpace(line);
+            changed = removeTrailingSpace(line, ignoreBlankLines);
         }
         int lineLength = line.length();
         int spacesCount = 0;
@@ -817,12 +817,27 @@ public class TextUtil {
         return changed;
     }
 
-    public static boolean removeTrailingSpace(StringBuffer line) {
+    public static boolean removeTrailingSpace(StringBuffer line, boolean ignoreBlankLine) {
         boolean changed = false;
         char lastChar;
         int lineLength = line.length();
         int lastCharsLength = getLineEnd(line).length;
         int lastIdx = lineLength - lastCharsLength - 1;
+
+        if (ignoreBlankLine) {
+            boolean nonWhitespaceFound = false;
+            for (int i = lastIdx; i >= 0; i--) {
+                lastChar = line.charAt(i);
+                if (lastChar != ' ' && lastChar != '\t') {
+                    nonWhitespaceFound = true;
+                    break;
+                }
+            }
+            if (nonWhitespaceFound == false) {
+                return false;
+            }
+        }
+
         while (lastIdx >= 0) {
             lastChar = line.charAt(lastIdx);
             if (lastChar != ' ' && lastChar != '\t') {
@@ -839,10 +854,10 @@ public class TextUtil {
     }
 
     public static boolean convertSpacesToTabs(StringBuffer line, int tabWidth,
-            boolean removeTrailing, boolean replaceAllSpaces) {
+            boolean removeTrailing, boolean ignoreBlankLines, boolean replaceAllSpaces) {
         boolean changed = false;
         if (removeTrailing) {
-            changed = removeTrailingSpace(line);
+            changed = removeTrailingSpace(line, ignoreBlankLines);
         }
         int lineLength = line.length();
         int spacesCount = 0;

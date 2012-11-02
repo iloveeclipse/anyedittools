@@ -139,7 +139,7 @@ public class TestUtils extends TestCase {
         String line = "   a  b cd \t \t \t";
         StringBuffer sb = new StringBuffer(line);
         String line2 = "   a  b cd \t \t \t";
-        TextUtil.convertSpacesToTabs(sb , 4, false, true);
+        TextUtil.convertSpacesToTabs(sb , 4, false, false, true);
     }
 
     public void testCount() {
@@ -159,8 +159,8 @@ public class TestUtils extends TestCase {
     }
 
     public void testCapitalize() {
-        String string = TextUtil.capitalize("abcdefghijklmnopqrstuvwxyz0123456789,.;:-_öä<>|@*+~#'`´?ß\\");
-        assertEquals(string, "Abcdefghijklmnopqrstuvwxyz0123456789,.;:-_öä<>|@*+~#'`´?ß\\");
+        String string = TextUtil.capitalize("abcdefghijklmnopqrstuvwxyz0123456789,.;:-_ï¿½ï¿½<>|@*+~#'`ï¿½?ï¿½\\");
+        assertEquals(string, "Abcdefghijklmnopqrstuvwxyz0123456789,.;:-_ï¿½ï¿½<>|@*+~#'`ï¿½?ï¿½\\");
     }
 
     public void testInvertCase() {

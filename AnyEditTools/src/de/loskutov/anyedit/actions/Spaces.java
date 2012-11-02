@@ -70,6 +70,7 @@ public class Spaces extends AbstractTextAction {
         boolean replaceAllTabs = isReplaceAllTabsEnabled(prefs);
         boolean replaceAllSpaces = isReplaceAllSpacesEnabled(prefs);
         boolean useModulo4Tabs = prefs.getBoolean(IAnyEditConstants.USE_MODULO_CALCULATION_FOR_TABS_REPLACE);
+        boolean ignoreBlankLines = prefs.getBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING);
 
         boolean usedOnSave = isUsedOnSave();
         if (usedOnSave) {
@@ -108,14 +109,14 @@ public class Spaces extends AbstractTextAction {
             if (convertEnabled) {
                 if (tabsToSpaces) {
                     changed = TextUtil.convertTabsToSpaces(sb, tabWidth, removeTrailing,
-                            replaceAllTabs, useModulo4Tabs);
+                            ignoreBlankLines, replaceAllTabs, useModulo4Tabs);
                 } else {
                     changed = TextUtil.convertSpacesToTabs(sb, tabWidth, removeTrailing,
-                            replaceAllSpaces);
+                            ignoreBlankLines, replaceAllSpaces);
                 }
             } else {
                 if (!usedOnSave || removeTrailing) {
-                    changed = TextUtil.removeTrailingSpace(sb);
+                    changed = TextUtil.removeTrailingSpace(sb, ignoreBlankLines);
                 } else {
                     changed = false;
                 }

@@ -128,6 +128,8 @@ IWorkbenchPreferencePage, SelectionListener {
 
     protected Button saveAndTrimCheck;
 
+    protected Button ignoreBlankLinesOnTrimCheck;
+
     protected Button saveAndAddLineCheck;
 
     protected Button askBeforeConvertAllCheck;
@@ -529,6 +531,10 @@ IWorkbenchPreferencePage, SelectionListener {
                 Messages.pref_saveAndTrimTip,
                 store.getBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED), firstRow);
 
+        ignoreBlankLinesOnTrimCheck = createLabeledCheck(Messages.pref_ignoreOnTrim,
+                Messages.pref_ignoreOnTrimTip,
+                store.getBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING), firstRow);
+
         saveAndAddLineCheck = createLabeledCheck(Messages.pref_saveAndAddLine,
                 Messages.pref_saveAndAddLineTip,
                 store.getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE), firstRow);
@@ -543,7 +549,7 @@ IWorkbenchPreferencePage, SelectionListener {
         layout.numColumns = 2;
 
         convertChoiceComposite.setLayout(layout);
-        gridData = new GridData();
+        gridData = new GridData(300, 50);
         gridData.horizontalIndent = 20;
         convertChoiceComposite.setLayoutData(gridData);
         convertChoiceComposite.setText(Messages.pref_convertChoiceIntro);
@@ -578,6 +584,7 @@ IWorkbenchPreferencePage, SelectionListener {
         convertChoiceComposite.setEnabled(isSaveHookEnabled
                 && saveAndConvertCheck.getSelection());
         saveAndTrimCheck.setEnabled(isSaveHookEnabled);
+        ignoreBlankLinesOnTrimCheck.setEnabled(isSaveHookEnabled);
         saveAndAddLineCheck.setEnabled(isSaveHookEnabled);
         saveAndConvertCheck.setEnabled(isSaveHookEnabled);
         saveComposite.setEnabled(isSaveHookEnabled);
@@ -696,6 +703,8 @@ IWorkbenchPreferencePage, SelectionListener {
         store.setValue(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR, removePrintCheck
                 .getSelection());
         store.setValue(IAnyEditConstants.SAVE_AND_TRIM_ENABLED, saveAndTrimCheck
+                .getSelection());
+        store.setValue(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING, ignoreBlankLinesOnTrimCheck
                 .getSelection());
         store.setValue(IAnyEditConstants.SAVE_AND_ADD_LINE, saveAndAddLineCheck
                 .getSelection());
@@ -828,6 +837,8 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getDefaultBoolean(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR));
         saveAndTrimCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED));
+        ignoreBlankLinesOnTrimCheck.setSelection(store
+                .getDefaultBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING));
         saveAndAddLineCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE));
         saveAndConvertCheck.setSelection(store

@@ -74,6 +74,8 @@ public class ProjectPreferencePage extends PropertyPage {
 
     private Button saveAndTrimCheck;
 
+    private Button ignoreBlankLinesCheck;
+
     private Button saveAndAddLineCheck;
 
     private Button saveAndConvertCheck;
@@ -125,6 +127,8 @@ public class ProjectPreferencePage extends PropertyPage {
     private String fInvalidEditorText;
 
     private Button addNewLineCheck;
+
+    private Group exclGroup;
 
     public ProjectPreferencePage() {
         super();
@@ -225,6 +229,8 @@ public class ProjectPreferencePage extends PropertyPage {
                 replaceAllSpacesCheck.getSelection());
         prefs.putBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED, saveAndTrimCheck
                 .getSelection());
+        prefs.putBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING, ignoreBlankLinesCheck
+                .getSelection());
         prefs.putBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE, saveAndAddLineCheck
                 .getSelection());
         prefs.putBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED, saveAndConvertCheck
@@ -280,6 +286,8 @@ public class ProjectPreferencePage extends PropertyPage {
         saveAndAddLineCheck.setSelection(defaultStore
                 .getDefaultBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE));
 
+        ignoreBlankLinesCheck.setSelection(defaultStore
+                .getDefaultBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING));
 
         saveAndConvertCheck.setSelection(defaultStore
                 .getDefaultBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED));
@@ -315,7 +323,7 @@ public class ProjectPreferencePage extends PropertyPage {
         GridLayout layout = new GridLayout();
         saveComposite.setLayout(layout);
         GridData gridData = new GridData(GridData.FILL_HORIZONTAL
-                | GridData.GRAB_HORIZONTAL);
+                | GridData.GRAB_HORIZONTAL );
         saveComposite.setLayoutData(gridData);
         String saveGroupText = Messages.pref_saveIntro;
         if (!isSaveHookEnabled) {
@@ -343,6 +351,12 @@ public class ProjectPreferencePage extends PropertyPage {
                         .getBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED)),
                         firstRow);
 
+        ignoreBlankLinesCheck = AnyEditPreferencePage.createLabeledCheck(
+                Messages.pref_ignoreOnTrim, Messages.pref_ignoreOnTrimTip, prefs
+                .getBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING, defaultStore
+                        .getBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING)),
+                        firstRow);
+
         saveAndAddLineCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_saveAndAddLine, Messages.pref_saveAndAddLineTip, prefs
                 .getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE, defaultStore
@@ -360,7 +374,7 @@ public class ProjectPreferencePage extends PropertyPage {
         layout.numColumns = 2;
 
         convertChoiceComposite.setLayout(layout);
-        gridData = new GridData();
+        gridData = new GridData(300, 50);
         gridData.horizontalIndent = 20;
         convertChoiceComposite.setLayoutData(gridData);
         convertChoiceComposite.setText(Messages.pref_convertChoiceIntro);
@@ -396,6 +410,7 @@ public class ProjectPreferencePage extends PropertyPage {
         convertChoiceComposite.setEnabled(isSaveHookEnabled
                 && saveAndConvertCheck.getSelection());
         saveAndTrimCheck.setEnabled(isSaveHookEnabled);
+        ignoreBlankLinesCheck.setEnabled(isSaveHookEnabled);
         saveAndAddLineCheck.setEnabled(isSaveHookEnabled);
         saveAndConvertCheck.setEnabled(isSaveHookEnabled);
         saveComposite.setEnabled(isSaveHookEnabled);
@@ -411,6 +426,7 @@ public class ProjectPreferencePage extends PropertyPage {
         tabFolder.setEnabled(selection);
         saveComposite.setEnabled(selection);
         saveAndTrimCheck.setEnabled(selection);
+        ignoreBlankLinesCheck.setEnabled(selection);
         saveAndAddLineCheck.setEnabled(selection);
         saveAndConvertCheck.setEnabled(selection);
         saveComposite.setEnabled(selection);
@@ -426,6 +442,7 @@ public class ProjectPreferencePage extends PropertyPage {
         addNewLineCheck.setEnabled(selection);
         replaceAllTabsCheck.setEnabled(selection);
         replaceAllSpacesCheck.setEnabled(selection);
+        exclGroup.setEnabled(selection);
         setFilterButtonsEnabled(selection);
     }
 
@@ -439,7 +456,7 @@ public class ProjectPreferencePage extends PropertyPage {
         // GridData.GRAB_HORIZONTAL);
         // contentTypeArea.getControl().setLayoutData(data);
 
-        Group exclGroup = new Group(parent, SWT.SHADOW_ETCHED_IN);
+        exclGroup = new Group(parent, SWT.SHADOW_ETCHED_IN);
         exclGroup.setText(Messages.pref_group_exclude);
         exclGroup.setToolTipText(Messages.pref_group_excludeTip);
         GridLayout layout = new GridLayout();

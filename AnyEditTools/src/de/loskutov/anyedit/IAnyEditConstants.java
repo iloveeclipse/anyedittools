@@ -137,6 +137,16 @@ public interface IAnyEditConstants {
     String SAVE_AND_TRIM_ENABLED = "saveAndTrim";
 
     /**
+     * A named preference that controls if blank lines should be trimmed
+     * when removing trailing whitespace.
+     * "removeTrailing" action should be executed.
+     * <p>
+     * Value is of type <code>Boolean</code>.
+     * </p>
+     */
+    String IGNORE_BLANK_LINES_WHEN_TRIMMING = "ignoreBlankLinesWhenTrimming";
+
+    /**
      * A named preference that controls if before "save" action in editor the
      * "addNewLine" action should be executed.
      * <p>

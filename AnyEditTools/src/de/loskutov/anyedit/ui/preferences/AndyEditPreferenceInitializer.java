@@ -53,6 +53,7 @@ AbstractPreferenceInitializer {
         store.setDefault(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED, false);
         store.setDefault(IAnyEditConstants.SAVE_AND_ADD_LINE, false);
         store.setDefault(IAnyEditConstants.SAVE_AND_TRIM_ENABLED, true);
+        store.setDefault(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING, false);
         store.setDefault(IAnyEditConstants.CONVERT_ACTION_ON_SAVE,
                 IAnyEditConstants.ACTION_ID_CONVERT_TABS);
         store.setDefault(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES, false);

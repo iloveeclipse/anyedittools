@@ -92,6 +92,9 @@ public class Messages  extends NLS {
     public static String pref_saveAndTrim;
     public static String pref_saveAndTrimTip;
 
+    public static String pref_ignoreOnTrim;
+    public static String pref_ignoreOnTrimTip;
+
     public static String pref_saveAndAddLine;
     public static String pref_saveAndAddLineTip;
 
