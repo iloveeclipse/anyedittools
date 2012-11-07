@@ -979,62 +979,62 @@ public class TextUtil {
      * Characters used for escape operations
      */
     private static final String[][] HTML_ESCAPE_CHARS = { {
-        "&lt;", "<" }, {
+            "&lt;", "<" }, {
             "&gt;", ">" }, {
-                "&amp;", "&" }, {
-                    "&quot;", "\"" }, {
-                        "&agrave;", "\u00e0" }, {
-                            "&Agrave;", "\u00c0" }, {
-                                "&acirc;", "\u00e2" }, {
-                                    "&auml;", "\u00e4" }, {
-                                        "&Auml;", "\u00c4" }, {
-                                            "&Acirc;", "\u00c2" }, {
-                                                "&aring;", "\u00e5" }, {
-                                                    "&Aring;", "\u00c5" }, {
-                                                        "&aelig;", "\u00e6" }, {
-                                                            "&AElig;", "\u00c6" }, {
-                                                                "&ccedil;", "\u00e7" }, {
-                                                                    "&Ccedil;", "\u00c7" }, {
-                                                                        "&eacute;", "\u00e9" }, {
-                                                                            "&Eacute;", "\u00c9" }, {
-                                                                                "&aacute;", "\u00e1" }, {
-                                                                                    "&Aacute;", "\u00c1" }, {
-                                                                                        "&egrave;", "\u00e8" }, {
-                                                                                            "&Egrave;", "\u00c8" }, {
-                                                                                                "&ecirc;", "\u00ea" }, {
-                                                                                                    "&Ecirc;", "\u00ca" }, {
-                                                                                                        "&euml;", "\u00eb" }, {
-                                                                                                            "&Euml;", "\u00cb" }, {
-                                                                                                                "&iuml;", "\u00ef" }, {
-                                                                                                                    "&Iuml;", "\u00cf" }, {
-                                                                                                                        "&iacute;", "\u00ed" }, {
-                                                                                                                            "&Iacute;", "\u00cd" }, {
-                                                                                                                                "&atilde;", "\u00e3" }, {
-                                                                                                                                    "&Atilde;", "\u00c3" }, {
-                                                                                                                                        "&otilde;", "\u00f5" }, {
-                                                                                                                                            "&Otilde;", "\u00d5" }, {
-                                                                                                                                                "&oacute;", "\u00f3" }, {
-                                                                                                                                                    "&Oacute;", "\u00d3" }, {
-                                                                                                                                                        "&ocirc;", "\u00f4" }, {
-                                                                                                                                                            "&Ocirc;", "\u00d4" }, {
-                                                                                                                                                                "&ouml;", "\u00f6" }, {
-                                                                                                                                                                    "&Ouml;", "\u00d6" }, {
-                                                                                                                                                                        "&oslash;", "\u00f8" }, {
-                                                                                                                                                                            "&Oslash;", "\u00d8" }, {
-                                                                                                                                                                                "&szlig;", "\u00df" }, {
-                                                                                                                                                                                    "&ugrave;", "\u00f9" }, {
-                                                                                                                                                                                        "&Ugrave;", "\u00d9" }, {
-                                                                                                                                                                                            "&uacute;", "\u00fa" }, {
-                                                                                                                                                                                                "&Uacute;", "\u00da" }, {
-                                                                                                                                                                                                    "&ucirc;", "\u00fb" }, {
-                                                                                                                                                                                                        "&Ucirc;", "\u00db" }, {
-                                                                                                                                                                                                            "&uuml;", "\u00fc" }, {
-                                                                                                                                                                                                                "&Uuml;", "\u00dc" }, {
-                                                                                                                                                                                                                    "&nbsp;", " " }, {
-                                                                                                                                                                                                                        "&reg;", "\u00AE" }, {
-                                                                                                                                                                                                                            "&copy;", "\u00A9" }, {
-                                                                                                                                                                                                                                "&euro;", "\u20A0" }, {
-                                                                                                                                                                                                                                    "&#8364;", "\u20AC" }
+            "&amp;", "&" }, {
+            "&quot;", "\"" }, {
+            "&agrave;", "\u00e0" }, {
+            "&Agrave;", "\u00c0" }, {
+            "&acirc;", "\u00e2" }, {
+            "&auml;", "\u00e4" }, {
+            "&Auml;", "\u00c4" }, {
+            "&Acirc;", "\u00c2" }, {
+            "&aring;", "\u00e5" }, {
+            "&Aring;", "\u00c5" }, {
+            "&aelig;", "\u00e6" }, {
+            "&AElig;", "\u00c6" }, {
+            "&ccedil;", "\u00e7" }, {
+            "&Ccedil;", "\u00c7" }, {
+            "&eacute;", "\u00e9" }, {
+            "&Eacute;", "\u00c9" }, {
+            "&aacute;", "\u00e1" }, {
+            "&Aacute;", "\u00c1" }, {
+            "&egrave;", "\u00e8" }, {
+            "&Egrave;", "\u00c8" }, {
+            "&ecirc;", "\u00ea" }, {
+            "&Ecirc;", "\u00ca" }, {
+            "&euml;", "\u00eb" }, {
+            "&Euml;", "\u00cb" }, {
+            "&iuml;", "\u00ef" }, {
+            "&Iuml;", "\u00cf" }, {
+            "&iacute;", "\u00ed" }, {
+            "&Iacute;", "\u00cd" }, {
+            "&atilde;", "\u00e3" }, {
+            "&Atilde;", "\u00c3" }, {
+            "&otilde;", "\u00f5" }, {
+            "&Otilde;", "\u00d5" }, {
+            "&oacute;", "\u00f3" }, {
+            "&Oacute;", "\u00d3" }, {
+            "&ocirc;", "\u00f4" }, {
+            "&Ocirc;", "\u00d4" }, {
+            "&ouml;", "\u00f6" }, {
+            "&Ouml;", "\u00d6" }, {
+            "&oslash;", "\u00f8" }, {
+            "&Oslash;", "\u00d8" }, {
+            "&szlig;", "\u00df" }, {
+            "&ugrave;", "\u00f9" }, {
+            "&Ugrave;", "\u00d9" }, {
+            "&uacute;", "\u00fa" }, {
+            "&Uacute;", "\u00da" }, {
+            "&ucirc;", "\u00fb" }, {
+            "&Ucirc;", "\u00db" }, {
+            "&uuml;", "\u00fc" }, {
+            "&Uuml;", "\u00dc" }, {
+            "&nbsp;", " " }, {
+            "&reg;", "\u00AE" }, {
+            "&copy;", "\u00A9" }, {
+            "&euro;", "\u20A0" }, {
+            "&#8364;", "\u20AC" }
 
     };
 
