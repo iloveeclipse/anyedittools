@@ -169,7 +169,11 @@ public class StartupHelper2 {
 
             IEditorPart part = HandlerUtil.getActiveEditor(event);
             if(part == null) {
-                return;
+                // workaround for http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=73
+                part = EclipseUtils.getActiveEditor();
+                if(part == null) {
+                    return;
+                }
             }
             spacesAction.setActiveEditor(null, part);
             boolean trim = spacesAction.isSaveAndTrimEnabled();
@@ -191,6 +195,11 @@ public class StartupHelper2 {
         private void runSpecial2(ExecutionEvent event) {
             IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
             if (window == null) {
+                window = AnyEditToolsPlugin.getDefault().getWorkbench()
+                        .getActiveWorkbenchWindow();
+                if(window == null) {
+                    return;
+                }
                 // action has been disposed
                 return;
             }
@@ -270,13 +279,13 @@ public class StartupHelper2 {
         }
 
         private void run(IWorkbenchWindow window) {
+            hookOnCommand(FILE_SAVE);
+            hookOnCommand(FILE_SAVE_ALL);
+
             IWorkbenchWindowConfigurer wwConf = getWorkbenchWindowConfigurer(window);
             if (wwConf == null) {
                 return;
             }
-
-            hookOnCommand(FILE_SAVE);
-            hookOnCommand(FILE_SAVE_ALL);
 
             IActionBarConfigurer configurer = wwConf.getActionBarConfigurer();
 
