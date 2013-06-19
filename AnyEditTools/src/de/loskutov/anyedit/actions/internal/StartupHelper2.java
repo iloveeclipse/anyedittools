@@ -198,10 +198,9 @@ public class StartupHelper2 {
                 window = AnyEditToolsPlugin.getDefault().getWorkbench()
                         .getActiveWorkbenchWindow();
                 if(window == null) {
+                    // action has been disposed
                     return;
                 }
-                // action has been disposed
-                return;
             }
             IWorkbenchPage page = window.getActivePage();
             final IEditorPart[] dirtyEditors = page.getDirtyEditors();
