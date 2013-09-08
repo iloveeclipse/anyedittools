@@ -22,6 +22,17 @@ public abstract class AbstractSortComparator implements Comparator {
 
     private final Pattern pattern = Pattern.compile("^\\s*(-?\\d+)");
 
+    protected int compareLineLength(Object left, Object right) {
+        int lLength = line(left).length();
+        int rLength = line(right).length();
+        if (rLength > lLength) {
+            return 1;
+        } else if(rLength < lLength) {
+            return  -1;
+        }
+        return 0;
+    }
+
     protected int compareLineCaseInsensitive(Object left, Object right) {
         int result = line(left).compareToIgnoreCase(line(right));
         if (result == 0) {

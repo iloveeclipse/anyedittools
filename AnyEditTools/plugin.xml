@@ -714,7 +714,20 @@
             defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseInsensitiveDescending"
             id="AnyEdit.sortAlphabeticallyCaseInsensitiveDescending.command"
             name="%sortAlphabeticallyCaseInsensitiveDescending"/>
+      
+	  <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.sort.SortLineLengthAscending"
+            id="AnyEdit.SortLineLengthAscending.command"
+            name="%SortLineLengthAscending"/>
 
+	  <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.sort.SortLineLengthDescending"
+            id="AnyEdit.SortLineLengthDescending.command"
+            name="%SortLineLengthDescending"/>
+			
+			
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortNumericallyAscending"
