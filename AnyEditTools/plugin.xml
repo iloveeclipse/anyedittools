@@ -714,20 +714,20 @@
             defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseInsensitiveDescending"
             id="AnyEdit.sortAlphabeticallyCaseInsensitiveDescending.command"
             name="%sortAlphabeticallyCaseInsensitiveDescending"/>
-      
-	  <command
+
+      <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortLineLengthAscending"
             id="AnyEdit.SortLineLengthAscending.command"
-            name="%SortLineLengthAscending"/>
+            name="%sortLineLengthAscending"/>
 
-	  <command
+      <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortLineLengthDescending"
             id="AnyEdit.SortLineLengthDescending.command"
-            name="%SortLineLengthDescending"/>
-			
-			
+            name="%sortLineLengthDescending"/>
+
+
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortNumericallyAscending"
@@ -759,9 +759,9 @@
             name="AnyEditTools.compare"/>
    </extension>
    <extension
-     	id="anyedit.ws.marker"
-     	name="%showWhitespace"
-     	point="org.eclipse.ui.editors.markerAnnotationSpecification">
+         id="anyedit.ws.marker"
+         name="%showWhitespace"
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
             annotationType="AnyEditTools.tabs"
             colorPreferenceKey="AnyEditTools.tabs.color"
@@ -1170,6 +1170,18 @@
                commandId="AnyEdit.sortNumericallyDescending.command"
                id="AnyEdit.sortNumericallyDescending"
                label="%sortNumericallyDescending"/>
+
+            <separator name="AnyEdit.sortMenu.separator3" visible="true"/>
+
+            <command
+               commandId="AnyEdit.SortLineLengthAscending.command"
+               id="AnyEdit.SortLineLengthAscending"
+               label="%sortLineLengthAscending"/>
+
+            <command
+               commandId="AnyEdit.SortLineLengthDescending.command"
+               id="AnyEdit.SortLineLengthDescending"
+               label="%sortLineLengthDescending"/>
 
             <visibleWhen checkEnabled="false">
                <with variable="activePart">
