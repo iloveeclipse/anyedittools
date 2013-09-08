@@ -18,11 +18,11 @@ import de.loskutov.anyedit.util.LineReplaceResult;
 /**
  * @author Clemens Fuchslocher
  */
-public abstract class AbstractSortComparator implements Comparator {
+public abstract class AbstractSortComparator<V extends LineReplaceResult> implements Comparator<V> {
 
     private final Pattern pattern = Pattern.compile("^\\s*(-?\\d+)");
 
-    protected int compareLineLength(Object left, Object right) {
+    protected int compareLineLength(LineReplaceResult left, LineReplaceResult right) {
         int lLength = line(left).length();
         int rLength = line(right).length();
         if (rLength > lLength) {
@@ -33,7 +33,7 @@ public abstract class AbstractSortComparator implements Comparator {
         return 0;
     }
 
-    protected int compareLineCaseInsensitive(Object left, Object right) {
+    protected int compareLineCaseInsensitive(LineReplaceResult left, LineReplaceResult right) {
         int result = line(left).compareToIgnoreCase(line(right));
         if (result == 0) {
             result = line(left).compareTo(line(right));
@@ -41,15 +41,15 @@ public abstract class AbstractSortComparator implements Comparator {
         return result;
     }
 
-    protected String line(Object object) {
-        String line = ((LineReplaceResult) object).textToReplace;
+    protected String line(LineReplaceResult object) {
+        String line = object.textToReplace;
         if (line != null) {
             return line;
         }
         return "";
     }
 
-    protected int compareNumber(Object left, Object right) {
+    protected int compareNumber(LineReplaceResult left, LineReplaceResult right) {
         BigInteger l = number(left);
         BigInteger r = number(right);
         if (l == null || r == null) {
@@ -58,7 +58,7 @@ public abstract class AbstractSortComparator implements Comparator {
         return l.compareTo(r);
     }
 
-    private BigInteger number(Object object) {
+    private BigInteger number(LineReplaceResult object) {
         Matcher matcher = pattern.matcher(line(object));
         if (matcher.find()) {
             return new BigInteger(matcher.group(1));

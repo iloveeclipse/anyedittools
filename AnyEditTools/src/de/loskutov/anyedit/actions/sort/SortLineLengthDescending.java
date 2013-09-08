@@ -19,8 +19,8 @@ public class SortLineLengthDescending extends AbstractSortAction {
 
     @Override
     protected Comparator<LineReplaceResult> getComparator() {
-        return new AbstractSortComparator() {
-            public int compare(Object left, Object right) {
+        return new AbstractSortComparator<LineReplaceResult>() {
+            public int compare(LineReplaceResult left, LineReplaceResult right) {
                 return -compareLineLength(left, right);
             }
         };
