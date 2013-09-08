@@ -25,9 +25,9 @@ public abstract class AbstractSortComparator<V extends LineReplaceResult> implem
     protected int compareLineLength(LineReplaceResult left, LineReplaceResult right) {
         int lLength = line(left).length();
         int rLength = line(right).length();
-        if (rLength > lLength) {
+        if (lLength > rLength) {
             return 1;
-        } else if(rLength < lLength) {
+        } else if(lLength < rLength) {
             return  -1;
         }
         return 0;
