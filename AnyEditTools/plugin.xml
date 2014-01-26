@@ -120,17 +120,6 @@
               id="de.loskutov.anyedit.r2editor2"
               objectClass="java.io.File">
 
-             <!-- Eclipse doesn't provide "Replace With..." menu for external files -->
-             <menu
-                   label="Replace With"
-                   path="additions"
-                   id="replaceWithMenu">
-                <separator
-                      name="replaceWithGroup2"/>
-                <separator
-                      name="additions"/>
-             </menu>
-
            <action
                  class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
                  enablesFor="?"
@@ -172,17 +161,6 @@
               adaptable="true"
               id="de.loskutov.anyedit.c2editor2"
               objectClass="java.io.File">
-
-         <!-- Eclipse doesn't provide "Compare With..." menu for external files -->
-         <menu
-               label="Compare With"
-               path="additions"
-               id="compareWithMenu">
-            <separator
-                  name="compareWithGroup2"/>
-            <separator
-                  name="additions"/>
-         </menu>
 
            <action
                  class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
@@ -237,16 +215,6 @@
               </objectState>
            </visibility>
 
-           <menu
-                   label="Replace With"
-                   path="additions"
-                   id="replaceWithMenu">
-                <separator
-                      name="replaceWithGroup2"/>
-                <separator
-                      name="additions"/>
-           </menu>
-
            <action
                  class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
                  enablesFor="?"
@@ -291,17 +259,6 @@
               adaptable="true"
               id="de.loskutov.anyedit.c2editor3"
               objectClass="de.loskutov.anyedit.compare.ContentWrapper">
-
-         <!-- Eclipse doesn't provide "Compare With..." menu for class files -->
-         <menu
-               label="Compare With"
-               path="additions"
-               id="compareWithMenu">
-            <separator
-                  name="compareWithGroup2"/>
-            <separator
-                  name="additions"/>
-         </menu>
 
            <action
                  class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
@@ -970,7 +927,7 @@
 
 
       <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+            locationURI="popup:org.eclipse.ui.popup.any?before=AnyEditTools.separator4">
          <menu
                icon="icons/invertCase.gif"
                id="AnyEdit.convertMenu"
@@ -1067,7 +1024,12 @@
             </visibleWhen>
          </menu>
 
-         <separator
+      </menuContribution>
+
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?endof=additions">
+                  <separator
                name="AnyEditTools.separator3"
                visible="true">
          </separator>
@@ -1132,7 +1094,6 @@
                    </with>
             </visibleWhen>
          </command>
-
       </menuContribution>
 
       <menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=AnyEdit.convertMenu">
@@ -1190,6 +1151,44 @@
             </visibleWhen>
          </menu>
       </menuContribution>
+
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?before=additions">
+         <separator
+               name="AnyEditTools.separator4"
+               visible="true">
+         </separator>
+         <menu
+               id="compareWithMenu"
+               label="Comp&amp;are With">
+            <separator
+                  name="compareWithGroup2"
+                  visible="true">
+            </separator>
+            <separator
+                  name="additions"
+                  visible="true">
+            </separator>
+         </menu>
+         <menu
+               id="replaceWithMenu"
+               label="Rep&amp;lace With">
+            <separator
+                  name="replaceWithGroup2"
+                  visible="true">
+            </separator>
+            <separator
+                  name="additions"
+                  visible="true">
+            </separator>
+         </menu>
+         <separator
+               name="AnyEditTools.separator5"
+               visible="false">
+         </separator>
+      </menuContribution>
+
    </extension>
 
    <extension
