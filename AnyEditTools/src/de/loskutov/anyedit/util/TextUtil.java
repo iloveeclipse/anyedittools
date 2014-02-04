@@ -9,6 +9,7 @@
 
 package de.loskutov.anyedit.util;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
@@ -49,6 +50,7 @@ public class TextUtil {
     public static final String DEFAULT_LINE_SEPARATOR_REGEX = ":|\\s+";
 
     private static final String INVALID_PATH_ENDS_CHARACTERS = "/\\";
+    private static final String VARIABLE_DELIMITERS = "${}()";
 
     public static final boolean DEFAULT_UNICODIFY_ALL = false;
 
@@ -282,7 +284,7 @@ public class TextUtil {
     }
 
     public String findPath(String line, int caretOffset) {
-        if (line == null || line.length() == 0 || caretOffset >= line.length()
+        if (line == null || line.length() < 2 || caretOffset >= line.length()
                 || caretOffset < 0) {
             return null; // shit in, shit out
         }
@@ -325,12 +327,93 @@ public class TextUtil {
          */
         if (forwardSearchIdx == line.length() && backwardSearchIdx == -1) {
             return trimPath(line);
-        } else if (forwardSearchIdx > backwardSearchIdx) {
+        } else if (forwardSearchIdx - backwardSearchIdx > 1) {
+            // try to check if the path starts with the variable, like
+            // $HELLO/path or ${HELLO}/path or $(HELLO)/path
+            if(backwardSearchIdx >= 0) {
+                // the first part of the line is the variable?
+                String result = tryToGuessVariable(line, backwardSearchIdx, forwardSearchIdx);
+                if(result != null){
+                    return result;
+                }
+            }
+
             line = line.substring(backwardSearchIdx + 1, forwardSearchIdx);
             if (isFilePath(line)) {
                 return trimPath(line);
             }
+        } else if (forwardSearchIdx == backwardSearchIdx && forwardSearchIdx == caretOffset
+                && VARIABLE_DELIMITERS.indexOf(line.charAt(caretOffset)) >= 0) {
+            // move caret right to match inside the text
+            return findPath(line, caretOffset + 1);
         }
+        return null;
+    }
+
+    private String tryToGuessVariable(final String line, final int backwardSearchIdx, final int forwardSearchIdx) {
+        char firstInvalidChar = line.charAt(backwardSearchIdx);
+        if (firstInvalidChar == '$') {
+            // try to check if the line part before the first character can be a variable
+            int firstSep = line.indexOf(File.separatorChar, backwardSearchIdx + 2);
+            if(firstSep > 0 && firstSep < forwardSearchIdx){
+                String var = line.substring(backwardSearchIdx + 1, firstSep);
+                String value = System.getenv(var);
+                String line2 = value + line.substring(firstSep, forwardSearchIdx);
+                if (isFilePath(line2)) {
+                    return trimPath(line2);
+                }
+            }
+        } else if (firstInvalidChar == ')') {
+            // try to find opening brace
+            int firstBrace = indexOf(line, '(', backwardSearchIdx, 0, false);
+            if(firstBrace > 0 && line.charAt(firstBrace - 1) == '$'){
+                String var = line.substring(firstBrace + 1, backwardSearchIdx);
+                String value = System.getenv(var);
+                if(value != null){
+                    String line2 = value + line.substring(backwardSearchIdx + 1, forwardSearchIdx);
+                    if (isFilePath(line2)) {
+                        return trimPath(line2);
+                    }
+                }
+            }
+        } else if (firstInvalidChar == '}') {
+            // try to find opening brace
+            int firstBrace = indexOf(line, '{', backwardSearchIdx, 0, false);
+            if(firstBrace > 0 && line.charAt(firstBrace - 1) == '$'){
+                String var = line.substring(firstBrace + 1, backwardSearchIdx);
+                String value = System.getenv(var);
+                if(value != null){
+                    String line2 = value + line.substring(backwardSearchIdx + 1, forwardSearchIdx);
+                    if (isFilePath(line2)) {
+                        return trimPath(line2);
+                    }
+                }
+            }
+        }  else if ((firstInvalidChar == '{' &&  line.charAt(forwardSearchIdx) == '}')
+                || firstInvalidChar == '(' &&  line.charAt(forwardSearchIdx) == ')' ) {
+            // try to match behind the last brace
+            int forwardSearch = line.length();
+            String disallowed = getCharsDisallowedInPath();
+            for (int i = 0; i < disallowed.length(); i++) {
+                int matchIdx = indexOf(line, disallowed.charAt(i), forwardSearchIdx + 1,
+                        forwardSearch, true);
+                // search nearest to cursor, also smaller
+                if (matchIdx != -1 && matchIdx < forwardSearch) {
+                    forwardSearch = matchIdx;
+                }
+            }
+            if(forwardSearch > forwardSearchIdx){
+                String var = line.substring(backwardSearchIdx + 1, forwardSearchIdx);
+                String value = System.getenv(var);
+                if(value != null){
+                    String line2 = value + line.substring(forwardSearchIdx + 1, forwardSearch);
+                    if (isFilePath(line2)) {
+                        return trimPath(line2);
+                    }
+                }
+            }
+        }
+
         return null;
     }
 
@@ -979,62 +1062,62 @@ public class TextUtil {
      * Characters used for escape operations
      */
     private static final String[][] HTML_ESCAPE_CHARS = { {
-            "&lt;", "<" }, {
+        "&lt;", "<" }, {
             "&gt;", ">" }, {
-            "&amp;", "&" }, {
-            "&quot;", "\"" }, {
-            "&agrave;", "\u00e0" }, {
-            "&Agrave;", "\u00c0" }, {
-            "&acirc;", "\u00e2" }, {
-            "&auml;", "\u00e4" }, {
-            "&Auml;", "\u00c4" }, {
-            "&Acirc;", "\u00c2" }, {
-            "&aring;", "\u00e5" }, {
-            "&Aring;", "\u00c5" }, {
-            "&aelig;", "\u00e6" }, {
-            "&AElig;", "\u00c6" }, {
-            "&ccedil;", "\u00e7" }, {
-            "&Ccedil;", "\u00c7" }, {
-            "&eacute;", "\u00e9" }, {
-            "&Eacute;", "\u00c9" }, {
-            "&aacute;", "\u00e1" }, {
-            "&Aacute;", "\u00c1" }, {
-            "&egrave;", "\u00e8" }, {
-            "&Egrave;", "\u00c8" }, {
-            "&ecirc;", "\u00ea" }, {
-            "&Ecirc;", "\u00ca" }, {
-            "&euml;", "\u00eb" }, {
-            "&Euml;", "\u00cb" }, {
-            "&iuml;", "\u00ef" }, {
-            "&Iuml;", "\u00cf" }, {
-            "&iacute;", "\u00ed" }, {
-            "&Iacute;", "\u00cd" }, {
-            "&atilde;", "\u00e3" }, {
-            "&Atilde;", "\u00c3" }, {
-            "&otilde;", "\u00f5" }, {
-            "&Otilde;", "\u00d5" }, {
-            "&oacute;", "\u00f3" }, {
-            "&Oacute;", "\u00d3" }, {
-            "&ocirc;", "\u00f4" }, {
-            "&Ocirc;", "\u00d4" }, {
-            "&ouml;", "\u00f6" }, {
-            "&Ouml;", "\u00d6" }, {
-            "&oslash;", "\u00f8" }, {
-            "&Oslash;", "\u00d8" }, {
-            "&szlig;", "\u00df" }, {
-            "&ugrave;", "\u00f9" }, {
-            "&Ugrave;", "\u00d9" }, {
-            "&uacute;", "\u00fa" }, {
-            "&Uacute;", "\u00da" }, {
-            "&ucirc;", "\u00fb" }, {
-            "&Ucirc;", "\u00db" }, {
-            "&uuml;", "\u00fc" }, {
-            "&Uuml;", "\u00dc" }, {
-            "&nbsp;", " " }, {
-            "&reg;", "\u00AE" }, {
-            "&copy;", "\u00A9" }, {
-            "&euro;", "\u20A0" }, {
-            "&#8364;", "\u20AC" }
+                "&amp;", "&" }, {
+                    "&quot;", "\"" }, {
+                        "&agrave;", "\u00e0" }, {
+                            "&Agrave;", "\u00c0" }, {
+                                "&acirc;", "\u00e2" }, {
+                                    "&auml;", "\u00e4" }, {
+                                        "&Auml;", "\u00c4" }, {
+                                            "&Acirc;", "\u00c2" }, {
+                                                "&aring;", "\u00e5" }, {
+                                                    "&Aring;", "\u00c5" }, {
+                                                        "&aelig;", "\u00e6" }, {
+                                                            "&AElig;", "\u00c6" }, {
+                                                                "&ccedil;", "\u00e7" }, {
+                                                                    "&Ccedil;", "\u00c7" }, {
+                                                                        "&eacute;", "\u00e9" }, {
+                                                                            "&Eacute;", "\u00c9" }, {
+                                                                                "&aacute;", "\u00e1" }, {
+                                                                                    "&Aacute;", "\u00c1" }, {
+                                                                                        "&egrave;", "\u00e8" }, {
+                                                                                            "&Egrave;", "\u00c8" }, {
+                                                                                                "&ecirc;", "\u00ea" }, {
+                                                                                                    "&Ecirc;", "\u00ca" }, {
+                                                                                                        "&euml;", "\u00eb" }, {
+                                                                                                            "&Euml;", "\u00cb" }, {
+                                                                                                                "&iuml;", "\u00ef" }, {
+                                                                                                                    "&Iuml;", "\u00cf" }, {
+                                                                                                                        "&iacute;", "\u00ed" }, {
+                                                                                                                            "&Iacute;", "\u00cd" }, {
+                                                                                                                                "&atilde;", "\u00e3" }, {
+                                                                                                                                    "&Atilde;", "\u00c3" }, {
+                                                                                                                                        "&otilde;", "\u00f5" }, {
+                                                                                                                                            "&Otilde;", "\u00d5" }, {
+                                                                                                                                                "&oacute;", "\u00f3" }, {
+                                                                                                                                                    "&Oacute;", "\u00d3" }, {
+                                                                                                                                                        "&ocirc;", "\u00f4" }, {
+                                                                                                                                                            "&Ocirc;", "\u00d4" }, {
+                                                                                                                                                                "&ouml;", "\u00f6" }, {
+                                                                                                                                                                    "&Ouml;", "\u00d6" }, {
+                                                                                                                                                                        "&oslash;", "\u00f8" }, {
+                                                                                                                                                                            "&Oslash;", "\u00d8" }, {
+                                                                                                                                                                                "&szlig;", "\u00df" }, {
+                                                                                                                                                                                    "&ugrave;", "\u00f9" }, {
+                                                                                                                                                                                        "&Ugrave;", "\u00d9" }, {
+                                                                                                                                                                                            "&uacute;", "\u00fa" }, {
+                                                                                                                                                                                                "&Uacute;", "\u00da" }, {
+                                                                                                                                                                                                    "&ucirc;", "\u00fb" }, {
+                                                                                                                                                                                                        "&Ucirc;", "\u00db" }, {
+                                                                                                                                                                                                            "&uuml;", "\u00fc" }, {
+                                                                                                                                                                                                                "&Uuml;", "\u00dc" }, {
+                                                                                                                                                                                                                    "&nbsp;", " " }, {
+                                                                                                                                                                                                                        "&reg;", "\u00AE" }, {
+                                                                                                                                                                                                                            "&copy;", "\u00A9" }, {
+                                                                                                                                                                                                                                "&euro;", "\u20A0" }, {
+                                                                                                                                                                                                                                    "&#8364;", "\u20AC" }
 
     };
 
