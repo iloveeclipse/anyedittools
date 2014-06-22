@@ -37,4 +37,4 @@ Export-Package: de.loskutov.anyedit,
  de.loskutov.anyedit.ui.preferences,
  de.loskutov.anyedit.ui.wizards,
  de.loskutov.anyedit.util
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
