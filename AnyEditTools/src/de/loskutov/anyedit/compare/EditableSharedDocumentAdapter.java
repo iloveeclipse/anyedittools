@@ -172,6 +172,7 @@ IElementStateListener {
         }
     }
 
+    @Override
     public void flushDocument(IDocumentProvider provider, IEditorInput documentKey,
             IDocument document, boolean overwrite) throws CoreException {
         if (!hasBufferedContents()) {
@@ -183,24 +184,29 @@ IElementStateListener {
         listener.handleDocumentFlushed();
     }
 
+    @Override
     public void elementContentAboutToBeReplaced(Object element) {
         // Nothing to do
     }
 
+    @Override
     public void elementContentReplaced(Object element) {
         // Nothing to do
     }
 
+    @Override
     public void elementDeleted(Object element) {
         listener.handleDocumentDeleted();
     }
 
+    @Override
     public void elementDirtyStateChanged(Object element, boolean isDirty) {
         if (!isDirty) {
             listener.handleDocumentSaved();
         }
     }
 
+    @Override
     public void elementMoved(Object originalElement, Object movedElement) {
         // Nothing to do
     }

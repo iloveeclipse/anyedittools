@@ -29,6 +29,7 @@ public class WorkingSetExportWizard extends Wizard implements IExportWizard {
         return mainPage.finish();
     }
 
+    @Override
     public void init(IWorkbench workbench, IStructuredSelection selection) {
         // noop
     }

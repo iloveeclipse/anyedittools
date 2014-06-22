@@ -54,11 +54,13 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
         super();
     }
 
+    @Override
     public int getPriority() {
         // a bit higher as default
         return PRIO_DEFAULT + 1;
     }
 
+    @Override
     public int guessLine(IDocument doc, ISelectionProvider selectionProvider,
             IWorkbenchPart editorPart) {
         if (doc == null) {
@@ -87,6 +89,7 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
         return linePart;
     }
 
+    @Override
     public IEditorPart openEditor(IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput, IFile file) throws OperationCanceledException {
         IEditorPart editorPart = null;
@@ -165,6 +168,7 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
         }
     }
 
+    @Override
     public IFile guessFile(IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput, IWorkbenchPart currentPart) throws OperationCanceledException {
         String selection = EclipseUtils.getSelectedText(selectionProvider);

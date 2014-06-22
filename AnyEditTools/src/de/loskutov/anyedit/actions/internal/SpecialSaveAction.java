@@ -62,6 +62,7 @@ public class SpecialSaveAction extends SaveAction implements IDirtyWorkaround {
     /**
      * Performs the 'convert spaces' action before the editor buffer is saved
      */
+    @Override
     public void runBeforeSave() {
         try {
             runSpecial();
@@ -106,6 +107,7 @@ public class SpecialSaveAction extends SaveAction implements IDirtyWorkaround {
         }
     }
 
+    @Override
     public void copyStateAndDispose(IContributionItem oldItem){
         if(oldItem == null || !(oldItem instanceof ActionContributionItem)){
             return;
@@ -138,6 +140,7 @@ public class SpecialSaveAction extends SaveAction implements IDirtyWorkaround {
 
     }
 
+    @Override
     public IWorkbenchWindow getWindow() {
         return getWorkbenchWindow();
     }

@@ -311,6 +311,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         editorPart.doSave(moni);
     }
 
+    @Override
     public boolean isEditorInputModifiable() {
         if (editorPart == null) {
             return false;
@@ -325,6 +326,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return true;
     }
 
+    @Override
     public boolean validateEditorInputState() {
         if (editorPart == null) {
             return false;

@@ -54,6 +54,7 @@ public abstract class WSPage extends WizardPage {
         usedFiles = new ArrayList<String>();
     }
 
+    @Override
     public void createControl(Composite parent) {
         comp = new Composite(parent, SWT.BORDER);
         GridLayout layout = new GridLayout();
@@ -72,6 +73,7 @@ public abstract class WSPage extends WizardPage {
         tv.setLabelProvider(new WorkingSetLabelProvider());
         tv.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         tv.addCheckStateListener(new ICheckStateListener() {
+            @Override
             public void checkStateChanged(CheckStateChangedEvent event) {
                 selectionChanged();
             }
@@ -96,6 +98,7 @@ public abstract class WSPage extends WizardPage {
         updateItems(lastUsedFile);
 
         dest.addModifyListener(new ModifyListener() {
+            @Override
             public void modifyText(ModifyEvent e) {
                 validateInput();
             }
@@ -104,10 +107,12 @@ public abstract class WSPage extends WizardPage {
         Button chooserBtn = new Button(fileSelectCom, SWT.NONE);
         chooserBtn.setText("Browse...");
         chooserBtn.addSelectionListener(new SelectionListener() {
+            @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 // ignored
             }
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 updateItems(getFileFromUser());
                 validateInput();

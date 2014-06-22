@@ -45,6 +45,7 @@ public abstract class CompareWithAction extends AbstractHandler implements IObje
         editor = new AbstractEditor(null);
     }
 
+    @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException {
         IWorkbenchPart activePart = HandlerUtil.getActivePart(event);
         Action dummyAction = new Action(){
@@ -62,6 +63,7 @@ public abstract class CompareWithAction extends AbstractHandler implements IObje
         return null;
     }
 
+    @Override
     public void setActivePart(IAction action, IWorkbenchPart targetPart) {
         if (targetPart instanceof IEditorPart) {
             editor = new AbstractEditor((IEditorPart) targetPart);
@@ -71,6 +73,7 @@ public abstract class CompareWithAction extends AbstractHandler implements IObje
 
     }
 
+    @Override
     public void run(IAction action) {
         StreamContent left = createLeftContent();
         if (left == null) {
@@ -137,6 +140,7 @@ public abstract class CompareWithAction extends AbstractHandler implements IObje
     }
 
 
+    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         if (!(selection instanceof IStructuredSelection) || selection.isEmpty()) {
             // happens only on first initialization in fresh started eclipse, in editor

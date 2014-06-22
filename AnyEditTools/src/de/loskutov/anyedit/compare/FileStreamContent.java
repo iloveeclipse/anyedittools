@@ -41,14 +41,17 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
         super.setContent(contents);
     }
 
+    @Override
     public String getFullName() {
         return content.getFullName();
     }
 
+    @Override
     public boolean isDirty() {
         return dirty;
     }
 
+    @Override
     public boolean commitChanges(IProgressMonitor pm) throws CoreException {
         if (!dirty) {
             return true;
@@ -82,6 +85,7 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
         return true;
     }
 
+    @Override
     public void dispose() {
         discardBuffer();
         if (sharedDocumentAdapter != null) {
@@ -89,18 +93,22 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
         }
     }
 
+    @Override
     public boolean isDisposed() {
         return false;
     }
 
+    @Override
     public void init(AnyeditCompareInput input) {
         getContent();
     }
 
+    @Override
     public StreamContent recreate() {
         return new FileStreamContent(content);
     }
 
+    @Override
     public Object getAdapter(Class adapter) {
 
         if (adapter == ISharedDocumentAdapter.class) {
@@ -124,6 +132,7 @@ public class FileStreamContent extends ResourceNode implements StreamContent {
         return sharedDocumentAdapter;
     }
 
+    @Override
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }

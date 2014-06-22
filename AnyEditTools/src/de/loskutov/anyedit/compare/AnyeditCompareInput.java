@@ -48,10 +48,12 @@ public class AnyeditCompareInput extends CompareEditorInput  {
             this.id = id;
         }
 
+        @Override
         public boolean contains(ISchedulingRule rule) {
             return rule instanceof ExclusiveJobRule && ((ExclusiveJobRule) rule).id == id;
         }
 
+        @Override
         public boolean isConflicting(ISchedulingRule rule) {
             return contains(rule);
         }

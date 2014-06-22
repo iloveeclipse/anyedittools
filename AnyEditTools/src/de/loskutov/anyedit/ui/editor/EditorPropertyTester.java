@@ -32,6 +32,7 @@ public class EditorPropertyTester extends PropertyTester {
         super();
     }
 
+    @Override
     public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
         if("hasModifiableDocument".equals(property) && receiver instanceof IWorkbenchPart){
             return hasModifiableDocument((IWorkbenchPart)receiver, args, expectedValue);

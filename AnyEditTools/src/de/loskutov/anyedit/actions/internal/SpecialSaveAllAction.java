@@ -84,6 +84,7 @@ public class SpecialSaveAllAction extends SaveAllAction implements IDirtyWorkaro
     /**
      * Performs the 'convert spaces' action before the editor buffer is saved
      */
+    @Override
     public void runBeforeSave() {
         try {
             runSpecial();
@@ -116,6 +117,7 @@ public class SpecialSaveAllAction extends SaveAllAction implements IDirtyWorkaro
         }
         IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
+            @Override
             public void run(IProgressMonitor monitor) throws InvocationTargetException,
             InterruptedException {
                 monitor.beginTask("Converting tabs <-> spaces before save", editorsCount);
@@ -159,6 +161,7 @@ public class SpecialSaveAllAction extends SaveAllAction implements IDirtyWorkaro
         }
     }
 
+    @Override
     public void copyStateAndDispose(IContributionItem oldItem) {
         if (oldItem == null || !(oldItem instanceof ActionContributionItem)) {
             return;
@@ -180,6 +183,7 @@ public class SpecialSaveAllAction extends SaveAllAction implements IDirtyWorkaro
         oldAction.dispose();
     }
 
+    @Override
     public IWorkbenchWindow getWindow() {
         return getWorkbenchWindow();
     }

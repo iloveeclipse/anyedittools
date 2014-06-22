@@ -83,19 +83,23 @@ public class StartupHelper implements IWindowListener {
         return null;
     }
 
+    @Override
     public void windowOpened(IWorkbenchWindow window) {
         DirtyHookRunnable dh = new DirtyHookRunnable();
         dh.run(window);
     }
 
+    @Override
     public void windowActivated(IWorkbenchWindow window) {
         // ignored
     }
 
+    @Override
     public void windowDeactivated(IWorkbenchWindow window) {
         // ignored
     }
 
+    @Override
     public void windowClosed(IWorkbenchWindow window) {
         // ignored
         List<PreExecutionHandler> list = commandListeners;
@@ -133,18 +137,22 @@ public class StartupHelper implements IWindowListener {
             this.commandId = commandId;
         }
 
+        @Override
         public void notHandled(String command, NotHandledException exception) {
             //
         }
 
+        @Override
         public void postExecuteFailure(String command, ExecutionException exception) {
             //
         }
 
+        @Override
         public void postExecuteSuccess(String command, Object returnValue) {
             //
         }
 
+        @Override
         public void preExecute(String command, ExecutionEvent event) {
             myAction.runBeforeSave();
         }
@@ -166,6 +174,7 @@ public class StartupHelper implements IWindowListener {
             super();
         }
 
+        @Override
         public void run() {
             IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
             if (window == null) {

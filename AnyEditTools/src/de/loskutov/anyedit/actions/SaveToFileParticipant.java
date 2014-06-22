@@ -31,14 +31,17 @@ IConsolePageParticipant {
         super();
     }
 
+    @Override
     public void activated() {
         // no op
     }
 
+    @Override
     public void deactivated() {
         // no op
     }
 
+    @Override
     public void init(IPageBookViewPage myPage, IConsole console) {
         page = myPage;
         IToolBarManager toolBarManager = page.getSite().getActionBars()
@@ -67,6 +70,7 @@ IConsolePageParticipant {
         return descriptor;
     }
 
+    @Override
     public Object getAdapter(Class adapter) {
         return null;
     }

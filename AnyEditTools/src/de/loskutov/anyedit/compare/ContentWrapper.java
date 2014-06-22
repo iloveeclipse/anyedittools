@@ -182,6 +182,7 @@ public class ContentWrapper implements IActionFilter {
         return modifiable;
     }
 
+    @Override
     public boolean testAttribute(Object target, String attrName, String value) {
         if(!(target instanceof ContentWrapper)){
             return false;

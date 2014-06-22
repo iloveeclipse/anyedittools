@@ -207,6 +207,7 @@ public class TypeFactory {
         // project from the path, if two projects with the same prefix exist. For example
         // org.eclipse.jdt.ui and org.eclipse.jdt.ui.tests.
         Arrays.sort(result, new Comparator() {
+            @Override
             public int compare(Object o1, Object o2) {
                 int l1 = ((String) o1).length();
                 int l2 = ((String) o2).length();

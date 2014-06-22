@@ -80,6 +80,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
         spacesAction.setUsedOnSave(false);
     }
 
+    @Override
     public void run(IAction action) {
         // selectedFiles contains all files for convert.
         shell = AnyEditToolsPlugin.getShell();
@@ -91,6 +92,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
             AnyEditToolsPlugin.logError("'Tabs<->spaces' operation cancelled by user", e);
         } catch (final Exception e) {
             PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+                @Override
                 public void run() {
                     AnyEditToolsPlugin.errorDialog("'Tabs<->spaces' operation failed", e);
                 }
@@ -219,6 +221,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
             // to run it in the UI Thread too...
             if (fileBuffer.isShared()) {
                 shell.getDisplay().syncExec(new Runnable() {
+                    @Override
                     public void run() {
                         writeDocument(file, document, resultSet);
                     }
@@ -316,6 +319,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
         return EclipseUtils.matchFilter(file.getName(), filters);
     }
 
+    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         if (selection instanceof IStructuredSelection) {
             IStructuredSelection ssel = (IStructuredSelection) selection;
@@ -331,6 +335,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
 
     protected final class ConvertRunner implements IRunnableWithProgress {
 
+        @Override
         public void run(IProgressMonitor monitor) throws InvocationTargetException,
         InterruptedException {
             monitor.beginTask(Messages.ConvertAll_task, selectedFiles.size());
@@ -378,6 +383,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
                 if (errors > 0) {
                     final int errorCount = errors;
                     PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+                        @Override
                         public void run() {
                             AnyEditToolsPlugin
                             .errorDialog("'Tabs<->spaces' operation failed for "
@@ -390,11 +396,13 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
         }
     }
 
+    @Override
     public void dispose() {
         selectedFiles.clear();
         selectedResources.clear();
     }
 
+    @Override
     public void init(IWorkbenchWindow window) {
         // do nothing
     }

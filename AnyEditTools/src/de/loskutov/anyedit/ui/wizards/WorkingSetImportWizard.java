@@ -27,6 +27,7 @@ public class WorkingSetImportWizard extends Wizard implements IImportWizard {
         return mainPage != null? mainPage.finish() : false;
     }
 
+    @Override
     public void init(IWorkbench workbench, IStructuredSelection sel) {
         this.selection = sel;
     }

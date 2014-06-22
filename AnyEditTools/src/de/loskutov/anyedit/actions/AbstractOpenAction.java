@@ -35,6 +35,7 @@ implements IEditorActionDelegate {
         super();
     }
 
+    @Override
     public final void setActiveEditor(IAction action, IEditorPart targetEditor) {
         if(targetEditor == null){
             return;

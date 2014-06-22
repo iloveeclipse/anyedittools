@@ -173,10 +173,12 @@ public class ProjectPreferencePage extends PropertyPage {
                 projectPropsEnabled, composite);
 
         enableProjectCheck.addSelectionListener(new SelectionListener() {
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 setProjectEnabled(enableProjectCheck.getSelection());
             }
 
+            @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 // ignored
             }
@@ -192,12 +194,14 @@ public class ProjectPreferencePage extends PropertyPage {
         link.setFont(composite.getFont());
         link.setText("<A>" + text + "</A>");
         link.addSelectionListener(new SelectionListener() {
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 String id = "AnyEditPreferencePage";
                 PreferencesUtil.createPreferenceDialogOn(getShell(), id,
                         new String[] { id }, null).open();
             }
 
+            @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 String id = "AnyEditPreferencePage";
                 PreferencesUtil.createPreferenceDialogOn(getShell(), id,
@@ -392,12 +396,14 @@ public class ProjectPreferencePage extends PropertyPage {
                 !convertTabsAction, convertChoiceComposite);
 
         saveAndConvertCheck.addSelectionListener(new SelectionListener() {
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 convertTabsOnSaveRadio.setEnabled(saveAndConvertCheck.getSelection());
                 convertSpacesOnSaveRadio.setEnabled(saveAndConvertCheck.getSelection());
                 convertChoiceComposite.setEnabled(saveAndConvertCheck.getSelection());
             }
 
+            @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 // ignored
             }
@@ -514,6 +520,7 @@ public class ProjectPreferencePage extends PropertyPage {
         fFilterViewer.setInput(this);
 
         fFilterViewer.addCheckStateListener(new ICheckStateListener() {
+            @Override
             public void checkStateChanged(CheckStateChangedEvent event) {
                 Filter filter = (Filter) event.getElement();
                 fStepFilterContentProvider.toggleFilter(filter);
@@ -521,6 +528,7 @@ public class ProjectPreferencePage extends PropertyPage {
         });
         fFilterViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
+            @Override
             public void selectionChanged(SelectionChangedEvent event) {
                 ISelection selection = event.getSelection();
                 if (selection.isEmpty()) {
@@ -564,6 +572,7 @@ public class ProjectPreferencePage extends PropertyPage {
         gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
         fAddFilterButton.setLayoutData(gd);
         fAddFilterButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 editFilter();
             }
@@ -576,6 +585,7 @@ public class ProjectPreferencePage extends PropertyPage {
         gd = AnyEditPreferencePage.getButtonGridData(fRemoveFilterButton);
         fRemoveFilterButton.setLayoutData(gd);
         fRemoveFilterButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 removeFilters();
             }
@@ -588,6 +598,7 @@ public class ProjectPreferencePage extends PropertyPage {
         gd = AnyEditPreferencePage.getButtonGridData(fEnableAllButton);
         fEnableAllButton.setLayoutData(gd);
         fEnableAllButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 checkAllFilters(true);
             }
@@ -599,6 +610,7 @@ public class ProjectPreferencePage extends PropertyPage {
         gd = AnyEditPreferencePage.getButtonGridData(fDisableAllButton);
         fDisableAllButton.setLayoutData(gd);
         fDisableAllButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 checkAllFilters(false);
             }
@@ -755,6 +767,7 @@ public class ProjectPreferencePage extends PropertyPage {
         // traverse away to dialog's default button. Without this, hitting
         // CR in the text field closes the entire dialog.
         text.addListener(SWT.Traverse, new Listener() {
+            @Override
             public void handleEvent(Event event) {
                 event.doit = false;
             }
@@ -897,14 +910,17 @@ public class ProjectPreferencePage extends PropertyPage {
         /**
          * @see IStructuredContentProvider#getElements(Object)
          */
+        @Override
         public Object[] getElements(Object inputElement) {
             return fFilters.toArray();
         }
 
+        @Override
         public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
             /** ignored */
         }
 
+        @Override
         public void dispose() {
             /** ignored */
         }

@@ -237,6 +237,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         job.schedule();
     }
 
+    @Override
     public void partActivated(IWorkbenchPart part) {
         if (!(part instanceof IEditorPart)) {
             disableButton();
@@ -283,6 +284,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         setEditor(null);
     }
 
+    @Override
     public void partDeactivated(IWorkbenchPart part) {
         if (!(part instanceof IEditorPart)) {
             return;
@@ -291,14 +293,17 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         part.removePropertyListener(this);
     }
 
+    @Override
     public void partBroughtToTop(IWorkbenchPart part) {
         // ignore
     }
 
+    @Override
     public void partOpened(IWorkbenchPart part) {
         // not used
     }
 
+    @Override
     public void partClosed(IWorkbenchPart part) {
         if (!(part instanceof IEditorPart)) {
             return;
@@ -353,6 +358,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
     /**
      * to catch the page selection in multi page editors which do not extend FormEditor
      */
+    @Override
     public void selectionChanged(SelectionChangedEvent event) {
         ISelection selection = event.getSelection();
         if (!(selection instanceof ITextSelection)) {
@@ -379,6 +385,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
     /**
      * to catch the page selection in multi page editors
      */
+    @Override
     public void pageChanged(PageChangedEvent event) {
         if(getWindow() == null){
             // strange init issue, just return
@@ -390,6 +397,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
     /**
      * to catch the dirty state
      */
+    @Override
     public void propertyChanged(Object source, int propId) {
         if (propId != ISaveablePart.PROP_DIRTY) {
             return;

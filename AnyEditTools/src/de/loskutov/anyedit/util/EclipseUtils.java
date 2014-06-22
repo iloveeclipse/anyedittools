@@ -792,6 +792,7 @@ public final class EclipseUtils {
             return 0;
         }
 
+        @Override
         public String getDefaultCharset(boolean checkImplicit) throws CoreException {
             return null;
         }

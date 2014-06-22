@@ -56,10 +56,12 @@ IEditableContent, IModificationDate, IEditableContentExtension {
         super.setContent(contents);
     }
 
+    @Override
     public Image getImage() {
         return CompareUI.getImage(content.getFileExtension());
     }
 
+    @Override
     public boolean commitChanges(IProgressMonitor pm) throws CoreException {
         if (!dirty) {
             return true;
@@ -97,42 +99,52 @@ IEditableContent, IModificationDate, IEditableContentExtension {
         }
     }
 
+    @Override
     public boolean isDirty() {
         return dirty;
     }
 
+    @Override
     public String getName() {
         return content.getName();
     }
 
+    @Override
     public String getFullName() {
         return content.getFullName();
     }
 
+    @Override
     public String getType() {
         return content.getFileExtension();
     }
 
+    @Override
     public Object[] getChildren() {
         return new StreamContent[0];
     }
 
+    @Override
     public boolean isEditable() {
         return true;
     }
 
+    @Override
     public ITypedElement replace(ITypedElement dest, ITypedElement src) {
         return null;
     }
 
+    @Override
     public long getModificationDate() {
         return content.getFile().lastModified();
     }
 
+    @Override
     public boolean isReadOnly() {
         return !content.getFile().canWrite();
     }
 
+    @Override
     public IStatus validateEdit(Shell shell) {
         File file = content.getFile();
         if(file.canWrite()) {
@@ -152,26 +164,32 @@ IEditableContent, IModificationDate, IEditableContentExtension {
         return Status.CANCEL_STATUS;
     }
 
+    @Override
     public void dispose() {
         discardBuffer();
     }
 
+    @Override
     public boolean isDisposed() {
         return false;
     }
 
+    @Override
     public void init(AnyeditCompareInput input) {
         getContent();
     }
 
+    @Override
     public StreamContent recreate() {
         return new ExternalFileStreamContent(content);
     }
 
+    @Override
     public Object getAdapter(Class adapter) {
         return null;
     }
 
+    @Override
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }

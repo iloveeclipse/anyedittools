@@ -310,10 +310,12 @@ IWorkbenchPreferencePage, SelectionListener {
                 openFileComposite, true, SWT.NONE);
 
         requiredInPathEnabledCheck.addSelectionListener(new SelectionListener() {
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 requiredInPathText.setEditable(requiredInPathEnabledCheck.getSelection());
             }
 
+            @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 // ignored
             }
@@ -349,6 +351,7 @@ IWorkbenchPreferencePage, SelectionListener {
                 false, SWT.NONE);
         tabWidthText.setTextLimit(2);
         tabWidthText.addModifyListener(new ModifyListener() {
+            @Override
             public void modifyText(ModifyEvent e) {
                 String number = ((Text) e.widget).getText();
                 number = number == null ? DEFAULT_TAB_WIDTH : number.trim();
@@ -425,6 +428,7 @@ IWorkbenchPreferencePage, SelectionListener {
                 store.getString(IAnyEditConstants.BASE64_LINE_LENGTH), base64Composite, false, SWT.NONE);
         base64LineLengthText.setTextLimit(3);
         base64LineLengthText.addModifyListener(new ModifyListener() {
+            @Override
             public void modifyText(ModifyEvent e) {
                 String number = ((Text) e.widget).getText();
                 number = number == null ? DEFAULT_BASE64_LENGTH : number.trim();
@@ -567,12 +571,14 @@ IWorkbenchPreferencePage, SelectionListener {
                 !convertTabsAction, convertChoiceComposite);
 
         saveAndConvertCheck.addSelectionListener(new SelectionListener() {
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 convertTabsOnSaveRadio.setEnabled(saveAndConvertCheck.getSelection());
                 convertSpacesOnSaveRadio.setEnabled(saveAndConvertCheck.getSelection());
                 convertChoiceComposite.setEnabled(saveAndConvertCheck.getSelection());
             }
 
+            @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 // ignored
             }
@@ -635,6 +641,7 @@ IWorkbenchPreferencePage, SelectionListener {
     /*
      * @see IWorkbenchPreferencePage#init(IWorkbench)
      */
+    @Override
     public void init(IWorkbench workbench) {
         // ignored
     }
@@ -642,6 +649,7 @@ IWorkbenchPreferencePage, SelectionListener {
     /*
      * @see SelectionListener#widgetDefaultSelected(SelectionEvent)
      */
+    @Override
     public void widgetDefaultSelected(SelectionEvent selectionEvent) {
         widgetSelected(selectionEvent);
     }
@@ -649,6 +657,7 @@ IWorkbenchPreferencePage, SelectionListener {
     /*
      * @see SelectionListener#widgetSelected(SelectionEvent)
      */
+    @Override
     public void widgetSelected(SelectionEvent selectionEvent) {
         // ignored
     }
@@ -937,12 +946,14 @@ IWorkbenchPreferencePage, SelectionListener {
         filterViewer.setInput(this);
 
         filterViewer.addCheckStateListener(new ICheckStateListener() {
+            @Override
             public void checkStateChanged(CheckStateChangedEvent event) {
                 Filter filter = (Filter) event.getElement();
                 fileFilterContentProvider.toggleFilter(filter);
             }
         });
         filterViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+            @Override
             public void selectionChanged(SelectionChangedEvent event) {
                 ISelection selection = event.getSelection();
                 if (selection.isEmpty()) {
@@ -974,6 +985,7 @@ IWorkbenchPreferencePage, SelectionListener {
         gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
         addFilterButton.setLayoutData(gd);
         addFilterButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 editFilter();
             }
@@ -986,6 +998,7 @@ IWorkbenchPreferencePage, SelectionListener {
         gd = getButtonGridData(removeFilterButton);
         removeFilterButton.setLayoutData(gd);
         removeFilterButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 removeFilters();
             }
@@ -998,6 +1011,7 @@ IWorkbenchPreferencePage, SelectionListener {
         gd = getButtonGridData(enableAllButton);
         enableAllButton.setLayoutData(gd);
         enableAllButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 checkAllFilters(true);
             }
@@ -1009,6 +1023,7 @@ IWorkbenchPreferencePage, SelectionListener {
         gd = getButtonGridData(disableAllButton);
         disableAllButton.setLayoutData(gd);
         disableAllButton.addListener(SWT.Selection, new Listener() {
+            @Override
             public void handleEvent(Event e) {
                 checkAllFilters(false);
             }
@@ -1131,6 +1146,7 @@ IWorkbenchPreferencePage, SelectionListener {
         // traverse away to dialog's default button. Without this, hitting
         // CR in the text field closes the entire dialog.
         text.addListener(SWT.Traverse, new Listener() {
+            @Override
             public void handleEvent(Event event) {
                 event.doit = false;
             }
@@ -1368,14 +1384,17 @@ IWorkbenchPreferencePage, SelectionListener {
         /**
          * @see IStructuredContentProvider#getElements(Object)
          */
+        @Override
         public Object[] getElements(Object inputElement) {
             return fFilters.toArray();
         }
 
+        @Override
         public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
             /** ignored */
         }
 
+        @Override
         public void dispose() {
             /** ignored */
         }
@@ -1441,6 +1460,7 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
     /**
      * @see ITableLabelProvider#getColumnText(Object, int)
      */
+    @Override
     public String getColumnText(Object object, int column) {
         if (column == 0) {
             return ((Filter) object).getName();
@@ -1459,6 +1479,7 @@ class FilterLabelProvider extends LabelProvider implements ITableLabelProvider {
     /**
      * @see ITableLabelProvider#getColumnImage(Object, int)
      */
+    @Override
     public Image getColumnImage(Object object, int column) {
         return imgPkg;
     }

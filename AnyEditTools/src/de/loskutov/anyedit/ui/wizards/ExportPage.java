@@ -94,14 +94,17 @@ public class ExportPage extends WSPage {
             super();
         }
 
+        @Override
         public void dispose() {
             // noop
         }
 
+        @Override
         public void inputChanged(Viewer viewer1, Object oldInput, Object newInput) {
             // noop
         }
 
+        @Override
         public Object[] getElements(Object inputElement) {
             IWorkingSet[] workingSets = PlatformUI.getWorkbench().getWorkingSetManager()
                     .getAllWorkingSets();
@@ -115,14 +118,17 @@ public class ExportPage extends WSPage {
             return sets.toArray(new IWorkingSet[sets.size()]);
         }
 
+        @Override
         public Object[] getChildren(Object parentElement) {
             return new Object[0];
         }
 
+        @Override
         public Object getParent(Object element) {
             return null;
         }
 
+        @Override
         public boolean hasChildren(Object element) {
             return false;
         }

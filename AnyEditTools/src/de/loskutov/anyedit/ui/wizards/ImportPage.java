@@ -68,10 +68,12 @@ public class ImportPage extends WSPage {
         chooserBtn.setSelection(isMerge);
         chooserBtn.setText("Merge with existing working sets");
         chooserBtn.addSelectionListener(new SelectionListener() {
+            @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 // ignored
             }
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 isMerge = chooserBtn.getSelection();
             }
@@ -225,16 +227,19 @@ public class ImportPage extends WSPage {
     public static class WorkingSetContentProvider implements ITreeContentProvider {
         private IWorkingSet[] workingSets;
 
+        @Override
         public void dispose() {
             // noop
         }
 
+        @Override
         public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
             if (newInput instanceof IWorkingSet[]) {
                 workingSets = (IWorkingSet[]) newInput;
             }
         }
 
+        @Override
         public Object[] getElements(Object inputElement) {
             if (workingSets == null) {
                 return new Object[0];
@@ -249,14 +254,17 @@ public class ImportPage extends WSPage {
             return sets.toArray(new IWorkingSet[sets.size()]);
         }
 
+        @Override
         public Object[] getChildren(Object parentElement) {
             return new Object[0];
         }
 
+        @Override
         public Object getParent(Object element) {
             return null;
         }
 
+        @Override
         public boolean hasChildren(Object element) {
             return false;
         }

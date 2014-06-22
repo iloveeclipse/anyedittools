@@ -23,6 +23,7 @@ import de.loskutov.anyedit.util.EclipseUtils;
 
 public class EditorAdapterFactory implements IAdapterFactory {
 
+    @Override
     public Object getAdapter(Object adaptableObject, Class adapterType) {
         if(adaptableObject instanceof FileStoreEditorInput) {
             FileStoreEditorInput editorInput = (FileStoreEditorInput) adaptableObject;
@@ -65,6 +66,7 @@ public class EditorAdapterFactory implements IAdapterFactory {
         return null;
     }
 
+    @Override
     public Class[] getAdapterList() {
         return new Class[] {File.class, ContentWrapper.class};
     }

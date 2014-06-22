@@ -154,6 +154,7 @@ public class OpenFile extends AbstractOpenAction {
             return participants;
         }
         Collections.sort(participants, new Comparator<IOpenEditorParticipant>() {
+            @Override
             public int compare(IOpenEditorParticipant o1, IOpenEditorParticipant o2) {
                 if (o1 == null || o2 == null) {
                     return 0;

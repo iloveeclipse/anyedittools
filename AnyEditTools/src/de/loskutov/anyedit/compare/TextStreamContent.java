@@ -93,9 +93,11 @@ IEditableContentExtension {
             // trigger recompare
             if(document != null) {
                 docListener = new IDocumentListener(){
+                    @Override
                     public void documentAboutToBeChanged(DocumentEvent event) {
                         // noop
                     }
+                    @Override
                     public void documentChanged(DocumentEvent event) {
                         updateCompareEditor(event);
                     }
@@ -169,26 +171,32 @@ IEditableContentExtension {
         }
     }
 
+    @Override
     public Image getImage() {
         return CompareUI.getImage(getType());
     }
 
+    @Override
     public String getName() {
         return selectedText == null ? content.getName() : "Selection in " + content.getName();
     }
 
+    @Override
     public String getFullName() {
         return selectedText == null ? content.getFullName() : "Selection in " + content.getFullName();
     }
 
+    @Override
     public String getType() {
         return content.getFileExtension();
     }
 
+    @Override
     public Object[] getChildren() {
         return new StreamContent[0];
     }
 
+    @Override
     public boolean commitChanges(IProgressMonitor pm) throws CoreException {
         if (!dirty || !isEditable()) {
             return true;
@@ -228,10 +236,12 @@ IEditableContentExtension {
 
 
 
+    @Override
     public boolean isDirty() {
         return dirty;
     }
 
+    @Override
     public InputStream getContents() throws CoreException {
         String charset = editor.computeEncoding();
         if (selectedText != null) {
@@ -256,6 +266,7 @@ IEditableContentExtension {
         return null;
     }
 
+    @Override
     public final boolean isEditable() {
         if (selectedText != null) {
             return !position.isDeleted && content.isModifiable() && !editor.isDisposed();
@@ -263,10 +274,12 @@ IEditableContentExtension {
         return content.isModifiable() && editor.getDocument() != null;
     }
 
+    @Override
     public ITypedElement replace(ITypedElement dest, ITypedElement src) {
         return null;
     }
 
+    @Override
     public void setContent(byte[] newContent) {
         bytes = newContent;
         if(isEditable()) {
@@ -274,6 +287,7 @@ IEditableContentExtension {
         }
     }
 
+    @Override
     public void dispose() {
         IWorkbench workbench = PlatformUI.getWorkbench();
         if(workbench.isClosing()){
@@ -300,6 +314,7 @@ IEditableContentExtension {
         disposed = true;
     }
 
+    @Override
     public boolean isDisposed() {
         return disposed;
     }
@@ -353,6 +368,7 @@ IEditableContentExtension {
 
     private final class PartListener2Impl implements IPartListener2 {
 
+        @Override
         public void partClosed(IWorkbenchPartReference partRef) {
             if (editor.getEditorPart() == partRef.getPart(false)) {
 
@@ -361,40 +377,49 @@ IEditableContentExtension {
             }
         }
 
+        @Override
         public void partInputChanged(IWorkbenchPartReference partRef) {
             partClosed(partRef);
         }
 
+        @Override
         public void partActivated(IWorkbenchPartReference partRef) {
             // noop
         }
 
+        @Override
         public void partBroughtToTop(IWorkbenchPartReference partRef) {
             // noop
         }
 
+        @Override
         public void partDeactivated(IWorkbenchPartReference partRef) {
             // noop
         }
 
+        @Override
         public void partHidden(IWorkbenchPartReference partRef) {
             // noop
         }
 
+        @Override
         public void partOpened(IWorkbenchPartReference partRef) {
             // noop
         }
 
+        @Override
         public void partVisible(IWorkbenchPartReference partRef) {
             // noop
         }
     }
 
+    @Override
     public void init(AnyeditCompareInput input) {
         this.compareInput = input;
     }
 
     /** create new one with the selection re-created from annotation, if any */
+    @Override
     public StreamContent recreate() {
         TextStreamContent tc;
 
@@ -421,10 +446,12 @@ IEditableContentExtension {
         return text;
     }
 
+    @Override
     public boolean isReadOnly() {
         return editor.isEditorInputModifiable();
     }
 
+    @Override
     public IStatus validateEdit(Shell shell) {
         boolean state = editor.validateEditorInputState();
         if(state){
@@ -433,6 +460,7 @@ IEditableContentExtension {
         return Status.CANCEL_STATUS;
     }
 
+    @Override
     public Object getAdapter(Class adapter) {
         if(selectedText == null) {
             if (adapter == ISharedDocumentAdapter.class) {
@@ -457,6 +485,7 @@ IEditableContentExtension {
         return sharedDocumentAdapter;
     }
 
+    @Override
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }

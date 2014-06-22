@@ -20,6 +20,7 @@ public class SortNumericallyAscending extends AbstractSortAction {
     @Override
     protected Comparator<LineReplaceResult> getComparator() {
         return new AbstractSortComparator<LineReplaceResult>() {
+            @Override
             public int compare(LineReplaceResult left, LineReplaceResult right) {
                 return compareNumber(left, right);
             }

@@ -272,14 +272,17 @@ public class CompareWithEditorAction extends CompareWithAction {
             return title!= null && title.equals(reference.getTitle());
         }
 
+        @Override
         public Object[] getElements(Object inputElement) {
             return references;
         }
 
+        @Override
         public void dispose() {
             // ignore
         }
 
+        @Override
         public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
             // ignore
         }

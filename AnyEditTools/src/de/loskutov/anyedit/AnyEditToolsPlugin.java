@@ -112,6 +112,7 @@ public class AnyEditToolsPlugin extends AbstractUIPlugin implements IStartup {
         return isSaveHookInitialized;
     }
 
+    @Override
     public void earlyStartup() {
         // hooks into the global toolbar/menu
         try {
@@ -121,7 +122,7 @@ public class AnyEditToolsPlugin extends AbstractUIPlugin implements IStartup {
                 new StartupHelper().init();
             }
         } catch (NoSuchMethodError e){
-        	// it's old Eclipse...
+            // it's old Eclipse...
             new StartupHelper().init();
         }
         setSaveHookInitialized(true);

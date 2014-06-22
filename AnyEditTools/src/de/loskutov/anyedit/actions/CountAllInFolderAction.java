@@ -92,6 +92,7 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
                 }
 
                 PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+                    @Override
                     public void run() {
                         printSummary(v);
                     }
@@ -157,6 +158,7 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
         long derivedFolders;
         long derivedFiles;
 
+        @Override
         public boolean visit(IResource resource) throws CoreException {
             if(!resource.isAccessible()){
                 return false;
@@ -190,16 +192,19 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
         }
     }
 
+    @Override
     public void addHandlerListener(IHandlerListener handlerListener) {
         // noop
     }
 
+    @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         selectionChanged(null, HandlerUtil.getCurrentSelection(event));
         run(null);
         return null;
     }
 
+    @Override
     public void removeHandlerListener(IHandlerListener handlerListener) {
         // noop
     }

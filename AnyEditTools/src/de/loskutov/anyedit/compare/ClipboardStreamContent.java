@@ -47,42 +47,52 @@ public class ClipboardStreamContent implements StreamContent, IStreamContentAcce
         lineSeparator = System.getProperty("line.separator");
     }
 
+    @Override
     public Image getImage() {
         return CompareUI.getImage(getType());
     }
 
+    @Override
     public String getName() {
         return "Clipboard";
     }
 
+    @Override
     public String getType() {
         return type != null? type : ITypedElement.UNKNOWN_TYPE;
     }
 
+    @Override
     public Object[] getChildren() {
         return new StreamContent[0];
     }
 
+    @Override
     public boolean commitChanges(IProgressMonitor pm) throws CoreException {
         return true;
     }
 
+    @Override
     public boolean isDirty() {
         return false;
     }
 
+    @Override
     public InputStream getContents() throws CoreException {
         return new ByteArrayInputStream(bytes);
     }
 
+    @Override
     public void dispose() {
         bytes = null;
     }
 
+    @Override
     public boolean isDisposed() {
         return bytes == null;
     }
 
+    @Override
     public void init(AnyeditCompareInput input) {
         if(clipboardContent != null){
             if(newLine == null || newLine.equals(lineSeparator)){
@@ -104,20 +114,24 @@ public class ClipboardStreamContent implements StreamContent, IStreamContentAcce
         bytes = new byte[0];
     }
 
+    @Override
     public StreamContent recreate() {
         ClipboardStreamContent newContent = new ClipboardStreamContent(type, newLine, charset,
                 clipboardContent);
         return newContent;
     }
 
+    @Override
     public String getFullName() {
         return getName();
     }
 
+    @Override
     public Object getAdapter(Class adapter) {
         return null;
     }
 
+    @Override
     public void setDirty(boolean dirty) {
         // noop
     }

@@ -39,6 +39,7 @@ public abstract class AbstractAction extends AbstractHandler implements IWorkben
         super();
     }
 
+    @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException {
         window = HandlerUtil.getActiveWorkbenchWindow(event);
         if (window != null && isEnabled()) {
@@ -59,6 +60,7 @@ public abstract class AbstractAction extends AbstractHandler implements IWorkben
         return part instanceof IViewPart? (IViewPart)part : null;
     }
 
+    @Override
     public void run(IAction action) {
         if(action == null){
             return;
@@ -91,10 +93,12 @@ public abstract class AbstractAction extends AbstractHandler implements IWorkben
         return editor;
     }
 
+    @Override
     public void init(IWorkbenchWindow window1) {
         window = window1;
     }
 
+    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         // unused
     }
@@ -125,6 +129,7 @@ public abstract class AbstractAction extends AbstractHandler implements IWorkben
         return window;
     }
 
+    @Override
     public final void init(IViewPart view) {
         this.part = view;
     }

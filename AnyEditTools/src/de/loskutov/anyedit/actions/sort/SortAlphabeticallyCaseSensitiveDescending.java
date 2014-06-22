@@ -20,6 +20,7 @@ public class SortAlphabeticallyCaseSensitiveDescending extends AbstractSortActio
     @Override
     protected Comparator<LineReplaceResult> getComparator() {
         return new AbstractSortComparator<LineReplaceResult>() {
+            @Override
             public int compare(LineReplaceResult left, LineReplaceResult right) {
                 return line(right).compareTo(line(left));
             }

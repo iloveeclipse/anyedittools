@@ -57,6 +57,7 @@ implements IEditorActionDelegate {
         textUtil = TextUtil.getDefaultTextUtilities();
     }
 
+    @Override
     public void setActiveEditor(IAction action, IEditorPart targetEditor) {
         if(targetEditor == null){
             return;

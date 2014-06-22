@@ -129,18 +129,22 @@ public class StartupHelper2 {
             spacesAction.setUsedOnSave(true);
         }
 
+        @Override
         public void notHandled(String command, NotHandledException exception) {
             //
         }
 
+        @Override
         public void postExecuteFailure(String command, ExecutionException exception) {
             //
         }
 
+        @Override
         public void postExecuteSuccess(String command, Object returnValue) {
             //
         }
 
+        @Override
         public void preExecute(String command, ExecutionEvent event) {
             runBeforeSave(event);
         }
@@ -211,6 +215,7 @@ public class StartupHelper2 {
             }
             IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
+                @Override
                 public void run(IProgressMonitor monitor) throws InvocationTargetException,
                 InterruptedException {
                     monitor.beginTask("Converting tabs <-> spaces before save", editorsCount);
@@ -265,6 +270,7 @@ public class StartupHelper2 {
             super();
         }
 
+        @Override
         public void run() {
             IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
             if (window == null) {

@@ -104,6 +104,7 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
             // starting main action, which will be executed in separated thread
             PlatformUI.getWorkbench().getProgressService().run(true, true,
                     new IRunnableWithProgress() {
+                @Override
                 public void run(IProgressMonitor monitor)
                         throws InvocationTargetException, InterruptedException {
                     monitor.beginTask(Messages.ConvertAllInFolder_task,

@@ -93,6 +93,7 @@ public class SelectWorkingSetsAction extends Action implements IWSAction {
         return null;
     }
 
+    @Override
     public void setWorkingSets(List<IWorkingSet> sets) {
         this.workingSets = sets.toArray(new IWorkingSet[sets.size()]);
     }

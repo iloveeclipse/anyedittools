@@ -57,6 +57,7 @@ public abstract class ReplaceWithAction extends AbstractHandler implements IObje
         editor = new AbstractEditor(null);
     }
 
+    @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException {
         IWorkbenchPart activePart = HandlerUtil.getActivePart(event);
         Action dummyAction = new Action(){
@@ -74,6 +75,7 @@ public abstract class ReplaceWithAction extends AbstractHandler implements IObje
         return null;
     }
 
+    @Override
     public void setActivePart(IAction action, IWorkbenchPart targetPart) {
         if (targetPart instanceof IEditorPart) {
             editor = new AbstractEditor((IEditorPart) targetPart);
@@ -82,6 +84,7 @@ public abstract class ReplaceWithAction extends AbstractHandler implements IObje
         }
     }
 
+    @Override
     public void run(IAction action) {
         InputStream stream = createInputStream();
         if (stream == null) {
@@ -240,6 +243,7 @@ public abstract class ReplaceWithAction extends AbstractHandler implements IObje
     abstract protected InputStream createInputStream();
 
 
+    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         if (!(selection instanceof IStructuredSelection) || selection.isEmpty()) {
             if(!editor.isDisposed()){
