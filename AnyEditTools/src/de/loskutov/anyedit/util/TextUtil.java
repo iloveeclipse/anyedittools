@@ -24,6 +24,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.Messages;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 
 /**
@@ -619,6 +620,7 @@ public class TextUtil {
         useRequiredInPathChars = b;
     }
 
+    @SuppressFBWarnings("NP_NULL_PARAM_DEREF_ALL_TARGETS_DANGEROUS")
     public String base64decode(String base64, String charset) {
         Base64Preferences prefs = new Base64Preferences();
         prefs.put(null, base64);

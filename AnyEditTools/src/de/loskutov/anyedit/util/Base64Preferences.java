@@ -11,6 +11,8 @@ package de.loskutov.anyedit.util;
 import java.util.prefs.AbstractPreferences;
 import java.util.prefs.BackingStoreException;
 
+import javax.annotation.Nullable;
+
 /**
  * This is a dummy class which only purpose is to re-use (package protected)
  * java.util.Base64 class. Unfortunately sun.misc.BASE64Encoder might be not available
@@ -44,7 +46,7 @@ class Base64Preferences extends AbstractPreferences {
      *      java.lang.String)
      */
     @Override
-    public String get(String key, String def) {
+    public String get(@Nullable String key, @Nullable String def) {
         return value;
     }
 

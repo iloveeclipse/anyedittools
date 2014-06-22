@@ -94,7 +94,7 @@ public class TypeFactory {
         this.simpleTypeName = new String(simpleTypeName1);
         String pn = new String(packageName);
 
-        int index = path.indexOf(IJavaSearchScope.JAR_FILE_ENTRY_SEPARATOR);
+        int index = path.indexOf(IJavaSearchScope.JAR_FILE_ENTRY_SEPARATOR.charAt(0));
         IType result = null;
         if (index != -1) {
             result = createJarFileEntryTypeInfo(pn, simpleTypeName, enclosingName,
@@ -206,11 +206,11 @@ public class TypeFactory {
         // We have to sort the list of project names to make sure that we cut of the longest
         // project from the path, if two projects with the same prefix exist. For example
         // org.eclipse.jdt.ui and org.eclipse.jdt.ui.tests.
-        Arrays.sort(result, new Comparator() {
+        Arrays.sort(result, new Comparator<String>() {
             @Override
-            public int compare(Object o1, Object o2) {
-                int l1 = ((String) o1).length();
-                int l2 = ((String) o2).length();
+            public int compare(String o1, String o2) {
+                int l1 = o1.length();
+                int l2 = o2.length();
                 if (l1 < l2) {
                     return 1;
                 }
