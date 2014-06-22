@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: de.loskutov.anyedit.AnyEditTools;singleton:=true
-Bundle-Version: 2.4.6.qualifier
+Bundle-Version: 2.4.7.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: de.loskutov.anyedit.AnyEditToolsPlugin
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0",
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.core.filesystem,
  org.eclipse.ui,
  org.eclipse.ui.ide,

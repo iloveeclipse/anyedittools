@@ -2,7 +2,7 @@
 <feature
       id="AnyEditTools"
       label="AnyEditTools"
-      version="2.4.6.qualifier"
+      version="2.4.7.qualifier"
       provider-name="Andrey Loskutov"
       plugin="de.loskutov.anyedit.AnyEditTools"
       image="loskutov32.gif">
@@ -29,7 +29,7 @@ All rights reserved.
    </url>
 
    <requires>
-      <import plugin="org.eclipse.core.runtime" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.filesystem"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.ui.ide"/>
