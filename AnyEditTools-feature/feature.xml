@@ -26,6 +26,7 @@ All rights reserved.
    <url>
       <update label="Andrey Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
       <discovery label="Andrey Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
+      <discovery label="Zip Editor plugin" url="http://zipeditor.sourceforge.net/update"/>
    </url>
 
    <requires>
