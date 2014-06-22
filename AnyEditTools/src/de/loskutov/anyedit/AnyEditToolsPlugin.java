@@ -114,9 +114,14 @@ public class AnyEditToolsPlugin extends AbstractUIPlugin implements IStartup {
 
     public void earlyStartup() {
         // hooks into the global toolbar/menu
-        if(EclipseUtils.getWorkbenchVersion().compareTo(new Version(3,7,0)) >= 0) {
-            new StartupHelper2().init();
-        } else {
+        try {
+            if(EclipseUtils.getWorkbenchVersion().compareTo(new Version(3,7,0)) >= 0) {
+                new StartupHelper2().init();
+            } else {
+                new StartupHelper().init();
+            }
+        } catch (NoSuchMethodError e){
+        	// it's old Eclipse...
             new StartupHelper().init();
         }
         setSaveHookInitialized(true);
