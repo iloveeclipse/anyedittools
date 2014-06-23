@@ -44,6 +44,7 @@ import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IOpenEditorParticipant;
 import de.loskutov.anyedit.util.EclipseUtils;
 import de.loskutov.anyedit.util.TextUtil;
+import de.loskutov.anyedit.util.TextUtil.LineAndCaret;
 
 /**
  * @author Andrey
@@ -190,21 +191,18 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
             if (doc != null) {
                 int caretPosition = EclipseUtils.getCaretPosition(selectionProvider);
                 try {
-                    IRegion line = doc.getLineInformation(doc
-                            .getLineOfOffset(caretPosition));
+                    IRegion line = doc.getLineInformation(doc.getLineOfOffset(caretPosition));
                     String lineText = doc.get(line.getOffset(), line.getLength());
                     selectedText = textUtil.trimPath(lineText);
                     int index = lineText.indexOf(selectedText);
-                    selectedText = textUtil.findPath(selectedText, caretPosition - index
-                            - line.getOffset());
+                    selectedText = textUtil.findPath(new LineAndCaret(selectedText, caretPosition - index - line.getOffset()));
                 } catch (BadLocationException e) {
                     AnyEditToolsPlugin.logError("", e);
-                    selectedText = textUtil.findPath(selectedText,
-                            selectedText.length() / 2);
+                    selectedText = textUtil.findPath(new LineAndCaret(selectedText, selectedText.length() / 2));
                 }
             } else {
                 // virtual caret in the middle of string
-                selectedText = textUtil.findPath(selectedText, selectedText.length() / 2);
+                selectedText = textUtil.findPath(new LineAndCaret(selectedText, selectedText.length() / 2));
             }
             if(selectedText == null) {
                 return null;

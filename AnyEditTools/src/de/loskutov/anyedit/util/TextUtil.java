@@ -9,7 +9,6 @@
 
 package de.loskutov.anyedit.util;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
@@ -17,6 +16,8 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import javax.annotation.Nonnull;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -32,6 +33,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class TextUtil {
 
+
     public static final String SYSTEM_CHARSET = ResourcesPlugin.getEncoding();
 
     /** The predefined line delimiters */
@@ -45,13 +47,15 @@ public class TextUtil {
 
     public static final String DEFAULT_CHARACTERS_REQUIRED_IN_PATH = ".";
 
+    public static final String WINDOOF_DEF = " \n\"'*?><|=(){};&$,%@";
+    public static final String LINUX_DEF =   " \n\"'*?><|=(){};&$,%@:"; // ':' is invalid in some cases too
     public static final String DEFAULT_CHARACTERS_DISALLOWED_IN_PATH = EclipseUtils.isWindows()?
-            " \n\"'*?><|=(){};&$,%@" : " \n\"'*?><|=(){};&$,%@:"; // ':' is invalid in some cases too
+            WINDOOF_DEF : LINUX_DEF;
 
     public static final String DEFAULT_LINE_SEPARATOR_REGEX = ":|\\s+";
 
     private static final String INVALID_PATH_ENDS_CHARACTERS = "/\\";
-    private static final String VARIABLE_DELIMITERS = "${}()";
+    //    private static final String VARIABLE_DELIMITERS = "${}()";
 
     public static final boolean DEFAULT_UNICODIFY_ALL = false;
 
@@ -73,6 +77,8 @@ public class TextUtil {
 
     private static final Pattern WHITE_SPACE_PATTERN = Pattern.compile("(\\n|\\r| |\\\t)");
     private static final Pattern UNICODE_PATTERN = Pattern.compile("\\\\u[0-9a-fA-F]{2,4}");
+    /** $HOME (group "one") or ( $(HOME) or ${HOME} ) (group "two")  */
+    private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$((?<one>\\w+)|[\\{\\(](?<two>\\w+)[\\)\\}])");
 
     private TextUtil() {
         useRequiredInPathChars = true;
@@ -245,7 +251,7 @@ public class TextUtil {
             }
         }
 
-        String disallowed = getCharsDisallowedInPath();
+        String disallowed = getCharsDisallowedInPath().replace("$", "");
         /*
          * trim leading characters
          */
@@ -265,6 +271,8 @@ public class TextUtil {
         /*
          * trim trailing characters
          */
+        disallowed = getCharsDisallowedInPath().replace(")", "");
+        disallowed = disallowed.replace("}", "");
         for (int i = 0; i < disallowed.length(); i++) {
             if (path.charAt(path.length() - 1) == disallowed.charAt(i)) {
                 path = path.substring(0, path.length() - 1);
@@ -284,11 +292,26 @@ public class TextUtil {
         return path;
     }
 
-    public String findPath(String line, int caretOffset) {
-        if (line == null || line.length() < 2 || caretOffset >= line.length()
-                || caretOffset < 0) {
+
+    public static class LineAndCaret {
+        public String line;
+        public int caret;
+        public LineAndCaret(String line, int caret) {
+            this.line = line;
+            this.caret = caret;
+        }
+    }
+
+    public String findPath(@Nonnull LineAndCaret position) {
+        if (badData(position)) {
             return null; // shit in, shit out
         }
+        position = resolveVariables(position);
+        if (badData(position)) {
+            return null; // shit in, shit out
+        }
+
+        String line = position.line;
 
         /**
          * we search for nearest to caret 'invalid' path characters in both directions
@@ -297,7 +320,7 @@ public class TextUtil {
         String disallowed = getCharsDisallowedInPath();
         for (int i = 0; i < disallowed.length(); i++) {
             char charAt = disallowed.charAt(i);
-            int matchIdx = indexOf(line, charAt, caretOffset, backwardSearchIdx, false);
+            int matchIdx = indexOf(line, charAt, position.caret, backwardSearchIdx, false);
             // search nearest to caret, also biggest
             if (matchIdx > backwardSearchIdx) {
                 backwardSearchIdx = matchIdx;
@@ -306,7 +329,7 @@ public class TextUtil {
 
         int forwardSearchIdx = line.length();
         for (int i = 0; i < disallowed.length(); i++) {
-            int matchIdx = indexOf(line, disallowed.charAt(i), caretOffset,
+            int matchIdx = indexOf(line, disallowed.charAt(i), position.caret,
                     forwardSearchIdx, true);
             // search nearest to caret, also smaller
             if (matchIdx != -1 && matchIdx < forwardSearchIdx) {
@@ -315,7 +338,7 @@ public class TextUtil {
         }
 
         if (EclipseUtils.isWindows() && disallowed.indexOf(':') < 0) {
-            int matchIdx = indexOf(line, ':', caretOffset, forwardSearchIdx, true);
+            int matchIdx = indexOf(line, ':', position.caret, forwardSearchIdx, true);
             // search nearest to caret, also smaller
             if (matchIdx != -1 && matchIdx < forwardSearchIdx) {
                 forwardSearchIdx = matchIdx;
@@ -329,93 +352,53 @@ public class TextUtil {
         if (forwardSearchIdx == line.length() && backwardSearchIdx == -1) {
             return trimPath(line);
         } else if (forwardSearchIdx - backwardSearchIdx > 1) {
-            // try to check if the path starts with the variable, like
-            // $HELLO/path or ${HELLO}/path or $(HELLO)/path
-            if(backwardSearchIdx >= 0) {
-                // the first part of the line is the variable?
-                String result = tryToGuessVariable(line, backwardSearchIdx, forwardSearchIdx);
-                if(result != null){
-                    return result;
-                }
-            }
-
             line = line.substring(backwardSearchIdx + 1, forwardSearchIdx);
             if (isFilePath(line)) {
                 return trimPath(line);
             }
-        } else if (forwardSearchIdx == backwardSearchIdx && forwardSearchIdx == caretOffset
-                && VARIABLE_DELIMITERS.indexOf(line.charAt(caretOffset)) >= 0) {
-            // move caret right to match inside the text
-            return findPath(line, caretOffset + 1);
         }
         return null;
     }
 
-    private String tryToGuessVariable(final String line, final int backwardSearchIdx, final int forwardSearchIdx) {
-        char firstInvalidChar = line.charAt(backwardSearchIdx);
-        if (firstInvalidChar == '$') {
-            // try to check if the line part before the first character can be a variable
-            int firstSep = line.indexOf(File.separatorChar, backwardSearchIdx + 2);
-            if(firstSep > 0 && firstSep < forwardSearchIdx){
-                String var = line.substring(backwardSearchIdx + 1, firstSep);
-                String value = System.getenv(var);
-                String line2 = value + line.substring(firstSep, forwardSearchIdx);
-                if (isFilePath(line2)) {
-                    return trimPath(line2);
-                }
-            }
-        } else if (firstInvalidChar == ')') {
-            // try to find opening brace
-            int firstBrace = indexOf(line, '(', backwardSearchIdx, 0, false);
-            if(firstBrace > 0 && line.charAt(firstBrace - 1) == '$'){
-                String var = line.substring(firstBrace + 1, backwardSearchIdx);
-                String value = System.getenv(var);
-                if(value != null){
-                    String line2 = value + line.substring(backwardSearchIdx + 1, forwardSearchIdx);
-                    if (isFilePath(line2)) {
-                        return trimPath(line2);
-                    }
-                }
-            }
-        } else if (firstInvalidChar == '}') {
-            // try to find opening brace
-            int firstBrace = indexOf(line, '{', backwardSearchIdx, 0, false);
-            if(firstBrace > 0 && line.charAt(firstBrace - 1) == '$'){
-                String var = line.substring(firstBrace + 1, backwardSearchIdx);
-                String value = System.getenv(var);
-                if(value != null){
-                    String line2 = value + line.substring(backwardSearchIdx + 1, forwardSearchIdx);
-                    if (isFilePath(line2)) {
-                        return trimPath(line2);
-                    }
-                }
-            }
-        }  else if ((firstInvalidChar == '{' &&  line.charAt(forwardSearchIdx) == '}')
-                || firstInvalidChar == '(' &&  line.charAt(forwardSearchIdx) == ')' ) {
-            // try to match behind the last brace
-            int forwardSearch = line.length();
-            String disallowed = getCharsDisallowedInPath();
-            for (int i = 0; i < disallowed.length(); i++) {
-                int matchIdx = indexOf(line, disallowed.charAt(i), forwardSearchIdx + 1,
-                        forwardSearch, true);
-                // search nearest to cursor, also smaller
-                if (matchIdx != -1 && matchIdx < forwardSearch) {
-                    forwardSearch = matchIdx;
-                }
-            }
-            if(forwardSearch > forwardSearchIdx){
-                String var = line.substring(backwardSearchIdx + 1, forwardSearchIdx);
-                String value = System.getenv(var);
-                if(value != null){
-                    String line2 = value + line.substring(forwardSearchIdx + 1, forwardSearch);
-                    if (isFilePath(line2)) {
-                        return trimPath(line2);
-                    }
-                }
-            }
-        }
+    private boolean badData(LineAndCaret position) {
+        String line = position.line;
+        return line == null || line.length() < 2 || position.caret >= line.length()
+                || position.caret < 0;
+    }
 
-        return null;
+    private LineAndCaret resolveVariables(LineAndCaret position) {
+        String line = position.line;
+        Matcher matcher = VARIABLE_PATTERN.matcher(line);
+        if(!matcher.find()){
+            return position;
+        }
+        int newCaret = position.caret;
+        StringBuffer sb = new StringBuffer();
+        do {
+            String var = matcher.group("one");
+            if(var == null){
+                var = matcher.group("two");
+                if(var == null){
+                    // paranoia
+                    break;
+                }
+            }
+            int start = matcher.start();
+            int end = matcher.end();
+            // for unresolved variables just use "null". Shit in, shit out.
+            String value = System.getenv(var) + "";
+            matcher.appendReplacement(sb, value);
+            if(position.caret >= start && position.caret < end){
+                // caret inside current variable: place it at the end of the current input
+                newCaret = sb.length() - 1;
+            } else if (position.caret >= end){
+                // caret after current variable: update it with the diff
+                newCaret += value.length() - (end - start);
+            }
+        } while(matcher.find());
+        matcher.appendTail(sb);
+
+        return new LineAndCaret(sb.toString(), newCaret);
     }
 
     public String trimJavaType(String type) {
