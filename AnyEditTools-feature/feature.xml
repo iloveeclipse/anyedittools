@@ -5,7 +5,7 @@
       version="2.4.8.qualifier"
       provider-name="Andrey Loskutov"
       plugin="de.loskutov.anyedit.AnyEditTools"
-      image="loskutov32.gif">
+      image="loskutov32.png">
 
    <description url="http://andrei.gmxhome.de/anyedit/index.html">
       Adds useful context menu actions to text files and editors - Open file, type under
@@ -20,7 +20,7 @@ All rights reserved.
    </copyright>
 
    <license url="http://www.eclipse.org/legal/epl-v10.html">
-      Copyright (c) 2002 - 2013 Andrey Loskutov, licensed under the Eclipse Public License 1.0.
+      Copyright (c) 2002 - 2014 Andrey Loskutov, licensed under the Eclipse Public License 1.0.
    </license>
 
    <url>

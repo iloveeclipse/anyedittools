@@ -3,8 +3,8 @@
 <head>
 <title>AnyEdit tools plugin for Eclipse</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="author" content="Andrei Loskutov" />
-<meta name="copyright" content="Copyright 2009 Andrei Loskutov" />
+<meta name="author" content="Andrey Loskutov" />
+<meta name="copyright" content="Copyright 2004,2005 Andrey Loskutov" />
 <meta name="description" content="AnyEdit plugin adds several new actions to the context menu of Text-based Eclipse editors" />
 <meta name="keywords" content="Java, Eclipse, Plugin, Plugins, Anyedit, free, Whitespace, Spaces, Tabs, convert, open, type, file, trailing, Entities, jsp, Tool, Programmer, Loskutov" />
 <meta name="revisit-after" content="3 Days" />
@@ -13,24 +13,33 @@
 <meta name="rating" content="General" />
 <meta name="audience" content="All" />
 <link rel="stylesheet" href="http://andrei.gmxhome.de/styles/styles.css" type="text/css" />
-<link rel="SHORTCUT ICON" href="http://andrei.gmxhome.de/favicon.ico" />
-</head>
+<link rel="SHORTCUT ICON" href="http://andrei.gmxhome.de/favicon.ico" /></head>
 <body>
 <table width="86%" border="0" align="center" cellpadding="8" cellspacing="0" class="mainTable">
   <tr>
     <td> <a href="http://andrei.gmxhome.de/index.html" class="box">Home</a> | <a href="http://andrei.gmxhome.de/eclipse.html" class="box">Eclipse
         plugins</a> <strong>-&gt;</strong> <span class="menu">AnyEdit</span></td>
-    <td align="right">| <a href="http://andrei.gmxhome.de/privat.html" class="box">About</a></td>
+    <td align="right">
+    <script type="text/javascript">
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+    <div align="right" class="g-plusone" data-size="small" data-href="http://andrei.gmxhome.de"></div>
+    </td>
+    <td align="right"><a href="https://google.com/+AndreyLoskutov" class="box">+Andrey</a> | <a href="http://andrei.gmxhome.de/privat.html" class="box">About</a></td>
   </tr>
 </table>
 <br />
 <table width="86%" border="0" align="center" cellpadding="20" cellspacing="0" class="mainTable">
   <tr>
     <td>
-        <a href="http://www.eclipse.org/org/foundation/eclipseawards/winners09.php" class="none" title="Eclipse ready"><img src="../images/finalist09.jpg" alt="Eclipse community awards 2009 finalist" width="144" height="144" border="0" align="right" class="none" /></a>
-        <h1>AnyEdit  tools plugin for Eclipse</h1>
+		<a href="http://www.eclipse.org/org/foundation/eclipseawards/winners09.php" class="none" title="Eclipse ready"><img src="../images/finalist09.jpg" alt="Eclipse community awards 2009 finalist" width="144" height="144" border="0" align="right" class="none" /></a>
+		<h1>AnyEdit  tools plugin for Eclipse</h1>
       <blockquote>
-    <p> AnyEdit plugin adds several new tools to the context menu of text-
+    <p>AnyEdit plugin adds several new tools to the context menu of text-
       based Eclipse editors, to output consoles, to Eclipse main menu and editor toolbar. AnyEdit contributes also Import/Export working sets wizards.</p>
     <p><a href="http://andrei.gmxhome.de/anyedit/features.html" class="box">What can AnyEdit do for you? </a></p>
     <p> &nbsp;&nbsp; -&gt; <a href="http://andrei.gmxhome.de/anyedit/examples.html" class="box"> AnyEdit examples</a> -&gt; <a href="http://andrei.gmxhome.de/anyedit/preferences.html" class="box"> AnyEdit preferences </a> -&gt; <a href="http://andrei.gmxhome.de/anyedit/examples2.html" class="box"> AnyEdit in action </a></p>
@@ -151,6 +160,21 @@ thisIsMyFieldName &lt;-&gt; this_is_my_field_name</td>
         <td align="left" valign="top">Only  text selection in editor will be changed</td>
       </tr>
       <tr>
+        <td align="left" valign="top">Sort <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Case-Sensitive A-z<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Case-Sensitive z-A<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Case-Insensitive A-Z<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Case-Insensitive Z-A<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Numerically 0-9<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Numerically 9-0<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Line Length Short-Long<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;Line Length Long-Short
+        </td>
+        <td align="left" valign="top">Editors</td>
+        <td align="left" valign="top">If nothing is selected, entire editor content will be sorted,
+        otherwise only text selection in editor will be changed</td>
+      </tr>
+      <tr>
         <td align="left" valign="top">Compare  / Replace with<br />
           &nbsp;&nbsp;&nbsp;&nbsp;Clipboard </td>
         <td align="left" valign="top">Editors, Navigator, Project Explorer </td>
@@ -177,10 +201,6 @@ thisIsMyFieldName &lt;-&gt; this_is_my_field_name</td>
     </table>
     <p>This programm is free, see <a href="http://andrei.gmxhome.de/anyedit/copyright.html" class="box">copyright</a></p>
       </blockquote>
-      <p class="titel">Users about AnyEdit</p>
-      <blockquote>
-        <p><a href="http://www.eclipseplugincentral.com/Web_Links-index-req-viewlink-cid-123.html">Plugin page at Eclipse plugin central</a></p>
-      </blockquote>
       <p class="titel">Installation</p>
 <blockquote>
     <p>Please use Eclipse update
@@ -191,7 +211,7 @@ thisIsMyFieldName &lt;-&gt; this_is_my_field_name</td>
         and Install... -&gt; Search for new features to install -&gt; Next -&gt; New
         Remote Site...&quot; </p>
     </blockquote>
-    <p>Eclipse 3.5:</p>
+    <p>Eclipse 3.5+:</p>
     <blockquote>
       <p>Go to &quot;Help -&gt; Install new Software... -&gt; Work with:&quot; </p>
     </blockquote>
@@ -203,7 +223,7 @@ thisIsMyFieldName &lt;-&gt; this_is_my_field_name</td>
 <p class="titel">Manual download</p>
 <blockquote>
   <p><a href="http://andrei.gmxhome.de/anyedit/links.html" class="box">Here</a></p>
-  <p><a href="http://code.google.com/p/anyedittools/source/checkout" class="box">Browse source  code</a></p>
+  <p><a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/source/checkout" class="box">Browse source  code</a></p>
   </blockquote>
 <p class="titel">Why AnyEdit </p>
 <blockquote>
@@ -283,28 +303,191 @@ thisIsMyFieldName &lt;-&gt; this_is_my_field_name</td>
 </blockquote>
 <p class="titel">Feedback</p>
 <blockquote>
+    <p><script type="text/javascript" src="http://w.sharethis.com/button/sharethis.js#publisher=fef764dd-3b8b-4213-85a0-a3b7a14d472d&amp;type=website&amp;style=rotate"></script></p>
     <p>Please send comments  and suggestions to <img src="http://andrei.gmxhome.de/images/loskutov.gif" alt="loskutov" width="130" height="12" align="top" /></p>
-    <p><a href="http://code.google.com/p/anyedittools/issues/list" class="box">Open issues / Report new issues </a></p>
-
-    <form action="http://www.eclipseplugincentral.com/Web_Links.html" method="post">
-       <input type="hidden" name="lid" value="104" />
-       <input type="hidden" name="req" value="ratelink" />
-        <table width="100%" border="0" cellspacing="0" cellpadding="3">
+    <p><a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/list" class="box">Open issues / Report new issues </a></p>
+		<table width="100%" border="0" cellspacing="0" cellpadding="3">
         <tr>
-          <td nowrap>Like it? Rate this plugin at <a href="http://www.eclipseplugincentral.com/Web_Links-index-req-ratelink-lid-104.html">Eclipse Plugin Central:</a></td>
-          <td><input name="submit" type="submit" value="Vote!" /></td>
+          <td nowrap>Vote for  AnyEdit Tools at <a href="http://marketplace.eclipse.org/content/anyedit-tools">Eclipse Marketplace </a></td>
+          <td><script type="text/javascript">url_site = 'http://marketplace.eclipse.org/node/87'</script>
+		  <script src="http://marketplace.eclipse.org/sites/all/modules/drigg_external/js/button.js" type="text/javascript"></script></td>
         </tr>
         <tr>
-          <td width="34%">or add AnyEdit to your stack at <a href="http://www.ohloh.net/p/anyedittools">Ohloh</a>:</td>
-          <td width="66%"><script type="text/javascript" src="http://www.ohloh.net/p/55543/widgets/project_users_logo.js"></script></td>
+          <td width="34%">or add AnyEdit to your stack at <a href="http://www.ohloh.net/p/anyedittools">Ohloh</a></td>
+          <td width="66%"><script type="text/javascript" src="http://www.ohloh.net/p/55543/widgets/project_users.js?style=red"></script></td>
+        </tr>
+		<tr>
+		<td colspan="2"><hr size="1" /></td>
+		</tr>
+        <tr>
+          <td>Support development of the plugin:</td>
+          <td>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick" />
+<input type="hidden" name="hosted_button_id" value="R5SHJLNGUXKHU" />
+<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG_global.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." />
+<!--<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1">-->
+</form>
+		  </td>
         </tr>
       </table>
-    </form>
 </blockquote>
 <p class="titel">History</p>
 <blockquote>
-  <p class="red">New in version 2.2.0 (Eclipse 3.3-3.5 only) [26.04.2009]</p>
-  <p><strong>This is a major version change. Please do not hesitate to <a href="http://code.google.com/p/anyedittools/issues/list">report any issues you found</a>.</strong></p>
+  <p class="red">New in version 2.4.8 (Eclipse 3.6-4.4 only) [24.06.2014]</p>
+  <ul>
+    <li>
+        <p>Improved feature (see <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=95">Issue 95</a>):
+       AnyEdit "Open File under Cursor" action understands now <b>any</b> paths with <b>any number</b> of environment variables inside.</p>
+       <p>For example, any of the paths below can be used to open "/home/andrei/anyedit/is/cool.txt" file in Eclipse:<br>
+        $HOME/${anyedit}/is/cool.txt or $(HOME)/$ANYEDIT/is/cool.txt or ${HOME}/$(anyedit)/is/cool.txt
+       </p>
+       <p>Requires Java 1.6 and Eclipse 3.6 as minimal target environment.</p>
+    </li>
+  </ul>
+  <p class="red">New in version 2.4.7 (Eclipse 3.6-4.4 only) [22.06.2014]</p>
+  <ul>
+    <li>
+        <p>Compatibility fix with Eclipse 3.6 (see <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=94">Issue 94</a>).</p>
+        <p>Anyedit requires now Eclipse 3.6 minimum.</p>
+        <p>Anyedit requires now Java 6 minimum.</p>
+    </li>
+  </ul>
+  <p class="red">New in version 2.4.6 (Eclipse 3.7-4.4 only) [08.02.2014]</p>
+  <ul>
+    <li>
+        <p>New feature (see <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=89">Issue 89</a>):
+       AnyEdit "Open File under Cursor" action understands now paths with leading environment variables.</p>
+       <p>For example, any of the paths below can be used to open "/home/andrei/anyedit/is/cool.txt" file in Eclipse:<br>
+        $HOME/anyedit/is/cool.txt or $(HOME)/anyedit/is/cool.txt or ${HOME}/anyedit/is/cool.txt
+       </p>
+    </li>
+  </ul>
+  <p>New in version 2.4.5 (Eclipse 3.5-4.3 only) [22.12.2013]</p>
+  <ul>
+    <li>
+        <p>New feature (see <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=83">Issue 83</a>):
+       Added "Sort Lines by Line Length" menus to the editors (initial contribution by Duncan Drysdale)</p>
+    </li>
+  </ul>
+  <p>New in version 2.4.4 (Eclipse 3.5-4.3 only) [15.06.2013]</p>
+  <ul>
+    <li>
+        <p>Bug fix: Ctrl+S/Ctrl+Shift+S is working again on Eclipse 4.3 (4.2 is too buggy, see <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=73">issue 73</a>).
+        </p>
+    </li>
+  </ul>
+  <p>New in version 2.4.3 (Eclipse 3.5-4.2 only) [02.11.2012]</p>
+  <ul>
+    <li>
+        <p>Feature: added an option to disable trailing whitespace removal for empty lines.
+        The patch was contributed by allati.g (see <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=7">issue 7</a>).
+        </p>
+    </li>
+    <li>
+        <p>Bug fix: do not offer option to change toolbar on Eclipse 4.x (doesn't work either).
+        </p>
+    </li>
+  </ul>
+  <p>New in version 2.4.2 (Eclipse 3.5-3.8 only) [12.05.2011]</p>
+  <ul>
+    <li>
+        <p>Fixed issues <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=69">69</a>
+            and <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=70">70</a>.
+        </p>
+    </li>
+  </ul>
+  <p>New in version 2.4.1 (Eclipse 3.5-3.8 only) [04.04.2011]</p>
+  <ul>
+    <li>
+      <p>Feature: &quot;File-&gt;Count (Selected) Resources&quot; uses better resource counting now: ignore team/derived resources per default.</p>
+       <table border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr>
+            <td class="border"><img src="http://andrei.gmxhome.de/images/anyedit_count_resources.png" alt="AnyEdit count resources" width="524" height="290" border="0" /></td>
+          </tr>
+        </table>
+    </li>
+    <li>
+      <p>New feature (see <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=66">Issue 66</a>):
+       allow merging of working sets on import</p>
+    </li>
+    <li><p> Fixed issues <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=55">55</a>,
+    <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=65">65</a></p>
+    </li>
+  </ul>
+  <p>New in version 2.4.0 (Eclipse 3.5-3.7 only) [29.01.2011]</p>
+  <ul>
+    <li>
+      <p>New feature (see <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=52">Issue 54</a>):
+       Added different "sort" menus to the editors (contributed by Clemens Fuchslocher)</p>
+		<table border="0" align="center" cellpadding="0" cellspacing="0">
+		  <tr>
+		    <td class="border"><img src="http://andrei.gmxhome.de/images/anyedit_sort.png" alt="AnyEdit editor sort actions" width="439" height="227" border="0" /></td>
+		  </tr>
+		</table>
+    </li>
+    <li><p>Fixed incompatibility with Eclipse 3.7 M5</p>
+    </li>
+  </ul>
+  <p>New in version 2.3.4 (Eclipse 3.5-3.6 only) [19.12.2010]</p>
+  <ul>
+    <li>
+      <p>Fix for <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=52">Issue 52</a>:
+       Always consider to use project specific settings for "Auto-convert"</p>
+    </li>
+  </ul>
+  <p>New in version 2.3.3 (Eclipse 3.5-3.6 only) [29.10.2010]</p>
+  <ul>
+    <li>
+      <p>Fix for <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=48">Issue 48</a>:
+       Self assigned key bindings for compare/replace doesn't work in Eclipse 3.6.</p>
+    </li>
+  </ul>
+  <p>New in version 2.3.2 (Eclipse 3.5-3.6 only) [21.10.2010]</p>
+  <ul>
+    <li>
+      <p>New feature: "Compare" editors opened by AnyEdit on Java files have now
+      some Java editor features as described <a href="http://eclipsesource.com/blogs/2009/06/16/eclipse35-my-top-10-list-number-10/">here</a>.</p>
+    </li>
+    <li>
+      <p>Fix for <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=45">Issue 45</a>:
+       Open type under cursor exception for C++ (if no JDT installed).</p>
+    </li>
+    <li>
+      <p>Fix for <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=47">Issue 47</a>:
+       Comparing a java file with clipboard opens a compare view in "text compare" or "java source compare" mode depending on where it is launched from.</p>
+    </li>
+    <li>
+      <p>Some smaller code cleanup.</p>
+    </li>
+  </ul>
+  <p>New in version 2.3.1 (Eclipse 3.5-3.6 only) [30.05.2010]</p>
+  <ul>
+    <li>
+      <p>New feature: added &quot;File-&gt;Count (Selected) Resources&quot; action.</p>
+    </li>
+    <li>
+      <p>New feature: allow to create new line (if missing) on &quot;File-&gt;Convert tabs/spaces&quot; action</p>
+    </li>
+    <li>
+      <p>Fixed console &quot;save&quot; dialog on Linux.</p>
+    </li>
+    </ul>
+  <p>New in version 2.3.0 (Eclipse 3.3-3.5 only) [04.10.2009]</p>
+  <ul>
+    <li>
+      <p><strong>Note: from this version plugin license has been changed from <a href="http://www.opensource.org/licenses/bsd-license.php">BSD</a> to the <a href="http://www.opensource.org/licenses/eclipse-1.0.php">EPL v. 1.0</a>.</strong></p>
+    </li>
+    <li>
+      <p><a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=10">Feature</a>:  Added a configurable line separator for &quot;Open file under cursor&quot; to jump to line.
+        (Based on the patch from Martin Stumpf).</p>
+    </li>
+    <li>
+      <p>Fixed two requests (<a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=8">issue 8</a> and <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/detail?id=9">issue 9</a>) to allow better packaging the plugin into the <a href="http://fedoraproject.org/">Fedora</a> <a href="http://www.linux.org/">Linux</a> distribution. </p>
+    </li>
+  </ul>
+  <p>New in version 2.2.0 (Eclipse 3.3-3.5 only) [26.04.2009]</p>
+  <p><strong>This is a major version change. Please do not hesitate to <a href="http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/list">report any issues you found</a>.</strong></p>
   <p>Main driver is the technical change of the way how AnyEdit contributes to the Eclipse context menu. AnyEdit behavior is changed from <strong>dedicated</strong> contribution to some well known editors/consoles to the <strong>global</strong> contribution to all text editors/consoles (with some filtering).</p>
   <ul>
     <li>
@@ -333,8 +516,6 @@ thisIsMyFieldName &lt;-&gt; this_is_my_field_name</td>
 </tr>
 </table>
 
-<p align="center"><i><small>Last changed at:
-      <!-- #BeginDate format:Br1m -->07.06.09  22:33<!-- #EndDate -->
-</small></i></p>
+<p align="center"><i><small>Last changed at: 08.02.2014  19:16</small></i></p>
 </body>
 </html>
