@@ -4,8 +4,7 @@
       label="AnyEditTools"
       version="2.4.8.qualifier"
       provider-name="Andrey Loskutov"
-      plugin="de.loskutov.anyedit.AnyEditTools"
-      image="loskutov32.png">
+      plugin="de.loskutov.anyedit.AnyEditTools">
 
    <description url="http://andrei.gmxhome.de/anyedit/index.html">
       Adds useful context menu actions to text files and editors - Open file, type under
@@ -15,7 +14,7 @@
    </description>
 
    <copyright url="http://andrei.gmxhome.de/anyedit/copyright.html">
-      Copyright (c)2002 - 2013 by Andrey Loskutov &lt;Loskutov@gmx.de&gt;.
+      Copyright (c)2002 - 2014 by Andrey Loskutov &lt;Loskutov@gmx.de&gt;.
 All rights reserved.
    </copyright>
 
@@ -26,7 +25,11 @@ All rights reserved.
    <url>
       <update label="Andrey Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
       <discovery label="Andrey Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
-      <discovery label="Zip Editor plugin" url="http://zipeditor.sourceforge.net/update"/>
+      <discovery label="Zip Editor" url="http://zipeditor.sourceforge.net/update/"/>
+      <discovery label="FindBugs" url="http://findbugs.cs.umd.edu/eclipse/"/>
+      <discovery label="Eclemma Java Code Coverage" url="http://update.eclemma.org/"/>
+      <discovery label="Subversive" url="http://download.eclipse.org/technology/subversive/1.1/update-site/"/>
+      <discovery label="EGit" url="http://download.eclipse.org/egit/updates/"/>
    </url>
 
    <requires>
