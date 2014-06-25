@@ -78,7 +78,10 @@ public class TextUtil {
     private static final Pattern WHITE_SPACE_PATTERN = Pattern.compile("(\\n|\\r| |\\\t)");
     private static final Pattern UNICODE_PATTERN = Pattern.compile("\\\\u[0-9a-fA-F]{2,4}");
     /** $HOME (group "one") or ( $(HOME) or ${HOME} ) (group "two")  */
-    private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$((?<one>\\w+)|[\\{\\(](?<two>\\w+)[\\)\\}])");
+
+    // XXX Java 6 doesn't support named groups!!!: (?<one>) causes crash
+    //    private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$((?<one>\\w+)|[\\{\\(](?<two>\\w+)[\\)\\}])");
+    private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$((\\w+)|[\\{\\(](\\w+)[\\)\\}])");
 
     private TextUtil() {
         useRequiredInPathChars = true;
@@ -375,9 +378,12 @@ public class TextUtil {
         int newCaret = position.caret;
         StringBuffer sb = new StringBuffer();
         do {
-            String var = matcher.group("one");
+            // XXX Java 6 doesn't support named groups!!!
+            //            String var = matcher.group("one");
+            String var = matcher.group(2);
             if(var == null){
-                var = matcher.group("two");
+                //                var = matcher.group("two");
+                var = matcher.group(3);
                 if(var == null){
                     // paranoia
                     break;
