@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2014 Andrey Loskutov.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * Contributor:  Holger Meyer - initial API and implementation
+ *******************************************************************************/
 package de.loskutov.anyedit.console;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -15,10 +23,13 @@ public class SplitStackTraceHandler extends AbstractHandler {
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
+        if(!isEnabled()){
+            return null;
+        }
         IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
-        if (window != null && isEnabled()) {
+        if (window != null) {
             IWorkbenchPart part = HandlerUtil.getActivePart(event);
-            if (part != null && part instanceof IConsoleView) {
+            if (part instanceof IConsoleView) {
                 IConsoleView view = (IConsoleView) part;
                 IConsole console = view.getConsole();
                 if (console instanceof TextConsole) {
@@ -35,13 +46,14 @@ public class SplitStackTraceHandler extends AbstractHandler {
 
     private String splitUp(String string) {
         if (string != null) {
-            String temp = string.replaceAll("\\. Messages:", ".\nMessages:");
-            temp = temp.replaceAll("\\. First error:", ".\nFirst error:");
-            temp = temp.replaceAll("\\. Stack:", ".\nStack:");
-            temp = temp.replaceAll("\\]. at", "].\nat");
-            temp = temp.replaceAll("\\]\\) . ", "]) .\n");
-            temp = temp.replaceAll("] at", "]\nat");
-            return temp.replaceAll("\\) at", ")\nat");
+            String temp = string;
+            temp = temp.replaceAll( "\\. Messages:",    ".\nMessages:"    );
+            temp = temp.replaceAll( "\\. First error:", ".\nFirst error:" );
+            temp = temp.replaceAll( "\\. Stack:",       ".\nStack:"       );
+            temp = temp.replaceAll( "\\]. at",          "].\nat"          );
+            temp = temp.replaceAll( "\\]\\) . ",        "]) .\n"          );
+            temp = temp.replaceAll( "] at",             "]\nat"           );
+            return temp.replaceAll( "\\) at",           ")\nat"           );
         }
         return null;
     }
