@@ -1201,4 +1201,56 @@
             type="org.eclipse.ui.IWorkbenchPart">
       </propertyTester>
    </extension>
+
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="AnyEdit.splitstacktrace.command"
+               icon="platform:/plugin/org.eclipse.ui.cheatsheets/icons/elcl16/restart_task.gif"
+               id="jstackconsole.splitstacktrace"
+               label="Split Stack Trace">
+            <visibleWhen
+                  checkEnabled="false">
+                  <and>
+                     <with
+                           variable="activePartId">
+                        <equals
+                              value="org.eclipse.ui.console.ConsoleView">
+                        </equals>
+                     </with>
+                 <with
+                     variable="activePart">
+                   <test
+                         forcePluginActivation="true"
+                         property="splitstacktracetester.isJStackConsole"
+                         value="true">
+                   </test>
+               </with>
+               </and>
+
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="de.loskutov.anyedit.console.SplitStackTraceHandler"
+            id="AnyEdit.splitstacktrace.command"
+            name="Split Stack Trace">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="de.loskutov.anyedit.console.SplitStackPropertyTester"
+            id="AnyEditTools.splitstacktracetester"
+            namespace="splitstacktracetester"
+            properties="isJStackConsole"
+            type="org.eclipse.ui.IViewPart">
+      </propertyTester>
+   </extension>
+
 </plugin>
