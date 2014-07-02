@@ -47,13 +47,10 @@ public class SplitStackTraceHandler extends AbstractHandler {
     private String splitUp(String string) {
         if (string != null) {
             String temp = string;
-            temp = temp.replaceAll( "\\. Messages:",    ".\nMessages:"    );
-            temp = temp.replaceAll( "\\. First error:", ".\nFirst error:" );
-            temp = temp.replaceAll( "\\. Stack:",       ".\nStack:"       );
-            temp = temp.replaceAll( "\\]. at",          "].\nat"          );
-            temp = temp.replaceAll( "\\]\\) . ",        "]) .\n"          );
-            temp = temp.replaceAll( "] at",             "]\nat"           );
-            return temp.replaceAll( "\\) at",           ")\nat"           );
+            temp = temp.replaceAll( "\\.[\\t ]+\\n?",     ".\n"            );
+            temp = temp.replaceAll( "\\s+at[\\t ]+",      "\n at "         );
+            temp = temp.replaceAll( "\\s*Caused by:\\s+", "\nCaused by:\n" );
+            return temp;
         }
         return null;
     }
