@@ -1207,10 +1207,10 @@
       <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
-               commandId="AnyEdit.splitstacktrace.command"
+               commandId="AnyEdit.formatStackTrace.command"
                icon="platform:/plugin/org.eclipse.ui.cheatsheets/icons/elcl16/restart_task.gif"
-               id="jstackconsole.splitstacktrace"
-               label="Split Stack Trace">
+               id="AnyEdit.formatStackTrace"
+               label="Format Stack Trace">
             <visibleWhen
                   checkEnabled="false">
                   <and>
@@ -1224,7 +1224,7 @@
                      variable="activePart">
                    <test
                          forcePluginActivation="true"
-                         property="splitstacktracetester.isJStackConsole"
+                         property="AnyEditTools.formatStackTrace.isJStackConsole"
                          value="true">
                    </test>
                </with>
@@ -1238,8 +1238,8 @@
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="de.loskutov.anyedit.console.SplitStackTraceHandler"
-            id="AnyEdit.splitstacktrace.command"
-            name="Split Stack Trace">
+            id="AnyEdit.formatStackTrace.command"
+            name="Format Stack Trace">
       </command>
    </extension>
    <extension
@@ -1247,7 +1247,7 @@
       <propertyTester
             class="de.loskutov.anyedit.console.SplitStackPropertyTester"
             id="AnyEditTools.splitstacktracetester"
-            namespace="splitstacktracetester"
+            namespace="AnyEditTools.formatStackTrace"
             properties="isJStackConsole"
             type="org.eclipse.ui.IViewPart">
       </propertyTester>
