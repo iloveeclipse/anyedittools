@@ -49,7 +49,7 @@ public class SplitStackTraceHandler extends AbstractHandler {
             String temp = string;
             temp = temp.replaceAll( "\\.[\\t ]+\\n?",     ".\n"            );
             temp = temp.replaceAll( "\\s+at[\\t ]+",      "\n at "         );
-            temp = temp.replaceAll( "\\s*Caused by:\\s+", "\nCaused by:\n" );
+            temp = temp.replaceAll( "\\s*Caused by:\\s*", "\nCaused by:\n" );
             return temp;
         }
         return null;
