@@ -8,8 +8,6 @@
  *******************************************************************************/
 package de.loskutov.anyedit.jdt;
 
-import javax.annotation.Nonnull;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -92,7 +90,7 @@ public final class JdtUtils {
      * @return null, if no types was found, empty array if more then one type was found,
      * or only one element, if single match exists
      */
-    @Nonnull
+    /* @Nonnull */
     private static IType[] getTypeForName(String simpleTypeName,
             final IJavaSearchScope searchScope, IProgressMonitor monitor)
                     throws JavaModelException {

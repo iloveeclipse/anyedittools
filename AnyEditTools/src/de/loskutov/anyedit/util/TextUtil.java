@@ -17,15 +17,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.annotation.Nonnull;
-
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.Messages;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 
 /**
@@ -305,7 +302,7 @@ public class TextUtil {
         }
     }
 
-    public String findPath(@Nonnull LineAndCaret position) {
+    public String findPath(/* @Nonnull */ LineAndCaret position) {
         if (badData(position)) {
             return null; // shit in, shit out
         }
@@ -609,7 +606,7 @@ public class TextUtil {
         useRequiredInPathChars = b;
     }
 
-    @SuppressFBWarnings("NP_NULL_PARAM_DEREF_ALL_TARGETS_DANGEROUS")
+    /* @SuppressFBWarnings("NP_NULL_PARAM_DEREF_ALL_TARGETS_DANGEROUS") */
     public String base64decode(String base64, String charset) {
         Base64Preferences prefs = new Base64Preferences();
         prefs.put(null, base64);

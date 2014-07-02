@@ -63,7 +63,6 @@ import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.Messages;
 import de.loskutov.anyedit.actions.AbstractTextAction;
 import de.loskutov.anyedit.util.EclipseUtils;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class ProjectPreferencePage extends PropertyPage {
 
@@ -315,7 +314,7 @@ public class ProjectPreferencePage extends PropertyPage {
 
     }
 
-    @SuppressFBWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
+    /* @SuppressFBWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR") */
     private void createTabAutoSave() {
         TabItem tabAuto = new TabItem(tabFolder, SWT.NONE);
         tabAuto.setText(Messages.pref_tab_auto);
@@ -430,7 +429,7 @@ public class ProjectPreferencePage extends PropertyPage {
      * Enable/disable all UI elements except for project props enabled check
      * @param selection
      */
-    @SuppressFBWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
+    /* @SuppressFBWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR") */
     protected void setProjectEnabled(boolean selection) {
         tabFolder.setEnabled(selection);
         saveComposite.setEnabled(selection);
@@ -654,7 +653,7 @@ public class ProjectPreferencePage extends PropertyPage {
         fStepFilterContentProvider.removeFilters(new Object[] { fNewStepFilter });
     }
 
-    @SuppressFBWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
+    /* @SuppressFBWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR") */
     protected void validateChangeAndCleanup() {
         String trimmedValue = fEditorText.getText().trim();
         // if the new value is blank, remove the filter
