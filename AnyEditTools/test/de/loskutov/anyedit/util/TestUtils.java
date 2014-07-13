@@ -112,7 +112,10 @@ public class TestUtils extends TestCase {
             "         $T/tmp/B.txt $X/bla $H/blup $H/$T/blup ",
             "       ${T}/tmp/B.txt $(X)/bla ${H}/blup $(H)/${T}/$X/blup ",
             "       $(T)/tmp/B.txt $(X)/bla ${H}/blup $(H)/${T}/$X/blup ",
-            "$(H)/$T/$XX/tmp/B.txt ${T}/B.txt $(X)/bla ${H}/blup $(H)/${T}/$X/blup "
+            "$(H)/$T/$XX/tmp/B.txt ${T}/B.txt $(X)/bla ${H}/blup $(H)/${T}/$X/blup ",
+            "    :10:x ~/tmp/B.txt:10:test \n extern VOID fw_ch",
+            "     x()  ~/tmp/B.txt: line 10",
+            "          ~/tmp/B.txt   "
             //               |  <  caret position: "B"
             );
     static final int CARET_POS = lineExamples.get(0).indexOf('B');
@@ -155,6 +158,10 @@ public class TestUtils extends TestCase {
             String path = tu.findPath(new LineAndCaret(line, i));
             assertNotNull("Failed with: " + line + ", index: " + i, path);
             if(!EXPECTED_PATH.equals(path)){
+                if(line.contains("~")){
+                    String home = System.getProperty("user.home") + "/";
+                    assertEquals(home + EXPECTED_PATH, path);
+                }
                 path = path.replace(EXPECTED_PATH, "");
                 assertEquals('/', path.charAt(path.length() - 1));
                 assertEquals(-1, path.indexOf('$'));

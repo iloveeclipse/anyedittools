@@ -77,8 +77,8 @@ public class TextUtil {
     /** $HOME (group "one") or ( $(HOME) or ${HOME} ) (group "two")  */
 
     // XXX Java 6 doesn't support named groups!!!: (?<one>) causes crash
-    //    private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$((?<one>\\w+)|[\\{\\(](?<two>\\w+)[\\)\\}])");
-    private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$((\\w+)|[\\{\\(](\\w+)[\\)\\}])");
+    //    private static final Pattern VARIABLE_PATTERN = Pattern.compile("(~/)|\\$((?<one>\\w+)|[\\{\\(](?<two>\\w+)[\\)\\}])");
+    private static final Pattern VARIABLE_PATTERN = Pattern.compile("(~/)|\\$((\\w+)|[\\{\\(](\\w+)[\\)\\}])");
 
     private TextUtil() {
         useRequiredInPathChars = true;
@@ -366,7 +366,7 @@ public class TextUtil {
                 || position.caret < 0;
     }
 
-    private LineAndCaret resolveVariables(LineAndCaret position) {
+    private static LineAndCaret resolveVariables(LineAndCaret position) {
         String line = position.line;
         Matcher matcher = VARIABLE_PATTERN.matcher(line);
         if(!matcher.find()){
@@ -375,21 +375,24 @@ public class TextUtil {
         int newCaret = position.caret;
         StringBuffer sb = new StringBuffer();
         do {
-            // XXX Java 6 doesn't support named groups!!!
-            //            String var = matcher.group("one");
-            String var = matcher.group(2);
+            String var = matcher.group(1);
             if(var == null){
-                //                var = matcher.group("two");
+                // XXX Java 6 doesn't support named groups!!!
+                //            String var = matcher.group("one");
                 var = matcher.group(3);
                 if(var == null){
-                    // paranoia
-                    break;
+                    //                var = matcher.group("two");
+                    var = matcher.group(4);
+                    if(var == null){
+                        // paranoia
+                        break;
+                    }
                 }
             }
             int start = matcher.start();
             int end = matcher.end();
             // for unresolved variables just use "null". Shit in, shit out.
-            String value = System.getenv(var) + "";
+            String value = getEnv(var);
             matcher.appendReplacement(sb, value);
             if(position.caret >= start && position.caret < end){
                 // caret inside current variable: place it at the end of the current input
@@ -402,6 +405,13 @@ public class TextUtil {
         matcher.appendTail(sb);
 
         return new LineAndCaret(sb.toString(), newCaret);
+    }
+
+    private static String getEnv(String var) {
+        if("~/".equals(var)){
+            return System.getProperty("user.home") + "/";
+        }
+        return System.getenv(var) + "";
     }
 
     public String trimJavaType(String type) {
