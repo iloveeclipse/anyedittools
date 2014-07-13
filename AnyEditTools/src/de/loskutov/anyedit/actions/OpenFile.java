@@ -8,6 +8,7 @@
 
 package de.loskutov.anyedit.actions;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,6 +31,8 @@ import de.loskutov.anyedit.IOpenEditorParticipant;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
 
 public class OpenFile extends AbstractOpenAction {
+
+    static WeakReference<List<IOpenEditorParticipant>> weakRef = new WeakReference<List<IOpenEditorParticipant>>(null);
 
     public OpenFile() {
         super();
@@ -125,8 +128,15 @@ public class OpenFile extends AbstractOpenAction {
         }
     }
 
-    private List<IOpenEditorParticipant> getParticipants() {
-        List<IOpenEditorParticipant> participants = new ArrayList<IOpenEditorParticipant>();
+    private static List<IOpenEditorParticipant> getParticipants() {
+        List<IOpenEditorParticipant> participants = weakRef.get();
+        if(participants == null){
+            participants = new ArrayList<IOpenEditorParticipant>();
+            weakRef = new WeakReference<List<IOpenEditorParticipant>>(participants);
+        } else {
+            return participants;
+        }
+
         IExtensionRegistry registry = Platform.getExtensionRegistry();
         IExtensionPoint point = registry.getExtensionPoint(AnyEditToolsPlugin.getId()
                 + ".openEditorParticipants");
@@ -166,7 +176,7 @@ public class OpenFile extends AbstractOpenAction {
         return participants;
     }
 
-    private Integer getPrio(IOpenEditorParticipant participant) {
+    private static Integer getPrio(IOpenEditorParticipant participant) {
         int prio = participant.getPriority();
         prio = prio > IOpenEditorParticipant.PRIO_HIGH ? IOpenEditorParticipant.PRIO_HIGH
                 : prio < IOpenEditorParticipant.PRIO_LOW ? IOpenEditorParticipant.PRIO_LOW
