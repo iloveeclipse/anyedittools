@@ -48,6 +48,8 @@ AbstractPreferenceInitializer {
         store.setDefault(IAnyEditConstants.USE_JAVA_TAB_WIDTH_FOR_JAVA, true);
         store.setDefault(IAnyEditConstants.SAVE_DIRTY_BUFFER, true);
         store.setDefault(IAnyEditConstants.REMOVE_TRAILING_SPACES, true);
+        store.setDefault(IAnyEditConstants.FIX_LINE_DELIMITERS, false);
+        store.setDefault(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS, false);
         store.setDefault(IAnyEditConstants.ADD_NEW_LINE, true);
         store.setDefault(IAnyEditConstants.PRESERVE_ENTITIES, true);
         store.setDefault(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED, false);

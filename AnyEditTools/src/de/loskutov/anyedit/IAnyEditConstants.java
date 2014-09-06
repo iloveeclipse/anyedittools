@@ -86,6 +86,15 @@ public interface IAnyEditConstants {
     String REMOVE_TRAILING_SPACES = "removeTrailingSpaces";
 
     /**
+     * A named preference that controls if while "tabs to spaces" we should
+     * fix line delimiters too
+     * <p>
+     * Value is of type <code>Boolean</code>.
+     * </p>
+     */
+    String FIX_LINE_DELIMITERS = "fixLineDelimiters";
+
+    /**
      * A named preference that controls if if while "tabs to spaces" we should
      * add a new line of the end of file.
      * <p>
@@ -154,6 +163,15 @@ public interface IAnyEditConstants {
      * </p>
      */
     String SAVE_AND_ADD_LINE = "saveAndAddLine";
+
+    /**
+     * A named preference that controls if before "save" action in editor the
+     * "fixLineDelimiters" action should be executed.
+     * <p>
+     * Value is of type <code>Boolean</code>.
+     * </p>
+     */
+    String SAVE_AND_FIX_LINE_DELIMITERS = "saveAndFixLineDelimiters";
 
     /**
      * A named preference that controls if before "save" action in editor the

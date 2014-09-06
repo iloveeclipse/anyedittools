@@ -108,6 +108,8 @@ IWorkbenchPreferencePage, SelectionListener {
 
     protected Button removeTrailingSpacesCheck;
 
+    protected Button fixLineDelimitersCheck;
+
     protected Button replaceAllTabsCheck;
 
     protected Button replaceAllSpacesCheck;
@@ -131,6 +133,8 @@ IWorkbenchPreferencePage, SelectionListener {
     protected Button ignoreBlankLinesOnTrimCheck;
 
     protected Button saveAndAddLineCheck;
+
+    protected Button saveAndFixLineDelimitersCheck;
 
     protected Button askBeforeConvertAllCheck;
 
@@ -382,6 +386,11 @@ IWorkbenchPreferencePage, SelectionListener {
                 store.getBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES),
                 spacesComposite);
 
+        fixLineDelimitersCheck = createLabeledCheck(Messages.pref_fixLineDelimiters,
+                Messages.pref_fixLineDelimitersTip,
+                store.getBoolean(IAnyEditConstants.FIX_LINE_DELIMITERS),
+                spacesComposite);
+
         addNewLineCheck = createLabeledCheck(Messages.pref_addNewline,
                 Messages.pref_addNewlineTip,
                 store.getBoolean(IAnyEditConstants.ADD_NEW_LINE),
@@ -543,6 +552,10 @@ IWorkbenchPreferencePage, SelectionListener {
         saveAndAddLineCheck = createLabeledCheck(Messages.pref_saveAndAddLine,
                 Messages.pref_saveAndAddLineTip,
                 store.getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE), firstRow);
+        
+        saveAndFixLineDelimitersCheck = createLabeledCheck(Messages.pref_saveAndFixLineDelimiters,
+                Messages.pref_saveAndFixLineDelimitersTip,
+                store.getBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS), firstRow);
 
         saveAndConvertCheck = createLabeledCheck(Messages.pref_saveAndConvert,
                 Messages.pref_saveAndConvertTip,
@@ -593,6 +606,7 @@ IWorkbenchPreferencePage, SelectionListener {
         saveAndTrimCheck.setEnabled(isSaveHookEnabled);
         ignoreBlankLinesOnTrimCheck.setEnabled(isSaveHookEnabled);
         saveAndAddLineCheck.setEnabled(isSaveHookEnabled);
+        saveAndFixLineDelimitersCheck.setEnabled(isSaveHookEnabled);
         saveAndConvertCheck.setEnabled(isSaveHookEnabled);
         saveComposite.setEnabled(isSaveHookEnabled);
 
@@ -696,6 +710,8 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getSelection());
         store.setValue(IAnyEditConstants.REMOVE_TRAILING_SPACES,
                 removeTrailingSpacesCheck.getSelection());
+        store.setValue(IAnyEditConstants.FIX_LINE_DELIMITERS,
+                fixLineDelimitersCheck.getSelection());
 
         store.setValue(IAnyEditConstants.ADD_NEW_LINE,
                 addNewLineCheck.getSelection());
@@ -719,6 +735,8 @@ IWorkbenchPreferencePage, SelectionListener {
         store.setValue(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING, ignoreBlankLinesOnTrimCheck
                 .getSelection());
         store.setValue(IAnyEditConstants.SAVE_AND_ADD_LINE, saveAndAddLineCheck
+                .getSelection());
+        store.setValue(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS, saveAndFixLineDelimitersCheck
                 .getSelection());
         store.setValue(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED, saveAndConvertCheck
                 .getSelection());
@@ -833,6 +851,8 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getDefaultBoolean(IAnyEditConstants.SAVE_DIRTY_BUFFER));
         removeTrailingSpacesCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES));
+        fixLineDelimitersCheck.setSelection(store
+                .getDefaultBoolean(IAnyEditConstants.FIX_LINE_DELIMITERS));
         addNewLineCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.ADD_NEW_LINE));
         replaceAllTabsCheck.setSelection(store
@@ -855,6 +875,8 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getDefaultBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING));
         saveAndAddLineCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE));
+        saveAndFixLineDelimitersCheck.setSelection(store
+                .getDefaultBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS));
         saveAndConvertCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED));
         askBeforeConvertAllCheck.setSelection(store

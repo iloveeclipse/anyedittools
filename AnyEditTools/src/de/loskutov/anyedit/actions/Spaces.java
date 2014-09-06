@@ -14,12 +14,18 @@ package de.loskutov.anyedit.actions;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.ui.IEditorPart;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
@@ -66,6 +72,7 @@ public class Spaces extends AbstractTextAction {
         boolean convertEnabled;
         boolean tabsToSpaces;
         boolean addLineEnabled;
+        boolean fixLineDelimiters;
         CombinedPreferences prefs = getCombinedPreferences();
         boolean replaceAllTabs = isReplaceAllTabsEnabled(prefs);
         boolean replaceAllSpaces = isReplaceAllSpacesEnabled(prefs);
@@ -78,14 +85,17 @@ public class Spaces extends AbstractTextAction {
             tabsToSpaces = isDefaultTabToSpaces();
             convertEnabled = isSaveAndConvertEnabled();
             addLineEnabled = isSaveAndAddLineEnabled(prefs);
+            fixLineDelimiters = isSaveAndFixLineDelimitersEnabled(prefs);
         } else {
             removeTrailing = isRemoveTrailingSpaceEnabled(prefs);
             tabsToSpaces = actionID.startsWith(ACTION_ID_CONVERT_TABS);
             convertEnabled = true;
             addLineEnabled = isAddLineEnabled(prefs);
+            fixLineDelimiters = isFixLineDelimitersEnabled(prefs);
         }
 
         int tabWidth = getTabWidth(getFile(), prefs);
+        String lineDelimiter = getLineDelimiter();
 
         StringBuffer sb = new StringBuffer();
         if (!tabsToSpaces && tabWidth == 0) {
@@ -124,16 +134,13 @@ public class Spaces extends AbstractTextAction {
 
             // on the last NON empty line add new line character(s)
             if (addLineEnabled && i == maxNbr - 1 && sb.length() != 0) {
-                String terminator;
-                if(i - 1 >= 0) {
-                    // use same terminator as line before
-                    terminator = doc.getLineDelimiter(i - 1);
-                } else {
-                    // use system one, which is not so good...
-                    terminator = System.getProperty("line.separator", null);
-                }
-                if(terminator != null) {
-                    sb.append(terminator);
+                sb.append(lineDelimiter);
+                changed = true;
+            } else if(fixLineDelimiters){
+                final String delimiter = doc.getLineDelimiter(i);
+                if (delimiter != null && delimiter.length() > 0 && !delimiter.equals(lineDelimiter)) {
+                    rangeToReplace += delimiter.length();
+                    sb.append(lineDelimiter);
                     changed = true;
                 }
             }
@@ -186,12 +193,49 @@ public class Spaces extends AbstractTextAction {
         return combinedPreferences;
     }
 
+    protected String getLineDelimiter() {
+        IFile file = getFile();
+        IProject project = null;
+        if (file != null) {
+            project = file.getProject();
+        }
+        String value = getLineDelimiter(getPlatformPreferences(project));
+        if (value == null) {
+            value = getLineDelimiter(Platform.getPreferencesService().getRootNode().node(DefaultScope.SCOPE));
+        }
+        return value != null ? value : System.getProperty(Platform.PREF_LINE_SEPARATOR, "\n");
+    }
+
+    private static Preferences getPlatformPreferences(IProject project) {
+        IEclipsePreferences rootNode = Platform.getPreferencesService().getRootNode();
+        if (project != null) {
+            return rootNode.node(ProjectScope.SCOPE).node(project.getName());
+        }
+        return rootNode.node(InstanceScope.SCOPE);
+    }
+
+    private static String getLineDelimiter(Preferences node) {
+        try {
+            // be careful looking up for our node so not to create any nodes as side effect
+            if (node.nodeExists(Platform.PI_RUNTIME)) {
+                return node.node(Platform.PI_RUNTIME).get(Platform.PREF_LINE_SEPARATOR, null);
+            }
+        } catch (BackingStoreException e) {
+            // ignore
+        }
+        return null;
+    }
+
     public boolean isSaveAndTrimEnabled() {
         return getCombinedPreferences().getBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED);
     }
 
     private boolean isSaveAndAddLineEnabled(CombinedPreferences prefs) {
         return prefs.getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE);
+    }
+
+    private boolean isSaveAndFixLineDelimitersEnabled(CombinedPreferences prefs) {
+        return prefs.getBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS);
     }
 
     public boolean isSaveAndConvertEnabled() {
@@ -204,6 +248,10 @@ public class Spaces extends AbstractTextAction {
 
     protected boolean isRemoveTrailingSpaceEnabled(CombinedPreferences prefs) {
         return prefs.getBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES);
+    }
+
+    protected boolean isFixLineDelimitersEnabled(CombinedPreferences prefs) {
+        return prefs.getBoolean(IAnyEditConstants.FIX_LINE_DELIMITERS);
     }
 
     protected boolean isReplaceAllTabsEnabled(CombinedPreferences prefs) {

@@ -68,6 +68,9 @@ public class Messages  extends NLS {
     public static String pref_removeTrailingSpaces;
     public static String pref_removeTrailingSpacesTip;
 
+    public static String pref_fixLineDelimiters;
+    public static String pref_fixLineDelimitersTip;
+
     public static String pref_addNewline;
     public static String pref_addNewlineTip;
 
@@ -97,6 +100,9 @@ public class Messages  extends NLS {
 
     public static String pref_saveAndAddLine;
     public static String pref_saveAndAddLineTip;
+
+    public static String pref_saveAndFixLineDelimiters;
+    public static String pref_saveAndFixLineDelimitersTip;
 
     public static String pref_saveAndConvert;
     public static String pref_saveAndConvertTip;

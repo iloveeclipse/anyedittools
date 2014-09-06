@@ -78,6 +78,8 @@ public class ProjectPreferencePage extends PropertyPage {
 
     private Button saveAndAddLineCheck;
 
+    private Button saveAndFixLineDelimitersCheck;
+
     private Button saveAndConvertCheck;
 
     private Button useModulo4TabsCheck;
@@ -117,6 +119,8 @@ public class ProjectPreferencePage extends PropertyPage {
     private Button useJavaTabsCheck;
 
     private Button removeTrailingSpacesCheck;
+
+    private Button fixLineDelimitersCheck;
 
     private Button replaceAllTabsCheck;
 
@@ -225,6 +229,9 @@ public class ProjectPreferencePage extends PropertyPage {
 
         prefs.putBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES,
                 removeTrailingSpacesCheck.getSelection());
+        prefs.putBoolean(IAnyEditConstants.FIX_LINE_DELIMITERS,
+                fixLineDelimitersCheck.getSelection());
+
         prefs.putBoolean(IAnyEditConstants.ADD_NEW_LINE,
                 addNewLineCheck.getSelection());
         prefs.putBoolean(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES,
@@ -236,6 +243,8 @@ public class ProjectPreferencePage extends PropertyPage {
         prefs.putBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING, ignoreBlankLinesCheck
                 .getSelection());
         prefs.putBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE, saveAndAddLineCheck
+                .getSelection());
+        prefs.putBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS, saveAndFixLineDelimitersCheck
                 .getSelection());
         prefs.putBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED, saveAndConvertCheck
                 .getSelection());
@@ -278,6 +287,8 @@ public class ProjectPreferencePage extends PropertyPage {
 
         removeTrailingSpacesCheck.setSelection(defaultStore
                 .getDefaultBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES));
+        fixLineDelimitersCheck.setSelection(defaultStore
+                .getDefaultBoolean(IAnyEditConstants.FIX_LINE_DELIMITERS));
         addNewLineCheck.setSelection(defaultStore
                 .getDefaultBoolean(IAnyEditConstants.ADD_NEW_LINE));
         replaceAllTabsCheck.setSelection(defaultStore
@@ -289,6 +300,8 @@ public class ProjectPreferencePage extends PropertyPage {
                 .getDefaultBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED));
         saveAndAddLineCheck.setSelection(defaultStore
                 .getDefaultBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE));
+        saveAndFixLineDelimitersCheck.setSelection(defaultStore
+                .getDefaultBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS));
 
         ignoreBlankLinesCheck.setSelection(defaultStore
                 .getDefaultBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING));
@@ -367,6 +380,12 @@ public class ProjectPreferencePage extends PropertyPage {
                 .getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE, defaultStore
                         .getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE)),
                         firstRow);
+        
+        saveAndFixLineDelimitersCheck = AnyEditPreferencePage.createLabeledCheck(
+                Messages.pref_saveAndFixLineDelimiters, Messages.pref_saveAndFixLineDelimitersTip, prefs
+                .getBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS, defaultStore
+                        .getBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS)),
+                        firstRow);
 
         saveAndConvertCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_saveAndConvert, Messages.pref_saveAndConvertTip,
@@ -419,6 +438,7 @@ public class ProjectPreferencePage extends PropertyPage {
         saveAndTrimCheck.setEnabled(isSaveHookEnabled);
         ignoreBlankLinesCheck.setEnabled(isSaveHookEnabled);
         saveAndAddLineCheck.setEnabled(isSaveHookEnabled);
+        saveAndFixLineDelimitersCheck.setEnabled(isSaveHookEnabled);
         saveAndConvertCheck.setEnabled(isSaveHookEnabled);
         saveComposite.setEnabled(isSaveHookEnabled);
 
@@ -436,6 +456,7 @@ public class ProjectPreferencePage extends PropertyPage {
         saveAndTrimCheck.setEnabled(selection);
         ignoreBlankLinesCheck.setEnabled(selection);
         saveAndAddLineCheck.setEnabled(selection);
+        saveAndFixLineDelimitersCheck.setEnabled(selection);
         saveAndConvertCheck.setEnabled(selection);
         saveComposite.setEnabled(selection);
         convertChoiceComposite.setEnabled(selection);
@@ -447,6 +468,7 @@ public class ProjectPreferencePage extends PropertyPage {
         useJavaTabsCheck.setEnabled(selection);
         useModulo4TabsCheck.setEnabled(selection);
         removeTrailingSpacesCheck.setEnabled(selection);
+        fixLineDelimitersCheck.setEnabled(selection);
         addNewLineCheck.setEnabled(selection);
         replaceAllTabsCheck.setEnabled(selection);
         replaceAllSpacesCheck.setEnabled(selection);
@@ -982,6 +1004,13 @@ public class ProjectPreferencePage extends PropertyPage {
                 Messages.pref_removeTrailingSpacesTip, prefs.getBoolean(
                         IAnyEditConstants.REMOVE_TRAILING_SPACES, defaultStore
                         .getBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES)),
+                        spacesComposite);
+
+        fixLineDelimitersCheck = AnyEditPreferencePage.createLabeledCheck(
+                Messages.pref_fixLineDelimiters,
+                Messages.pref_fixLineDelimitersTip, prefs.getBoolean(
+                        IAnyEditConstants.FIX_LINE_DELIMITERS, defaultStore
+                        .getBoolean(IAnyEditConstants.FIX_LINE_DELIMITERS)),
                         spacesComposite);
 
         addNewLineCheck = AnyEditPreferencePage.createLabeledCheck(
