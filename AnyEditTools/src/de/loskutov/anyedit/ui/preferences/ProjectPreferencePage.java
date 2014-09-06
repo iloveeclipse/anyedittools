@@ -366,31 +366,31 @@ public class ProjectPreferencePage extends PropertyPage {
         saveAndTrimCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_saveAndTrim, Messages.pref_saveAndTrimTip, prefs
                 .getBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED, defaultStore
-                        .getBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED)),
+                        .getDefaultBoolean(IAnyEditConstants.SAVE_AND_TRIM_ENABLED)),
                         firstRow);
 
         ignoreBlankLinesCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_ignoreOnTrim, Messages.pref_ignoreOnTrimTip, prefs
                 .getBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING, defaultStore
-                        .getBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING)),
+                        .getDefaultBoolean(IAnyEditConstants.IGNORE_BLANK_LINES_WHEN_TRIMMING)),
                         firstRow);
 
         saveAndAddLineCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_saveAndAddLine, Messages.pref_saveAndAddLineTip, prefs
                 .getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE, defaultStore
-                        .getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE)),
+                        .getDefaultBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE)),
                         firstRow);
-        
+
         saveAndFixLineDelimitersCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_saveAndFixLineDelimiters, Messages.pref_saveAndFixLineDelimitersTip, prefs
                 .getBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS, defaultStore
-                        .getBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS)),
+                        .getDefaultBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS)),
                         firstRow);
 
         saveAndConvertCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_saveAndConvert, Messages.pref_saveAndConvertTip,
                 prefs.getBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED, defaultStore
-                        .getBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED)),
+                        .getDefaultBoolean(IAnyEditConstants.SAVE_AND_CONVERT_ENABLED)),
                         saveComposite);
 
         convertChoiceComposite = new Group(saveComposite, SWT.SHADOW_ETCHED_IN);// SWT.SHADOW_NONE
@@ -405,7 +405,7 @@ public class ProjectPreferencePage extends PropertyPage {
 
         boolean convertTabsAction = AbstractTextAction.ACTION_ID_CONVERT_TABS
                 .equals(prefs.get(IAnyEditConstants.CONVERT_ACTION_ON_SAVE, defaultStore
-                        .getString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE)));
+                        .getDefaultString(IAnyEditConstants.CONVERT_ACTION_ON_SAVE)));
 
         convertTabsOnSaveRadio = AnyEditPreferencePage.createLabeledRadio(
                 Messages.pref_convertTabsOnSave, Messages.pref_convertTabsOnSaveTip,
@@ -973,7 +973,7 @@ public class ProjectPreferencePage extends PropertyPage {
 
         tabWidthText = AnyEditPreferencePage.createLabeledText(Messages.pref_tabWidth,
                 Messages.pref_tabWidthTip, prefs.get(IAnyEditConstants.EDITOR_TAB_WIDTH,
-                        defaultStore.getString(IAnyEditConstants.EDITOR_TAB_WIDTH)),
+                        defaultStore.getDefaultString(IAnyEditConstants.EDITOR_TAB_WIDTH)),
                         spacesComposite, false, SWT.NONE);
         tabWidthText.setTextLimit(2);
 
@@ -985,7 +985,7 @@ public class ProjectPreferencePage extends PropertyPage {
                         .getBoolean(
                                 IAnyEditConstants.USE_JAVA_TAB_WIDTH_FOR_JAVA,
                                 defaultStore
-                                .getBoolean(IAnyEditConstants.USE_JAVA_TAB_WIDTH_FOR_JAVA)),
+                                .getDefaultBoolean(IAnyEditConstants.USE_JAVA_TAB_WIDTH_FOR_JAVA)),
                                 spacesComposite);
 
         useModulo4TabsCheck = AnyEditPreferencePage
@@ -996,28 +996,28 @@ public class ProjectPreferencePage extends PropertyPage {
                         .getBoolean(
                                 IAnyEditConstants.USE_MODULO_CALCULATION_FOR_TABS_REPLACE,
                                 defaultStore
-                                .getBoolean(IAnyEditConstants.USE_MODULO_CALCULATION_FOR_TABS_REPLACE)),
+                                .getDefaultBoolean(IAnyEditConstants.USE_MODULO_CALCULATION_FOR_TABS_REPLACE)),
                                 spacesComposite);
 
         removeTrailingSpacesCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_removeTrailingSpaces,
                 Messages.pref_removeTrailingSpacesTip, prefs.getBoolean(
                         IAnyEditConstants.REMOVE_TRAILING_SPACES, defaultStore
-                        .getBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES)),
+                        .getDefaultBoolean(IAnyEditConstants.REMOVE_TRAILING_SPACES)),
                         spacesComposite);
 
         fixLineDelimitersCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_fixLineDelimiters,
                 Messages.pref_fixLineDelimitersTip, prefs.getBoolean(
                         IAnyEditConstants.FIX_LINE_DELIMITERS, defaultStore
-                        .getBoolean(IAnyEditConstants.FIX_LINE_DELIMITERS)),
+                        .getDefaultBoolean(IAnyEditConstants.FIX_LINE_DELIMITERS)),
                         spacesComposite);
 
         addNewLineCheck = AnyEditPreferencePage.createLabeledCheck(
                 Messages.pref_addNewline,
                 Messages.pref_addNewlineTip, prefs.getBoolean(
                         IAnyEditConstants.ADD_NEW_LINE, defaultStore
-                        .getBoolean(IAnyEditConstants.ADD_NEW_LINE)),
+                        .getDefaultBoolean(IAnyEditConstants.ADD_NEW_LINE)),
                         spacesComposite);
 
         replaceAllTabsCheck = AnyEditPreferencePage
@@ -1028,7 +1028,7 @@ public class ProjectPreferencePage extends PropertyPage {
                         .getBoolean(
                                 IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES,
                                 defaultStore
-                                .getBoolean(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES)),
+                                .getDefaultBoolean(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES)),
                                 spacesComposite);
         replaceAllSpacesCheck = AnyEditPreferencePage
                 .createLabeledCheck(
@@ -1038,7 +1038,7 @@ public class ProjectPreferencePage extends PropertyPage {
                         .getBoolean(
                                 IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS,
                                 defaultStore
-                                .getBoolean(IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS)),
+                                .getDefaultBoolean(IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS)),
                                 spacesComposite);
 
     }
