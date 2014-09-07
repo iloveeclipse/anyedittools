@@ -36,11 +36,11 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
 
     @Override
     public void selectionChanged(IAction action, ISelection selection) {
+        selectedFiles.clear();
+        selectedResources.clear();
         if (selection instanceof IStructuredSelection) {
             IStructuredSelection ssel = (IStructuredSelection) selection;
             Iterator<?> iterator = ssel.iterator();
-            selectedFiles.clear();
-            selectedResources.clear();
             while (iterator.hasNext()) {
                 IResource next = getResource(iterator.next());
                 if(next != null) {

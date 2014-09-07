@@ -55,6 +55,7 @@ import de.loskutov.anyedit.util.EclipseUtils;
 import de.loskutov.anyedit.util.LineReplaceResult;
 import de.loskutov.anyedit.util.TextReplaceResultSet;
 
+@SuppressWarnings("unused")
 public class ConvertAllAction extends Action implements IActionDelegate, IWorkbenchWindowActionDelegate {
 
     protected List<IFile> selectedFiles;
@@ -67,242 +68,39 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
 
     protected static final int ERROR = 1 << 2;
 
-    private final Spaces spacesAction;
 
-    protected final IContentType text_type = Platform.getContentTypeManager()
+    protected static final IContentType TEXT_TYPE = Platform.getContentTypeManager()
             .getContentType("org.eclipse.core.runtime.text");
-
-    private Shell shell;
 
     public ConvertAllAction() {
         super();
         selectedFiles = new ArrayList<IFile>();
         selectedResources = new ArrayList<IResource>();
-        spacesAction = new Spaces();
-        spacesAction.setUsedOnSave(false);
     }
 
     @Override
     public void run(IAction action) {
-        shell = AnyEditToolsPlugin.getShell();
         // selectedFiles contains all files for convert.
-        WorkspaceJob job = new ConvertRunner("Converting 'Tabs<->Spaces'");
+        WorkspaceJob job = new ConvertJob("Converting 'Tabs<->Spaces'", new ArrayList<IFile>(selectedFiles));
+        selectedResources.clear();
+        selectedFiles.clear();
         job.schedule();
-        PlatformUI.getWorkbench().getProgressService().showInDialog(shell, job);
+        PlatformUI.getWorkbench().getProgressService().showInDialog(AnyEditToolsPlugin.getShell(), job);
     }
 
-    protected int performAction(IFile file, ITextFileBufferManager manager,
-            boolean saveIfDirty, IProgressMonitor monitor) throws CoreException {
+    protected static final class ConvertJob extends WorkspaceJob {
+        private final Shell shell;
+        private final Spaces spacesAction;
+        private final List<IFile> selectedFiles;
+        private final ITextFileBufferManager fbManager;
 
-        // set current file to action (required to get tab width from)
-        spacesAction.setFile(file);
-        CombinedPreferences preferences = spacesAction.getCombinedPreferences();
-
-        String filterPerf = preferences.getString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST);
-        String[] filters = EclipseUtils.parseList(filterPerf);
-        String actionId;
-        if (spacesAction.isDefaultTabToSpaces()) {
-            actionId = AbstractTextAction.ACTION_ID_CONVERT_TABS;
-        } else {
-            actionId = AbstractTextAction.ACTION_ID_CONVERT_SPACES;
-        }
-
-        // 1) get file name. filter all excluded in preferences
-        if (matchFilter(file, filters)) {
-            return SKIPPED;
-        }
-
-        // 2) get content type. filter all non-text files
-        if (hasWrongContentType(file, monitor)) {
-            return SKIPPED;
-        }
-
-        // do the main work
-        return convertFile(actionId, file, manager, saveIfDirty, monitor);
-    }
-
-    private int convertFile(final String actionId, IFile file,
-            ITextFileBufferManager manager, boolean saveIfDirty, IProgressMonitor monitor) throws CoreException {
-        int result = ERROR;
-        IPath fullPath = file.getFullPath();
-        try {
-            manager.connect(fullPath, LocationKind.IFILE, new SubProgressMonitor(monitor, 1));
-            monitor.subTask(fullPath.makeRelative().toString());
-            final ITextFileBuffer fileBuffer = manager.getTextFileBuffer(fullPath, LocationKind.IFILE);
-
-            if(!file.isSynchronized(IResource.DEPTH_ZERO)){
-                file.refreshLocal(IResource.DEPTH_ZERO, monitor);
-            }
-            // check if buffer is opened by some editor - save it first, if required
-            boolean wasDirty = fileBuffer.isDirty();
-            if (saveIfDirty && wasDirty && fileBuffer.isCommitable()) {
-                fileBuffer.commit(new SubProgressMonitor(monitor, 2), false);
-            }
-
-            // 4) perform convert in-memory
-            result = convertBuffer(actionId, file, fileBuffer, monitor);
-
-            if (result == MODIFIED && (!wasDirty || saveIfDirty)) {
-                if(fileBuffer.isShared()){
-                    // convertBuffer() should checkout the file, but...
-                    // because convertBuffer() operation was running in the UI thread,
-                    // the checkout file operation task may be still incomplete
-                    // second call to check-out file from VCS, if any
-                    fileBuffer.validateState(monitor, shell);
-                }
-                fileBuffer.commit(new SubProgressMonitor(monitor, 2), false);
-            }
-
-        } finally {
-            // clean up - action shouldn't have old file reference
-            spacesAction.setFile(null);
-            manager.disconnect(fullPath, LocationKind.IFILE, new SubProgressMonitor(monitor, 1));
-        }
-        return result;
-    }
-
-    private int convertBuffer(String actionId, final IFile file,
-            ITextFileBuffer fileBuffer, IProgressMonitor monitor) throws CoreException {
-        final IDocument document = fileBuffer.getDocument();
-        final TextReplaceResultSet resultSet = spacesAction.estimateActionRange(document);
-        // no lines affected - return immediately
-        if (resultSet.getNumberOfLines() == 0) {
-            return SKIPPED;
-        }
-
-        // perform memory based replace, the result will contain all changed lines
-        try {
-            spacesAction.doTextOperation(document, actionId, resultSet);
-        } catch (Exception ex) {
-            AnyEditToolsPlugin.logError("doTextOperation() failed on: " + file, ex);
-            return ERROR;
-        }
-
-        if (!resultSet.areResultsChanged()) {
-            return SKIPPED;
-        }
-
-        int result = ERROR;
-
-        // check-out file from VCS, if any
-        fileBuffer.validateState(monitor, shell);
-
-        // if buffer is shared, then it means, that this operation could affect
-        // changes in the UI thread because of associated editors and we *must*
-        // to run it in the UI Thread too...
-        if (fileBuffer.isShared()) {
-            shell.getDisplay().syncExec(new Runnable() {
-                @Override
-                public void run() {
-                    writeDocument(file, document, resultSet);
-                }
-            });
-        } else {
-            writeDocument(file, document, resultSet);
-        }
-        if (resultSet.getException() != null) {
-            result = ERROR;
-        } else {
-            result = MODIFIED;
-        }
-        return result;
-    }
-
-    void writeDocument(IFile file, IDocument document, TextReplaceResultSet resultSet) {
-        int docLinesNbr = document.getNumberOfLines();
-        int changedLinesNbr = resultSet.getNumberOfLines();
-        boolean rewriteWholeDoc = changedLinesNbr >= docLinesNbr;
-
-        // some oddities with document??? prevent overflow in changedLinesNbr
-        if (rewriteWholeDoc) {
-            changedLinesNbr = docLinesNbr;
-        }
-
-        // this operation could affect changes in UI thread because of associated editors
-        final DocumentRewriteSession rewriteSession = startSequentialRewriteMode(document);
-        try {
-            for (int i = 0; i < changedLinesNbr; i++) {
-                LineReplaceResult trr = resultSet.get(i);
-                if (trr != null) {
-                    IRegion lineInfo = document.getLineInformation(i
-                            + resultSet.getStartLine());
-                    document.replace(lineInfo.getOffset() + trr.startReplaceIndex,
-                            trr.rangeToReplace, trr.textToReplace);
-                }
-            }
-        } catch (Exception e) {
-            resultSet.setException(e);
-            AnyEditToolsPlugin.logError(
-                    "Error during write document for file: " + file, e);
-        } finally {
-            stopSequentialRewriteMode(document, rewriteSession);
-            resultSet.clear();
-        }
-    }
-
-    private DocumentRewriteSession startSequentialRewriteMode(IDocument document) {
-        if (document instanceof IDocumentExtension4) {
-            IDocumentExtension4 extension = (IDocumentExtension4) document;
-            return extension.startRewriteSession(DocumentRewriteSessionType.SEQUENTIAL);
-        }
-        if (document instanceof IDocumentExtension) {
-            IDocumentExtension extension = (IDocumentExtension) document;
-            extension.startSequentialRewrite(false);
-        }
-        return null;
-    }
-
-    private void stopSequentialRewriteMode(IDocument document,
-            DocumentRewriteSession rewriteSession) {
-        if (document instanceof IDocumentExtension4) {
-            IDocumentExtension4 extension = (IDocumentExtension4) document;
-            extension.stopRewriteSession(rewriteSession);
-        } else if (document instanceof IDocumentExtension) {
-            IDocumentExtension extension = (IDocumentExtension) document;
-            extension.stopSequentialRewrite();
-        }
-    }
-
-    private boolean hasWrongContentType(IFile file, IProgressMonitor monitor) {
-        try {
-            IContentDescription contentDescr = file.getContentDescription();
-            if (contentDescr == null) {
-                return true;
-            }
-            IContentType contentType = contentDescr.getContentType();
-            if (contentType == null) {
-                return true;
-            }
-            return !contentType.isKindOf(text_type);
-            //
-        } catch (CoreException e) {
-            AnyEditToolsPlugin.logError("Could not get content type for: " + file, e);
-        }
-        return false;
-    }
-
-    private static boolean matchFilter(IFile file, String[] filters) {
-        return EclipseUtils.matchFilter(file.getName(), filters);
-    }
-
-    @Override
-    public void selectionChanged(IAction action, ISelection selection) {
-        if (selection instanceof IStructuredSelection) {
-            IStructuredSelection ssel = (IStructuredSelection) selection;
-            Iterator<?> iterator = ssel.iterator();
-            selectedFiles.clear();
-            selectedResources.clear();
-            while (iterator.hasNext()) {
-                // by definition in plugin.xml, we are called only on IFile's
-                selectedFiles.add((IFile) iterator.next());
-            }
-        }
-    }
-
-    protected final class ConvertRunner extends WorkspaceJob {
-
-        public ConvertRunner(String name) {
+        public ConvertJob(String name, List<IFile> selectedFiles) {
             super(name);
+            this.selectedFiles = selectedFiles;
+            spacesAction = new Spaces();
+            spacesAction.setUsedOnSave(false);
+            shell = AnyEditToolsPlugin.getShell();
+            fbManager = FileBuffers.getTextFileBufferManager();
         }
 
         @Override
@@ -320,12 +118,12 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
             long start = System.currentTimeMillis();
 
             try {
-                ITextFileBufferManager manager1 = FileBuffers.getTextFileBufferManager();
+
                 for (int i = 0; i < filesToConvert && !monitor.isCanceled(); i++) {
                     monitor.internalWorked(1);
                     IFile file = selectedFiles.get(i);
                     try {
-                        int result = performAction(file, manager1, saveIfDirty, monitor);
+                        int result = performAction(file, saveIfDirty, monitor);
                         if (result == ERROR) {
                             errors.add(new Status(IStatus.ERROR, AnyEditToolsPlugin.getId(),
                                     "'Tabs<->Spaces' operation failed for file: " + file, null));
@@ -341,8 +139,6 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
                 }
             } finally {
                 monitor.done();
-                selectedFiles.clear();
-                selectedResources.clear();
                 long stop = System.currentTimeMillis();
                 long msec = (stop - start);
                 AnyEditToolsPlugin.logInfo("Tabs<->Spaces: modified " +
@@ -366,6 +162,215 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
                 error.add(status);
             }
             return error;
+        }
+
+        private int performAction(IFile file,
+                boolean saveIfDirty, IProgressMonitor monitor) throws CoreException {
+
+            // set current file to action (required to get tab width from)
+            spacesAction.setFile(file);
+            CombinedPreferences preferences = spacesAction.getCombinedPreferences();
+
+            String filterPerf = preferences.getString(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST);
+            String[] filters = EclipseUtils.parseList(filterPerf);
+            String actionId;
+            if (spacesAction.isDefaultTabToSpaces()) {
+                actionId = AbstractTextAction.ACTION_ID_CONVERT_TABS;
+            } else {
+                actionId = AbstractTextAction.ACTION_ID_CONVERT_SPACES;
+            }
+
+            // 1) get file name. filter all excluded in preferences
+            if (matchFilter(file, filters)) {
+                return SKIPPED;
+            }
+
+            // 2) get content type. filter all non-text files
+            if (hasWrongContentType(file, monitor)) {
+                return SKIPPED;
+            }
+
+            // do the main work
+            return convertFile(actionId, file, saveIfDirty, monitor);
+        }
+
+        private int convertFile(final String actionId, IFile file, boolean saveIfDirty, IProgressMonitor monitor) throws CoreException {
+            int result = ERROR;
+            IPath fullPath = file.getFullPath();
+            try {
+                fbManager.connect(fullPath, LocationKind.IFILE, new SubProgressMonitor(monitor, 1));
+                monitor.subTask(fullPath.makeRelative().toString());
+                final ITextFileBuffer fileBuffer = fbManager.getTextFileBuffer(fullPath, LocationKind.IFILE);
+
+                if(!file.isSynchronized(IResource.DEPTH_ZERO)){
+                    file.refreshLocal(IResource.DEPTH_ZERO, monitor);
+                }
+                // check if buffer is opened by some editor - save it first, if required
+                boolean wasDirty = fileBuffer.isDirty();
+                if (saveIfDirty && wasDirty && fileBuffer.isCommitable()) {
+                    fileBuffer.commit(new SubProgressMonitor(monitor, 2), false);
+                }
+
+                // 4) perform convert in-memory
+                result = convertBuffer(actionId, file, fileBuffer, monitor);
+
+                if (result == MODIFIED && (!wasDirty || saveIfDirty)) {
+                    if(fileBuffer.isShared()){
+                        // convertBuffer() should checkout the file, but...
+                        // because convertBuffer() operation was running in the UI thread,
+                        // the checkout file operation task may be still incomplete
+                        // second call to check-out file from VCS, if any
+                        fileBuffer.validateState(monitor, shell);
+                    }
+                    fileBuffer.commit(new SubProgressMonitor(monitor, 2), false);
+                }
+
+            } finally {
+                // clean up - action shouldn't have old file reference
+                spacesAction.setFile(null);
+                fbManager.disconnect(fullPath, LocationKind.IFILE, new SubProgressMonitor(monitor, 1));
+            }
+            return result;
+        }
+
+        private int convertBuffer(String actionId, final IFile file,
+                ITextFileBuffer fileBuffer, IProgressMonitor monitor) throws CoreException {
+            final IDocument document = fileBuffer.getDocument();
+            final TextReplaceResultSet resultSet = spacesAction.estimateActionRange(document);
+            // no lines affected - return immediately
+            if (resultSet.getNumberOfLines() == 0) {
+                return SKIPPED;
+            }
+
+            // perform memory based replace, the result will contain all changed lines
+            try {
+                spacesAction.doTextOperation(document, actionId, resultSet);
+            } catch (Exception ex) {
+                AnyEditToolsPlugin.logError("doTextOperation() failed on: " + file, ex);
+                return ERROR;
+            }
+
+            if (!resultSet.areResultsChanged()) {
+                return SKIPPED;
+            }
+
+            int result = ERROR;
+
+            // check-out file from VCS, if any
+            fileBuffer.validateState(monitor, shell);
+
+            // if buffer is shared, then it means, that this operation could affect
+            // changes in the UI thread because of associated editors and we *must*
+            // to run it in the UI Thread too...
+            if (fileBuffer.isShared()) {
+                shell.getDisplay().syncExec(new Runnable() {
+                    @Override
+                    public void run() {
+                        writeDocument(file, document, resultSet);
+                    }
+                });
+            } else {
+                writeDocument(file, document, resultSet);
+            }
+            if (resultSet.getException() != null) {
+                result = ERROR;
+            } else {
+                result = MODIFIED;
+            }
+            return result;
+        }
+
+        static void writeDocument(IFile file, IDocument document, TextReplaceResultSet resultSet) {
+            int docLinesNbr = document.getNumberOfLines();
+            int changedLinesNbr = resultSet.getNumberOfLines();
+            boolean rewriteWholeDoc = changedLinesNbr >= docLinesNbr;
+
+            // some oddities with document??? prevent overflow in changedLinesNbr
+            if (rewriteWholeDoc) {
+                changedLinesNbr = docLinesNbr;
+            }
+
+            // this operation could affect changes in UI thread because of associated editors
+            final DocumentRewriteSession rewriteSession = startSequentialRewriteMode(document);
+            try {
+                for (int i = 0; i < changedLinesNbr; i++) {
+                    LineReplaceResult trr = resultSet.get(i);
+                    if (trr != null) {
+                        IRegion lineInfo = document.getLineInformation(i
+                                + resultSet.getStartLine());
+                        document.replace(lineInfo.getOffset() + trr.startReplaceIndex,
+                                trr.rangeToReplace, trr.textToReplace);
+                    }
+                }
+            } catch (Exception e) {
+                resultSet.setException(e);
+                AnyEditToolsPlugin.logError(
+                        "Error during write document for file: " + file, e);
+            } finally {
+                stopSequentialRewriteMode(document, rewriteSession);
+                resultSet.clear();
+            }
+        }
+
+        @SuppressWarnings("deprecation")
+        private static DocumentRewriteSession startSequentialRewriteMode(IDocument document) {
+            if (document instanceof IDocumentExtension4) {
+                IDocumentExtension4 extension = (IDocumentExtension4) document;
+                return extension.startRewriteSession(DocumentRewriteSessionType.SEQUENTIAL);
+            }
+            if (document instanceof IDocumentExtension) {
+                IDocumentExtension extension = (IDocumentExtension) document;
+                extension.startSequentialRewrite(false);
+            }
+            return null;
+        }
+
+        @SuppressWarnings("deprecation")
+        private static void stopSequentialRewriteMode(IDocument document,
+                DocumentRewriteSession rewriteSession) {
+            if (document instanceof IDocumentExtension4) {
+                IDocumentExtension4 extension = (IDocumentExtension4) document;
+                extension.stopRewriteSession(rewriteSession);
+            } else if (document instanceof IDocumentExtension) {
+                IDocumentExtension extension = (IDocumentExtension) document;
+                extension.stopSequentialRewrite();
+            }
+        }
+
+        private static boolean hasWrongContentType(IFile file, IProgressMonitor monitor) {
+            try {
+                IContentDescription contentDescr = file.getContentDescription();
+                if (contentDescr == null) {
+                    return true;
+                }
+                IContentType contentType = contentDescr.getContentType();
+                if (contentType == null) {
+                    return true;
+                }
+                return !contentType.isKindOf(TEXT_TYPE);
+            } catch (CoreException e) {
+                AnyEditToolsPlugin.logError("Could not get content type for: " + file, e);
+            }
+            return false;
+        }
+
+        private static boolean matchFilter(IFile file, String[] filters) {
+            return EclipseUtils.matchFilter(file.getName(), filters);
+        }
+
+    }
+
+    @Override
+    public void selectionChanged(IAction action, ISelection selection) {
+        selectedFiles.clear();
+        selectedResources.clear();
+        if (selection instanceof IStructuredSelection) {
+            IStructuredSelection ssel = (IStructuredSelection) selection;
+            Iterator<?> iterator = ssel.iterator();
+            while (iterator.hasNext()) {
+                // by definition in plugin.xml, we are called only on IFile's
+                selectedFiles.add((IFile) iterator.next());
+            }
         }
     }
 
