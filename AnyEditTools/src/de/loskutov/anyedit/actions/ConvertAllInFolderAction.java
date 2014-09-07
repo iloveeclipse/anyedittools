@@ -32,7 +32,6 @@ import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.Messages;
 
-// TODO check how we could reuse ConvertLineDelimitersAction etc
 public class ConvertAllInFolderAction extends ConvertAllAction {
 
     @Override
@@ -115,13 +114,12 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
 
                             Object o = selectedResources.get(i);
                             if(o instanceof IContainer) {
-                                addAllFiles((IContainer) o,
-                                        selectedFiles, monitor);
+                                addAllFiles((IContainer) o, selectedFiles, monitor);
                             } else if(o instanceof IFile){
                                 if (selectedFiles.contains(o)) {
                                     continue;
                                 }
-                                selectedFiles.add(o);
+                                selectedFiles.add((IFile) o);
                             }
                         }
                     } finally {
@@ -134,8 +132,8 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
         } catch (InterruptedException e) {
             AnyEditToolsPlugin.logError("'Convert all' operation cancelled by user", e);
             return;
-        } // workspace lock
-        // will run in another thread, but will block UI too
+        }
+        // will run in another thread
         doAction(action);
     }
 
@@ -144,7 +142,7 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
         super.run(action);
     }
 
-    protected void addAllFiles(IContainer container, List<Object> fileList, IProgressMonitor monitor) {
+    protected void addAllFiles(IContainer container, List<IFile> fileList, IProgressMonitor monitor) {
         try {
             IResource[] resources = container.members();
             for (int i = 0; i < resources.length && !monitor.isCanceled(); i++) {
@@ -155,7 +153,7 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
                     if (fileList.contains(resource)) {
                         continue;
                     }
-                    fileList.add(resource);
+                    fileList.add((IFile) resource);
                 } else if (type == IResource.FOLDER || type == IResource.PROJECT) {
                     addAllFiles((IContainer) resource, fileList, monitor);
                 }

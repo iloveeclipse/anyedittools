@@ -9,7 +9,6 @@
 
 package de.loskutov.anyedit.actions;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,16 +19,19 @@ import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.DocumentRewriteSession;
 import org.eclipse.jface.text.DocumentRewriteSessionType;
@@ -55,9 +57,9 @@ import de.loskutov.anyedit.util.TextReplaceResultSet;
 
 public class ConvertAllAction extends Action implements IActionDelegate, IWorkbenchWindowActionDelegate {
 
-    protected List/* <IFile> */selectedFiles;
+    protected List<IFile> selectedFiles;
 
-    protected List/* <IFolder> */selectedResources;
+    protected List<IResource> selectedResources;
 
     protected static final int MODIFIED = 1 << 0;
 
@@ -74,45 +76,23 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
 
     public ConvertAllAction() {
         super();
-        selectedFiles = new ArrayList();
-        selectedResources = new ArrayList();
+        selectedFiles = new ArrayList<IFile>();
+        selectedResources = new ArrayList<IResource>();
         spacesAction = new Spaces();
         spacesAction.setUsedOnSave(false);
     }
 
     @Override
     public void run(IAction action) {
-        // selectedFiles contains all files for convert.
         shell = AnyEditToolsPlugin.getShell();
-        try {
-            // runs in separated thread but blocks workspace
-            PlatformUI.getWorkbench().getProgressService().run(true, true,
-                    new ConvertRunner());
-        } catch (InterruptedException e) {
-            AnyEditToolsPlugin.logError("'Tabs<->spaces' operation cancelled by user", e);
-        } catch (final Exception e) {
-            PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
-                @Override
-                public void run() {
-                    AnyEditToolsPlugin.errorDialog("'Tabs<->spaces' operation failed", e);
-                }
-            });
-        } // workspace lock
-        finally {
-            shell = null;
-        }
+        // selectedFiles contains all files for convert.
+        WorkspaceJob job = new ConvertRunner("Converting 'Tabs<->Spaces'");
+        job.schedule();
+        PlatformUI.getWorkbench().getProgressService().showInDialog(shell, job);
     }
 
-    /**
-     *
-     * @param file
-     * @param manager
-     * @param monitor
-     * @return false, if operation was not performed or failed because of *unexpected*
-     *         errors.
-     */
     protected int performAction(IFile file, ITextFileBufferManager manager,
-            boolean saveIfDirty, IProgressMonitor monitor) {
+            boolean saveIfDirty, IProgressMonitor monitor) throws CoreException {
 
         // set current file to action (required to get tab width from)
         spacesAction.setFile(file);
@@ -142,7 +122,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
     }
 
     private int convertFile(final String actionId, IFile file,
-            ITextFileBufferManager manager, boolean saveIfDirty, IProgressMonitor monitor) {
+            ITextFileBufferManager manager, boolean saveIfDirty, IProgressMonitor monitor) throws CoreException {
         int result = ERROR;
         IPath fullPath = file.getFullPath();
         try {
@@ -153,7 +133,6 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
             if(!file.isSynchronized(IResource.DEPTH_ZERO)){
                 file.refreshLocal(IResource.DEPTH_ZERO, monitor);
             }
-
             // check if buffer is opened by some editor - save it first, if required
             boolean wasDirty = fileBuffer.isDirty();
             if (saveIfDirty && wasDirty && fileBuffer.isCommitable()) {
@@ -174,24 +153,16 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
                 fileBuffer.commit(new SubProgressMonitor(monitor, 2), false);
             }
 
-        } catch (CoreException e) {
-            AnyEditToolsPlugin.logError("Connect() to file buffer failed: " + fullPath, e);
-            result = ERROR;
         } finally {
             // clean up - action shouldn't have old file reference
             spacesAction.setFile(null);
-            try {
-                manager.disconnect(fullPath, LocationKind.IFILE, new SubProgressMonitor(monitor, 1));
-            } catch (CoreException e) {
-                AnyEditToolsPlugin.logError(
-                        "Disconnect() from file buffer failed: " + fullPath, e);
-            }
+            manager.disconnect(fullPath, LocationKind.IFILE, new SubProgressMonitor(monitor, 1));
         }
         return result;
     }
 
     private int convertBuffer(String actionId, final IFile file,
-            ITextFileBuffer fileBuffer, IProgressMonitor monitor) {
+            ITextFileBuffer fileBuffer, IProgressMonitor monitor) throws CoreException {
         final IDocument document = fileBuffer.getDocument();
         final TextReplaceResultSet resultSet = spacesAction.estimateActionRange(document);
         // no lines affected - return immediately
@@ -212,33 +183,28 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
         }
 
         int result = ERROR;
-        try {
-            // check-out file from VCS, if any
-            fileBuffer.validateState(monitor, shell);
 
-            // if buffer is shared, then it means, that this operation could affect
-            // changes in the UI thread because of associated editors and we *must*
-            // to run it in the UI Thread too...
-            if (fileBuffer.isShared()) {
-                shell.getDisplay().syncExec(new Runnable() {
-                    @Override
-                    public void run() {
-                        writeDocument(file, document, resultSet);
-                    }
-                });
-            } else {
-                writeDocument(file, document, resultSet);
-            }
-            if (resultSet.getException() != null) {
-                result = ERROR;
-            } else {
-                result = MODIFIED;
-            }
-        } catch (Exception e) {
-            AnyEditToolsPlugin.logError(
-                    "Error during write document for file: " + file, e);
+        // check-out file from VCS, if any
+        fileBuffer.validateState(monitor, shell);
+
+        // if buffer is shared, then it means, that this operation could affect
+        // changes in the UI thread because of associated editors and we *must*
+        // to run it in the UI Thread too...
+        if (fileBuffer.isShared()) {
+            shell.getDisplay().syncExec(new Runnable() {
+                @Override
+                public void run() {
+                    writeDocument(file, document, resultSet);
+                }
+            });
+        } else {
+            writeDocument(file, document, resultSet);
         }
-
+        if (resultSet.getException() != null) {
+            result = ERROR;
+        } else {
+            result = MODIFIED;
+        }
         return result;
     }
 
@@ -315,7 +281,7 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
         return false;
     }
 
-    private boolean matchFilter(IFile file, String[] filters) {
+    private static boolean matchFilter(IFile file, String[] filters) {
         return EclipseUtils.matchFilter(file.getName(), filters);
     }
 
@@ -323,21 +289,24 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
     public void selectionChanged(IAction action, ISelection selection) {
         if (selection instanceof IStructuredSelection) {
             IStructuredSelection ssel = (IStructuredSelection) selection;
-            Iterator iterator = ssel.iterator();
+            Iterator<?> iterator = ssel.iterator();
             selectedFiles.clear();
             selectedResources.clear();
             while (iterator.hasNext()) {
                 // by definition in plugin.xml, we are called only on IFile's
-                selectedFiles.add(iterator.next());
+                selectedFiles.add((IFile) iterator.next());
             }
         }
     }
 
-    protected final class ConvertRunner implements IRunnableWithProgress {
+    protected final class ConvertRunner extends WorkspaceJob {
+
+        public ConvertRunner(String name) {
+            super(name);
+        }
 
         @Override
-        public void run(IProgressMonitor monitor) throws InvocationTargetException,
-        InterruptedException {
+        public IStatus runInWorkspace(IProgressMonitor monitor) {
             monitor.beginTask(Messages.ConvertAll_task, selectedFiles.size());
             int filesToConvert = selectedFiles.size();
             IPreferenceStore preferenceStore = AnyEditToolsPlugin.getDefault()
@@ -347,25 +316,27 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
                     .getBoolean(IAnyEditConstants.SAVE_DIRTY_BUFFER);
             int modified = 0;
             int skipped = 0;
-            int errors = 0;
+            List<IStatus> errors = new ArrayList<IStatus>();
             long start = System.currentTimeMillis();
+
             try {
-
-                ITextFileBufferManager manager = FileBuffers.getTextFileBufferManager();
-
+                ITextFileBufferManager manager1 = FileBuffers.getTextFileBufferManager();
                 for (int i = 0; i < filesToConvert && !monitor.isCanceled(); i++) {
                     monitor.internalWorked(1);
-                    IFile file = (IFile) selectedFiles.get(i);
-                    int result = performAction(file, manager, saveIfDirty, monitor);
-                    if (result == ERROR) {
-                        AnyEditToolsPlugin
-                        .logInfo("'Tabs<->spaces' operation failed for file: "
-                                + file);
-                        errors++;
-                    } else if (result == MODIFIED) {
-                        modified++;
-                    } else if (result == SKIPPED) {
-                        skipped++;
+                    IFile file = selectedFiles.get(i);
+                    try {
+                        int result = performAction(file, manager1, saveIfDirty, monitor);
+                        if (result == ERROR) {
+                            errors.add(new Status(IStatus.ERROR, AnyEditToolsPlugin.getId(),
+                                    "'Tabs<->Spaces' operation failed for file: " + file, null));
+                        } else if (result == MODIFIED) {
+                            modified++;
+                        } else if (result == SKIPPED) {
+                            skipped++;
+                        }
+                    } catch (CoreException e) {
+                        errors.add(new Status(IStatus.ERROR, AnyEditToolsPlugin.getId(),
+                                "'Tabs<->Spaces' operation failed for file: " + file, e));
                     }
                 }
             } finally {
@@ -374,25 +345,27 @@ public class ConvertAllAction extends Action implements IActionDelegate, IWorkbe
                 selectedResources.clear();
                 long stop = System.currentTimeMillis();
                 long msec = (stop - start);
-                AnyEditToolsPlugin.logInfo("Tabs<->spaces: modified " +
+                AnyEditToolsPlugin.logInfo("Tabs<->Spaces: modified " +
                         modified + " files from "
                         + filesToConvert + ", ignored "
-                        + skipped + ", failed on: " + errors + " ("  //$NON-NLS-2$
+                        + skipped + ", failed on: " + errors.size() + " ("
                         + msec + " ms)");
 
-                if (errors > 0) {
-                    final int errorCount = errors;
-                    PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
-                        @Override
-                        public void run() {
-                            AnyEditToolsPlugin
-                            .errorDialog("'Tabs<->spaces' operation failed for "
-                                    + errorCount
-                                    + " files. Please check log for details.");
-                        }
-                    });
-                }
             }
+            if(errors.size() == 0){
+                if(monitor.isCanceled()){
+                    AnyEditToolsPlugin.logError("'Tabs<->Spaces' operation cancelled by user", null);
+                    return Status.CANCEL_STATUS;
+                }
+                return Status.OK_STATUS;
+            }
+            MultiStatus error = new MultiStatus(AnyEditToolsPlugin.getId(), IStatus.ERROR, "'Tabs<->Spaces' operation failed for "
+                    + errors.size()
+                    + " files. Please check log for details.", null);
+            for (IStatus status : errors) {
+                error.add(status);
+            }
+            return error;
         }
     }
 
