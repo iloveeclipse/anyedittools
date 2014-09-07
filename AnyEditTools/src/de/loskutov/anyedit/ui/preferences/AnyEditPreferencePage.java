@@ -552,7 +552,7 @@ IWorkbenchPreferencePage, SelectionListener {
         saveAndAddLineCheck = createLabeledCheck(Messages.pref_saveAndAddLine,
                 Messages.pref_saveAndAddLineTip,
                 store.getBoolean(IAnyEditConstants.SAVE_AND_ADD_LINE), firstRow);
-        
+
         saveAndFixLineDelimitersCheck = createLabeledCheck(Messages.pref_saveAndFixLineDelimiters,
                 Messages.pref_saveAndFixLineDelimitersTip,
                 store.getBoolean(IAnyEditConstants.SAVE_AND_FIX_LINE_DELIMITERS), firstRow);
