@@ -700,6 +700,9 @@
 
    <extension
          point="org.eclipse.ui.startup">
+      <startup
+            class="de.loskutov.anyedit.actions.internal.AnyeditStartup">
+      </startup>
    </extension>
    <extension
          id="anyedit.whitespace"

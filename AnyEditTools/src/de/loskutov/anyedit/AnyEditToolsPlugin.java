@@ -13,19 +13,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.Version;
-
-import de.loskutov.anyedit.actions.internal.StartupHelper;
-import de.loskutov.anyedit.actions.internal.StartupHelper2;
-import de.loskutov.anyedit.util.EclipseUtils;
 
 
 /**
  * The main plugin class to be used in the desktop.
  */
-public class AnyEditToolsPlugin extends AbstractUIPlugin implements IStartup {
+public class AnyEditToolsPlugin extends AbstractUIPlugin {
 
     private static AnyEditToolsPlugin plugin;
 
@@ -112,19 +106,4 @@ public class AnyEditToolsPlugin extends AbstractUIPlugin implements IStartup {
         return isSaveHookInitialized;
     }
 
-    @Override
-    public void earlyStartup() {
-        // hooks into the global toolbar/menu
-        try {
-            if(EclipseUtils.getWorkbenchVersion().compareTo(new Version(3,7,0)) >= 0) {
-                new StartupHelper2().init();
-            } else {
-                new StartupHelper().init();
-            }
-        } catch (NoSuchMethodError e){
-            // it's old Eclipse...
-            new StartupHelper().init();
-        }
-        setSaveHookInitialized(true);
-    }
 }
