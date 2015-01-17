@@ -287,6 +287,10 @@ public class StartupHelper2 {
             hookOnCommand(FILE_SAVE);
             hookOnCommand(FILE_SAVE_ALL);
 
+            boolean removePrint = getPref(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR);
+            if (!removePrint) {
+                return;
+            }
             IWorkbenchWindowConfigurer wwConf = getWorkbenchWindowConfigurer(window);
             if (wwConf == null) {
                 return;
@@ -305,10 +309,7 @@ public class StartupHelper2 {
                 ToolBarContributionItem item2 = (ToolBarContributionItem) item;
                 ToolBarManager manager = (ToolBarManager) item2.getToolBarManager();
 
-                boolean removePrint = getPref(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR);
-                if (removePrint) {
-                    remove(manager, PRINT_BUTTON_ID);
-                }
+                remove(manager, PRINT_BUTTON_ID);
                 // to resize toolbars after changes...
                 coolBar.update(true);
             }
