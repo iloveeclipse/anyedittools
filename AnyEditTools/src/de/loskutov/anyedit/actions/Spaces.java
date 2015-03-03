@@ -201,6 +201,9 @@ public class Spaces extends AbstractTextAction {
         }
         String value = getLineDelimiter(getPlatformPreferences(project));
         if (value == null) {
+            value = getLineDelimiter(getPlatformPreferences(null));
+        }
+        if (value == null) {
             value = getLineDelimiter(Platform.getPreferencesService().getRootNode().node(DefaultScope.SCOPE));
         }
         return value != null ? value : System.getProperty(Platform.PREF_LINE_SEPARATOR, "\n");
