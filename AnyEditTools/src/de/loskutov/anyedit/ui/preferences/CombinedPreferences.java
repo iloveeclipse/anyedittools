@@ -12,6 +12,7 @@ package de.loskutov.anyedit.ui.preferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.osgi.service.prefs.BackingStoreException;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
@@ -61,6 +62,19 @@ public class CombinedPreferences {
             result = pluginStore.getBoolean(key);
         }
         return result;
+    }
+
+    public void setBoolean(String key, boolean value) {
+        if (preferences != null) {
+            preferences.putBoolean(key, value);
+            try {
+                preferences.sync();
+            } catch (BackingStoreException e) {
+                AnyEditToolsPlugin.logError("Failed to remember property: " + key, e);
+            }
+        } else {
+            pluginStore.setValue(key, value);
+        }
     }
 
     public int getInt(String key) {
