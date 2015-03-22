@@ -17,20 +17,15 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.ui.IEditorPart;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
-import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.jdt.JdtUtils;
-import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.ui.preferences.CombinedPreferences;
 import de.loskutov.anyedit.util.EclipseUtils;
 import de.loskutov.anyedit.util.LineReplaceResult;
@@ -39,7 +34,6 @@ import de.loskutov.anyedit.util.TextUtil;
 
 public class Spaces extends AbstractTextAction {
 
-    private CombinedPreferences combinedPreferences;
 
     public Spaces() {
         super();
@@ -156,41 +150,6 @@ public class Spaces extends AbstractTextAction {
             // cleanup
             sb.setLength(0);
         }
-    }
-
-    @Override
-    public void setFile(IFile file) {
-        super.setFile(file);
-        combinedPreferences = null;
-    }
-
-    @Override
-    public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-        super.setActiveEditor(action, targetEditor);
-        combinedPreferences = null;
-    }
-
-    @Override
-    public void setEditor(AbstractEditor editor) {
-        super.setEditor(editor);
-        combinedPreferences = null;
-    }
-
-    public CombinedPreferences getCombinedPreferences() {
-        if(combinedPreferences != null){
-            return combinedPreferences;
-        }
-        IFile file = getFile();
-        IScopeContext context = null;
-        if (file != null) {
-            IProject project = file.getProject();
-            if (project != null) {
-                context = new ProjectScope(project);
-            }
-        }
-        combinedPreferences = new CombinedPreferences(context,
-                AnyEditToolsPlugin.getDefault().getPreferenceStore());
-        return combinedPreferences;
     }
 
     protected String getLineDelimiter() {

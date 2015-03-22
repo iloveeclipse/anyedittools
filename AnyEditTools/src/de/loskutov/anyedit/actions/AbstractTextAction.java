@@ -21,8 +21,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionDelegate;
-import org.eclipse.ui.IEditorActionDelegate;
-import org.eclipse.ui.IEditorPart;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
@@ -32,8 +30,7 @@ import de.loskutov.anyedit.util.LineReplaceResult;
 import de.loskutov.anyedit.util.TextReplaceResultSet;
 import de.loskutov.anyedit.util.TextUtil;
 
-public abstract class AbstractTextAction extends AbstractAction
-implements IEditorActionDelegate {
+public abstract class AbstractTextAction extends AbstractAction {
 
     public static final String ACTION_ID_CONVERT_TABS = IAnyEditConstants.ACTION_ID_CONVERT_TABS;
     public static final String ACTION_ID_CONVERT_SPACES = IAnyEditConstants.ACTION_ID_CONVERT_SPACES;
@@ -55,14 +52,6 @@ implements IEditorActionDelegate {
 
     protected final void init() {
         textUtil = TextUtil.getDefaultTextUtilities();
-    }
-
-    @Override
-    public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-        if(targetEditor == null){
-            return;
-        }
-        setEditor(new AbstractEditor(targetEditor));
     }
 
     protected abstract TextReplaceResultSet estimateActionRange(IDocument doc);

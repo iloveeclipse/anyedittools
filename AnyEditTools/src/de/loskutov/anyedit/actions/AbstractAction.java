@@ -12,9 +12,14 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IEditorActionDelegate;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
@@ -22,18 +27,22 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
+import de.loskutov.anyedit.ui.preferences.CombinedPreferences;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
  * @author Andrey
  */
-public abstract class AbstractAction extends AbstractHandler implements IWorkbenchWindowActionDelegate, IViewActionDelegate {
+public abstract class AbstractAction extends AbstractHandler
+implements IWorkbenchWindowActionDelegate, IViewActionDelegate, IEditorActionDelegate {
 
     protected AbstractEditor editor;
     private IFile file;
     private IWorkbenchWindow window;
     private IWorkbenchPart part;
+    private CombinedPreferences combinedPreferences;
 
     public AbstractAction() {
         super();
@@ -82,11 +91,21 @@ public abstract class AbstractAction extends AbstractHandler implements IWorkben
         part = null;
     }
 
-    protected void setEditor(AbstractEditor editor) {
+    public void setEditor(AbstractEditor editor) {
         if(getEditor() != null){
             getEditor().dispose();
         }
         this.editor = editor;
+        combinedPreferences = null;
+    }
+
+    @Override
+    public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+        combinedPreferences = null;
+        if(targetEditor == null){
+            return;
+        }
+        setEditor(new AbstractEditor(targetEditor));
     }
 
     protected AbstractEditor getEditor() {
@@ -120,6 +139,7 @@ public abstract class AbstractAction extends AbstractHandler implements IWorkben
      */
     public void setFile(IFile file) {
         this.file = file;
+        combinedPreferences = null;
     }
 
     /**
@@ -132,5 +152,22 @@ public abstract class AbstractAction extends AbstractHandler implements IWorkben
     @Override
     public final void init(IViewPart view) {
         this.part = view;
+    }
+
+    public CombinedPreferences getCombinedPreferences() {
+        if(combinedPreferences != null){
+            return combinedPreferences;
+        }
+        IFile file1 = getFile();
+        IScopeContext context = null;
+        if (file1 != null) {
+            IProject project = file1.getProject();
+            if (project != null) {
+                context = new ProjectScope(project);
+            }
+        }
+        combinedPreferences = new CombinedPreferences(context,
+                AnyEditToolsPlugin.getDefault().getPreferenceStore());
+        return combinedPreferences;
     }
 }
