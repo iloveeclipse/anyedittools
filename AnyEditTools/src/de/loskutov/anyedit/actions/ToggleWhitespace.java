@@ -8,9 +8,6 @@
  *******************************************************************************/
 package de.loskutov.anyedit.actions;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -27,6 +24,8 @@ import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.AnnotationModel;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.IAnnotationModelExtension;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -41,46 +40,84 @@ import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
+import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
+import de.loskutov.anyedit.ui.preferences.CombinedPreferences;
+import de.loskutov.anyedit.util.EclipseUtils;
 
-public class ToggleWhitespace extends AbstractAction implements IPartListener,
-ISelectionChangedListener, IPageChangedListener, IPropertyListener {
+public class ToggleWhitespace extends AbstractAction {
+
+    private static final String SHOW_WS_COMMAND = "AnyEdit.ShowWhiteSpace.command";
 
     private static final String SPACES = "AnyEditTools.spaces";
 
     private static final String TABS = "AnyEditTools.tabs";
 
-    private Map<Integer, Boolean> partToggleState;
+    private static final String TRAILING = "AnyEditTools.trailingws";
 
     private IAction proxyAction;
 
+    private SuperListener mainListener;
 
     public ToggleWhitespace() {
         super();
-        partToggleState = new HashMap<Integer, Boolean>();
+    }
+
+    @Override
+    public void init(IWorkbenchWindow window1) {
+        super.init(window1);
+        mainListener = installGlobalListener(window1);
+        // TODO if we are activated on startup, should get the action from toolbar and set the state
     }
 
     @Override
     public void run(IAction action) {
         super.run(action);
         this.proxyAction = action;
-        toggleEditorAnnotations(action.isChecked());
+        CombinedPreferences prefs = getCombinedPreferences();
+        boolean newValue = !isChecked(prefs);
+        setChecked(prefs, newValue);
+        applyEditorAnnotations(newValue);
+        // XXX update the "toggled" state based on the current editor
+        mainListener.ws.updateCheckState();
     }
 
-    @Override
-    public void init(IWorkbenchWindow window1) {
-        super.init(window1);
+    SuperListener installGlobalListener(IWorkbenchWindow window1){
+        IHandlerService hs = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
+        Object variable = hs.getCurrentState().getRoot().getVariable(SHOW_WS_COMMAND);
+        if(variable instanceof SuperListener) {
+            return (SuperListener) variable;
+        }
+        SuperListener superListener = new SuperListener(this);
+        hs.getCurrentState().getRoot().addVariable(SHOW_WS_COMMAND, superListener);
         IWorkbenchPage activePage = window1.getActivePage();
-        activePage.addPartListener(this);
+        activePage.addPartListener(superListener);
         IWorkbenchPart activePart = activePage.getActivePart();
         if (activePart != null) {
-            partActivated(activePart);
+            superListener.partActivated(activePart);
         }
-        // TODO if we are activated on startup, should get the action from toolbar and set the state
+        AnyEditToolsPlugin.getDefault().getPreferenceStore().addPropertyChangeListener(superListener);
+        return superListener;
+    }
+
+    void uninstallGlobalListener(){
+        AnyEditToolsPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(mainListener);
+        IHandlerService hs = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
+        Object variable = hs.getCurrentState().getRoot().getVariable(SHOW_WS_COMMAND);
+        if(variable == null || variable.equals(Boolean.FALSE)) {
+            return;
+        }
+        hs.getCurrentState().getRoot().addVariable(SHOW_WS_COMMAND, Boolean.FALSE);
+        IWorkbenchPage[] pages = getWindow().getPages();
+        for (int i = 0; i < pages.length; i++) {
+            pages[i].removePartListener(mainListener);
+        }
     }
 
     @Override
@@ -91,33 +128,13 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
             // strange init issue, just return
             return;
         }
-        IWorkbenchPage[] pages = getWindow().getPages();
-        for (int i = 0; i < pages.length; i++) {
-            pages[i].removePartListener(this);
-        }
+
         proxyAction = null;
-        partToggleState = null;
+        uninstallGlobalListener();
         super.dispose();
     }
 
-    /**
-     *
-     * @param activeEditor
-     * @param rememberEditor true to remember editor, false to discard old one
-     * @return may be null
-     */
-    private Integer getEditorCookie(IEditorPart activeEditor, boolean rememberEditor) {
-        if (activeEditor == null) {
-            return null;
-        }
-        AbstractEditor aEditor = new AbstractEditor(activeEditor);
-        if (rememberEditor) {
-            setEditor(aEditor);
-        }
-        return Integer.valueOf(aEditor.hashCode());
-    }
-
-    private void toggleEditorAnnotations(boolean on) {
+    private void applyEditorAnnotations(boolean on) {
         AbstractEditor aEditor = getEditor();
         if (aEditor == null) {
             disableButton();
@@ -128,8 +145,7 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
             disableButton();
             return;
         }
-        Integer editorCookie = Integer.valueOf(aEditor.hashCode());
-        partToggleState.put(editorCookie, Boolean.valueOf(on));
+
         IEditorInput input = aEditor.getInput();
         IAnnotationModel annotationModel = documentProvider.getAnnotationModel(input);
         if (!(annotationModel instanceof IAnnotationModelExtension)) {
@@ -154,22 +170,27 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
 
             @Override
             public IStatus run(IProgressMonitor monitor) {
-                //                long start = System.currentTimeMillis();
+                if(aEditor.isDisposed() || aEditor.getEditorPart() == null){
+                    return Status.CANCEL_STATUS;
+                }
+
                 monitor.beginTask("Whitespace annotation ...", lines);
                 extension.removeAnnotationModel(ToggleWhitespace.class);
 
                 final Annotation sAnnotation = new Annotation(SPACES, false, "Spaces");
                 final Annotation tAnnotation = new Annotation(TABS, false, "Tabs");
-
+                boolean showTrailingDifferently = isTrailingShownDifferently(getCombinedPreferences());
                 for (int i = 0; i < lines && !monitor.isCanceled(); i++) {
                     monitor.internalWorked(1);
                     try {
                         IRegion region = doc.getLineInformation(i);
                         String line = doc.get(region.getOffset(), region.getLength());
-                        addAnnotations(annotationModel, line, region, ' ', sAnnotation,
-                                monitor);
-                        addAnnotations(annotationModel, line, region, '\t', tAnnotation,
-                                monitor);
+                        if(showTrailingDifferently && line.trim().length() == 0){
+                            addTrailingAnnotation(annotationModel, line, region);
+                        } else {
+                            addAnnotations(annotationModel, line, region, ' ', sAnnotation, monitor);
+                            addAnnotations(annotationModel, line, region, '\t', tAnnotation, monitor);
+                        }
                     } catch (BadLocationException e) {
                         AnyEditToolsPlugin.logError(
                                 "Problem during annotation of whitespace", e);
@@ -180,10 +201,6 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
                     extension.addAnnotationModel(ToggleWhitespace.class, annotationModel);
                 }
                 monitor.done();
-                //                long stop = System.currentTimeMillis();
-                // XXY
-                //                System.out.println("time for " + lines + " lines and "
-                //                        + annotationModel.count + " annotations: " + (stop - start));
                 return monitor.isCanceled() ? Status.CANCEL_STATUS : Status.OK_STATUS;
             }
         };
@@ -196,7 +213,8 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
             IRegion region, char c, final Annotation annotation, IProgressMonitor monitor) {
         int startIdx = line.indexOf(c, 0);
         int stopIdx = startIdx;
-        Annotation lineAnnotation = null;
+        boolean showTrailingDifferently = isTrailingShownDifferently(getCombinedPreferences());
+        boolean showTrailingOnly = isTrailingOnly(getCombinedPreferences());
         while (stopIdx >= 0 && !monitor.isCanceled()) {
             int oldStopIdx = stopIdx;
             stopIdx = line.indexOf(c, stopIdx + 1);
@@ -208,18 +226,42 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
 
                 int length = oldStopIdx - startIdx + 1;
                 if (true /*length > 1 || c == '\t'*/) {
+                    Annotation lineAnnotation = null;
                     Position position = new Position(offset, length);
-                    // on the same line editor must have different annotation object
-                    lineAnnotation = new Annotation(annotation.getType(), false,
-                            annotation.getText());
-                    annotationModel.addAnnotation(lineAnnotation, position);
+
+                    if(oldStopIdx == line.length() - 1) {
+                        if (showTrailingDifferently) {
+                            // on the same line editor must have different annotation object
+                            lineAnnotation = new Annotation(TRAILING, false, "Trailing whitespace");
+                        } else {
+                            // on the same line editor must have different annotation object
+                            lineAnnotation = new Annotation(annotation.getType(), false,
+                                    annotation.getText());
+                        }
+                    } else if(!showTrailingOnly){
+                        // on the same line editor must have different annotation object
+                        lineAnnotation = new Annotation(annotation.getType(), false,
+                                annotation.getText());
+                    }
+                    if(lineAnnotation != null) {
+                        annotationModel.addAnnotation(lineAnnotation, position);
+                    }
                 }
                 startIdx = stopIdx;
             }
         }
     }
 
-    private void removeAnnotations(final IAnnotationModelExtension extension) {
+    private static void addTrailingAnnotation(IAnnotationModel annotationModel, String line,
+            IRegion region) {
+        int offset = region.getOffset();
+        int length = line.length();
+        Position position = new Position(offset, length);
+        Annotation lineAnnotation = new Annotation(TRAILING, false, "Trailing whitespace");
+        annotationModel.addAnnotation(lineAnnotation, position);
+    }
+
+    private static void removeAnnotations(final IAnnotationModelExtension extension) {
         final Job job = new Job("Toggle whitespace") {
             @Override
             public IStatus run(IProgressMonitor monitor) {
@@ -237,36 +279,173 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
         job.schedule();
     }
 
-    @Override
-    public void partActivated(IWorkbenchPart part) {
-        if (!(part instanceof IEditorPart)) {
-            disableButton();
-            return;
-        }
-        Integer cookie = getEditorCookie((IEditorPart) part, true);
-        AbstractEditor abstractEditor = getEditor();
-        if (abstractEditor.isMultiPage()) {
-            addPageListener(part);
-        }
-        IDocumentProvider documentProvider = abstractEditor.getDocumentProvider();
-        if (documentProvider == null) {
-            disableButton();
-            return;
-        }
-        enableButton();
-        part.addPropertyListener(this);
-        if (partToggleState.get(cookie) != null) {
-            boolean checked = partToggleState.get(cookie).booleanValue();
-            setChecked(checked);
-        } else {
-            partToggleState.put(cookie, Boolean.FALSE);
-            setChecked(false);
-        }
-    }
+    static class SuperListener implements IPartListener, ISelectionChangedListener,
+    IPageChangedListener, IPropertyListener, IPropertyChangeListener {
 
-    private void setChecked(boolean enabled) {
-        if (proxyAction != null) {
-            proxyAction.setChecked(enabled);
+        private final ToggleWhitespace ws;
+
+        public SuperListener(ToggleWhitespace ws) {
+            this.ws = ws;
+        }
+
+        @Override
+        public void partActivated(IWorkbenchPart part) {
+            if (!(part instanceof IEditorPart)) {
+                ws.disableButton();
+                return;
+            }
+            IEditorPart activeEditor = EclipseUtils.getActiveEditor();
+            if(activeEditor != part){
+                ws.disableButton();
+                return;
+            }
+            AbstractEditor abstractEditor = ws.createActiveEditorDelegate();
+            ws.setEditor(abstractEditor);
+
+            if (abstractEditor.isMultiPage()) {
+                addPageListener(part);
+            }
+            IDocumentProvider documentProvider = abstractEditor.getDocumentProvider();
+            if (documentProvider == null) {
+                ws.disableButton();
+                return;
+            }
+            ws.enableButton();
+            part.addPropertyListener(this);
+            ws.applyEditorAnnotations(ws.isChecked(ws.getCombinedPreferences()));
+        }
+
+        @Override
+        public void partDeactivated(IWorkbenchPart part) {
+            if (!(part instanceof IEditorPart)) {
+                return;
+            }
+            removePageListener(part);
+            part.removePropertyListener(this);
+        }
+
+        @Override
+        public void partBroughtToTop(IWorkbenchPart part) {
+            // ignore
+        }
+
+        @Override
+        public void partOpened(IWorkbenchPart part) {
+            // not used
+        }
+
+        @Override
+        public void partClosed(IWorkbenchPart part) {
+            if (!(part instanceof IEditorPart)) {
+                return;
+            }
+            if (ws.proxyAction != null && ws.proxyAction.isEnabled()) {
+                boolean hasEditors = part.getSite().getPage().getEditorReferences().length > 0;
+                if (!hasEditors) {
+                    ws.disableButton();
+                }
+            }
+        }
+
+        /**
+         * @param part expected to be a multi page part, never null
+         */
+        private void addPageListener(IWorkbenchPart part) {
+            if (part instanceof FormEditor) {
+                FormEditor formEditor = (FormEditor) part;
+                formEditor.addPageChangedListener(this);
+            } else {
+                ISelectionProvider selectionProvider = part.getSite().getSelectionProvider();
+                if (selectionProvider instanceof IPostSelectionProvider) {
+                    ((IPostSelectionProvider) selectionProvider)
+                    .addSelectionChangedListener(this);
+                }
+            }
+        }
+
+        /**
+         * @param part must be non null
+         */
+        private void removePageListener(IWorkbenchPart part) {
+            if (part instanceof FormEditor) {
+                FormEditor formEditor = (FormEditor) part;
+                formEditor.removePageChangedListener(this);
+            } else {
+                ISelectionProvider selectionProvider = part.getSite().getSelectionProvider();
+                if (selectionProvider instanceof IPostSelectionProvider) {
+                    ((IPostSelectionProvider) selectionProvider)
+                    .removeSelectionChangedListener(this);
+                }
+            }
+        }
+
+
+        /**
+         * to catch the page selection in multi page editors which do not extend FormEditor
+         */
+        @Override
+        public void selectionChanged(SelectionChangedEvent event) {
+            ISelection selection = event.getSelection();
+            if (!(selection instanceof ITextSelection)) {
+                // TODO this would prevent disabling of the button on web tools xml editor
+                // but it does not have sense at all because they do not support highlighting,
+                // only underligning
+                // see https://bugs.eclipse.org/bugs/show_bug.cgi?id=156086
+                if (!(selection instanceof ITreeSelection)) {
+                    ws.disableButton();
+                }
+                return;
+            }
+            if(ws.getWindow() == null){
+                // strange init issue, just return
+                return;
+            }
+            AbstractEditor abstractEditor = ws.getEditor();
+            IEditorPart editorPart = ws.getWindow().getActivePage().getActiveEditor();
+            if (!new AbstractEditor(editorPart).equals(abstractEditor)) {
+                partActivated(editorPart);
+            }
+        }
+
+        /**
+         * to catch the page selection in multi page editors
+         */
+        @Override
+        public void pageChanged(PageChangedEvent event) {
+            if(ws.getWindow() == null){
+                // strange init issue, just return
+                return;
+            }
+            partActivated(ws.getWindow().getActivePage().getActiveEditor());
+        }
+
+        /**
+         * to catch the dirty state
+         */
+        @Override
+        public void propertyChanged(Object source, int propId) {
+            if (propId != ISaveablePart.PROP_DIRTY) {
+                return;
+            }
+            if (ws.proxyAction != null && ws.proxyAction.isChecked()) {
+                AbstractEditor abstractEditor = ws.getEditor();
+                if (abstractEditor != null && !abstractEditor.isDirty()) {
+                    ws.applyEditorAnnotations(ws.isChecked(ws.getCombinedPreferences()));
+                }
+            }
+        }
+
+        @Override
+        public void propertyChange(PropertyChangeEvent event) {
+            String key = event.getProperty();
+            if (!IAnyEditConstants.SHOW_TRAILING_ONLY.equals(key)
+                    && !IAnyEditConstants.SHOW_TRAILING_DIFFERENTLY.equals(key)) {
+                return;
+            }
+            if(ws.isChecked(ws.getCombinedPreferences())){
+                ws.applyEditorAnnotations(true);
+            }
+
         }
     }
 
@@ -279,135 +458,47 @@ ISelectionChangedListener, IPageChangedListener, IPropertyListener {
     private void disableButton() {
         if (proxyAction != null) {
             proxyAction.setEnabled(false);
-            proxyAction.setChecked(false);
         }
         setEditor(null);
     }
 
     @Override
-    public void partDeactivated(IWorkbenchPart part) {
-        if (!(part instanceof IEditorPart)) {
-            return;
-        }
-        removePageListener(part);
-        part.removePropertyListener(this);
-    }
-
-    @Override
-    public void partBroughtToTop(IWorkbenchPart part) {
-        // ignore
-    }
-
-    @Override
-    public void partOpened(IWorkbenchPart part) {
-        // not used
-    }
-
-    @Override
-    public void partClosed(IWorkbenchPart part) {
-        if (!(part instanceof IEditorPart)) {
-            return;
-        }
-        Integer cookie = getEditorCookie((IEditorPart) part, false);
-        partToggleState.remove(cookie);
-        if (proxyAction != null && proxyAction.isEnabled()) {
-            boolean hasEditors = part.getSite().getPage().getEditorReferences().length > 0;
-            if (!hasEditors) {
-                disableButton();
-            }
-        }
-    }
-
-    /**
-     * @param part expected to be a multi page part, never null
-     */
-    private void addPageListener(IWorkbenchPart part) {
-        if (part instanceof FormEditor) {
-            FormEditor formEditor = (FormEditor) part;
-            formEditor.addPageChangedListener(this);
-        } else {
-            ISelectionProvider selectionProvider = part.getSite().getSelectionProvider();
-            if (selectionProvider instanceof IPostSelectionProvider) {
-                ((IPostSelectionProvider) selectionProvider)
-                .addSelectionChangedListener(this);
-            }
-        }
-    }
-
-    /**
-     * @param part must be non null
-     */
-    private void removePageListener(IWorkbenchPart part) {
-        if (part instanceof FormEditor) {
-            FormEditor formEditor = (FormEditor) part;
-            formEditor.removePageChangedListener(this);
-        } else {
-            ISelectionProvider selectionProvider = part.getSite().getSelectionProvider();
-            if (selectionProvider instanceof IPostSelectionProvider) {
-                ((IPostSelectionProvider) selectionProvider)
-                .removeSelectionChangedListener(this);
-            }
-        }
-    }
-
-    @Override
     public void selectionChanged(IAction action, ISelection selection) {
         this.proxyAction = action;
+        updateCheckState();
     }
 
-    /**
-     * to catch the page selection in multi page editors which do not extend FormEditor
-     */
-    @Override
-    public void selectionChanged(SelectionChangedEvent event) {
-        ISelection selection = event.getSelection();
-        if (!(selection instanceof ITextSelection)) {
-            // TODO this would prevent disabling of the button on web tools xml editor
-            // but it does not have sense at all because they do not support highlighting,
-            // only underligning
-            // see https://bugs.eclipse.org/bugs/show_bug.cgi?id=156086
-            if (!(selection instanceof ITreeSelection)) {
-                disableButton();
-            }
+    private void updateCheckState() {
+        if(proxyAction == null) {
             return;
         }
-        if(getWindow() == null){
-            // strange init issue, just return
-            return;
+        boolean checked = isChecked(getCombinedPreferences());
+        if(checked != proxyAction.isChecked()) {
+            // XXX does not work with commands
+            proxyAction.setChecked(checked);
         }
-        AbstractEditor abstractEditor = getEditor();
-        IEditorPart editorPart = getWindow().getActivePage().getActiveEditor();
-        if (!new AbstractEditor(editorPart).equals(abstractEditor)) {
-            partActivated(editorPart);
+        IEditorPart activeEditor = EclipseUtils.getActiveEditor();
+        if(activeEditor == null){
+            disableButton();
+            return;
         }
     }
 
-    /**
-     * to catch the page selection in multi page editors
-     */
-    @Override
-    public void pageChanged(PageChangedEvent event) {
-        if(getWindow() == null){
-            // strange init issue, just return
-            return;
-        }
-        partActivated(getWindow().getActivePage().getActiveEditor());
+
+    protected boolean isChecked(CombinedPreferences prefs) {
+        return prefs.getBoolean(IAnyEditConstants.SHOW_WHITESPACE);
     }
 
-    /**
-     * to catch the dirty state
-     */
-    @Override
-    public void propertyChanged(Object source, int propId) {
-        if (propId != ISaveablePart.PROP_DIRTY) {
-            return;
-        }
-        if (proxyAction != null && proxyAction.isChecked()) {
-            AbstractEditor abstractEditor = getEditor();
-            if (abstractEditor != null && !abstractEditor.isDirty()) {
-                toggleEditorAnnotations(true);
-            }
-        }
+    protected void setChecked(CombinedPreferences prefs, boolean checked) {
+        prefs.setBoolean(IAnyEditConstants.SHOW_WHITESPACE, checked);
+    }
+
+    protected boolean isTrailingOnly(CombinedPreferences prefs) {
+        return prefs.getBoolean(IAnyEditConstants.SHOW_TRAILING_ONLY);
+    }
+
+    protected boolean isTrailingShownDifferently(CombinedPreferences prefs) {
+        return prefs.getBoolean(IAnyEditConstants.SHOW_TRAILING_DIFFERENTLY);
     }
 
 }

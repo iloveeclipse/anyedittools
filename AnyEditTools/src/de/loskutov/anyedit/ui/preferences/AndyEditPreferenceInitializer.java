@@ -67,7 +67,6 @@ AbstractPreferenceInitializer {
         store.setDefault(IAnyEditConstants.ADD_SAVE_ALL_TO_TOOLBAR, true);
         store.setDefault(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR, false);
         store.setDefault(IAnyEditConstants.USE_WORKSPACE_SCOPE_FOR_SEARCH, false);
-        store.setDefault(IAnyEditConstants.SHOW_ONLY_BAD_WHITESPACE, true);
         store.setDefault(IAnyEditConstants.SAVE_TO_OPEN_EDITOR, false);
         store.setDefault(IAnyEditConstants.SAVE_TO_IGNORE_SELECTION, false);
         store.setDefault(IAnyEditConstants.SAVE_TO_SHOW_OPTIONS, true);
@@ -75,5 +74,8 @@ AbstractPreferenceInitializer {
         store.setDefault(IAnyEditConstants.UNICODIFY_ALL, false);
         store.setDefault(IAnyEditConstants.BASE64_SPLIT_LINE, false);
         store.setDefault(IAnyEditConstants.HIDE_OPEN_TYPE_ACTION, false);
+        store.setDefault(IAnyEditConstants.SHOW_TRAILING_DIFFERENTLY, true);
+        store.setDefault(IAnyEditConstants.SHOW_TRAILING_ONLY, true);
+        store.setDefault(IAnyEditConstants.SHOW_WHITESPACE, false);
     }
 }

@@ -134,6 +134,13 @@ public class Messages  extends NLS {
     public static String pref_hideOpenTypeTip;
     public static String pref_includeDerived;
     public static String pref_includeDerivedTip;
+
+    public static String pref_showWhitespaceGroup;
+    public static String pref_showTrailingOnly;
+    public static String pref_showTrailingOnlyTip;
+    public static String pref_showTrailingDifferently;
+    public static String pref_showTrailingDifferentlyTip;
+
     public static String pref_searchFileIntro;
     public static String pref_useWorkspaceScope;
     public static String pref_useWorkspaceScopeTip;

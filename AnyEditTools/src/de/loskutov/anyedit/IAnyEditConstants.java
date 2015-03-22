@@ -227,10 +227,8 @@ public interface IAnyEditConstants {
 
     String PROJECT_PROPS_ENABLED = "projectPropsEnabled";
 
-    String SHOW_ONLY_BAD_WHITESPACE = "showOnlyBadWhitespace";
-
     /**
-     * setiongs for saveToFile from console
+     * settings for saveToFile from console
      */
     String SAVE_TO_SHOW_OPTIONS = "saveToShowOptions";
 
@@ -254,4 +252,13 @@ public interface IAnyEditConstants {
 
     /** to split lines on base64 encoding */
     String BASE64_SPLIT_LINE = "base64SplitLine";
+
+    /** true to show (color) whitespace in editors */
+    String SHOW_WHITESPACE = "showWhitespace";
+
+    /** true to show (color) only trailing whitespace in editors */
+    String SHOW_TRAILING_ONLY = "showOnlyTrailingWhitespace";
+
+    /** true to show (color) trailing whitespace in editors differently as other whitespace */
+    String SHOW_TRAILING_DIFFERENTLY = "showTrailingWhitespaceDifferently";
 }

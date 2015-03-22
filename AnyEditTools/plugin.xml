@@ -715,6 +715,9 @@
             markerType="AnyEditTools.spaces"
             name="AnyEditTools.spaces"/>
       <type
+            markerType="AnyEditTools.trailingws"
+            name="AnyEditTools.trailingws"/>
+      <type
             markerType="AnyEditTools.compare"
             name="AnyEditTools.compare"/>
    </extension>
@@ -756,6 +759,24 @@
            textPreferenceKey="AnyEditTools.spaces.text"
            textPreferenceValue="false"
            verticalRulerPreferenceKey="AnyEditTools.spaces.vruler"
+           verticalRulerPreferenceValue="false"/>
+
+     <specification
+           annotationType="AnyEditTools.trailingws"
+           colorPreferenceKey="AnyEditTools.trailingws.color"
+           colorPreferenceValue="255,0,0"
+           contributesToHeader="true"
+           highlightPreferenceKey="AnyEditTools.trailingws.highlight"
+           highlightPreferenceValue="true"
+           icon="icons/whiteSpace.gif"
+           includeOnPreferencePage="true"
+           label="%whiteSpaceTrailing"
+           overviewRulerPreferenceKey="AnyEditTools.trailingws.oruler"
+           overviewRulerPreferenceValue="true"
+           presentationLayer="3"
+           textPreferenceKey="AnyEditTools.trailingws.text"
+           textPreferenceValue="false"
+           verticalRulerPreferenceKey="AnyEditTools.trailingws.vruler"
            verticalRulerPreferenceValue="false"/>
 
      <specification

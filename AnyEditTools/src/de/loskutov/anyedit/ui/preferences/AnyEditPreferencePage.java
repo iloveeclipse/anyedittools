@@ -186,6 +186,10 @@ IWorkbenchPreferencePage, SelectionListener {
 
     private Button addNewLineCheck;
 
+    private Button showTrailingOnly;
+
+    private Button showTrailingDifferently;
+
     public AnyEditPreferencePage() {
         super();
         setPreferenceStore(AnyEditToolsPlugin.getDefault().getPreferenceStore());
@@ -496,6 +500,23 @@ IWorkbenchPreferencePage, SelectionListener {
                     store.getBoolean(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR), toolbarComposite);
         }
 
+        Group showWhitespaceComposite = new Group(defPanel, SWT.SHADOW_ETCHED_IN);
+        layout = new GridLayout();
+        showWhitespaceComposite.setLayout(layout);
+        gridData = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
+        showWhitespaceComposite.setLayoutData(gridData);
+        showWhitespaceComposite.setText(Messages.pref_showWhitespaceGroup);
+
+        showTrailingOnly = createLabeledCheck(Messages.pref_showTrailingOnly,
+                Messages.pref_showTrailingOnlyTip,
+                store.getBoolean(IAnyEditConstants.SHOW_TRAILING_ONLY),
+                showWhitespaceComposite);
+
+        showTrailingDifferently = createLabeledCheck(Messages.pref_showTrailingDifferently,
+                Messages.pref_showTrailingDifferentlyTip,
+                store.getBoolean(IAnyEditConstants.SHOW_TRAILING_DIFFERENTLY),
+                showWhitespaceComposite);
+
         Group ratingComposite = new Group(defPanel, SWT.SHADOW_ETCHED_IN);
         layout = new GridLayout();
         ratingComposite.setLayout(layout);
@@ -756,6 +777,8 @@ IWorkbenchPreferencePage, SelectionListener {
                 unicodifyAllCheck.getSelection());
         store.setValue(IAnyEditConstants.BASE64_SPLIT_LINE,
                 base64SplitLineCheck.getSelection());
+        store.setValue(IAnyEditConstants.SHOW_TRAILING_ONLY, showTrailingOnly.getSelection());
+        store.setValue(IAnyEditConstants.SHOW_TRAILING_DIFFERENTLY, showTrailingDifferently.getSelection());
 
 
         if (convertSpacesOnSaveRadio.getSelection()) {
@@ -895,6 +918,11 @@ IWorkbenchPreferencePage, SelectionListener {
                 .getDefaultBoolean(IAnyEditConstants.UNICODIFY_ALL));
         base64SplitLineCheck.setSelection(store
                 .getDefaultBoolean(IAnyEditConstants.BASE64_SPLIT_LINE));
+
+        showTrailingOnly.setSelection(store
+                .getDefaultBoolean(IAnyEditConstants.SHOW_TRAILING_ONLY));
+        showTrailingDifferently.setSelection(store
+                .getDefaultBoolean(IAnyEditConstants.SHOW_TRAILING_DIFFERENTLY));
 
         boolean convertTabsAction = AbstractTextAction.ACTION_ID_CONVERT_TABS
                 .equals(store.getDefaultString(
