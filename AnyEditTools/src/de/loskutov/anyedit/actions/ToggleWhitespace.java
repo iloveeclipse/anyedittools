@@ -185,7 +185,7 @@ public class ToggleWhitespace extends AbstractAction {
                     try {
                         IRegion region = doc.getLineInformation(i);
                         String line = doc.get(region.getOffset(), region.getLength());
-                        if(showTrailingDifferently && line.trim().length() == 0){
+                        if(showTrailingDifferently && line.length() > 0 && line.trim().length() == 0){
                             addTrailingAnnotation(annotationModel, line, region);
                         } else {
                             addAnnotations(annotationModel, line, region, ' ', sAnnotation, monitor);
