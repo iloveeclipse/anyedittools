@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -48,7 +49,6 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
-import de.loskutov.anyedit.ui.preferences.CombinedPreferences;
 import de.loskutov.anyedit.util.EclipseUtils;
 
 public class ToggleWhitespace extends AbstractAction {
@@ -80,9 +80,8 @@ public class ToggleWhitespace extends AbstractAction {
     public void run(IAction action) {
         super.run(action);
         this.proxyAction = action;
-        CombinedPreferences prefs = getCombinedPreferences();
-        boolean newValue = !isChecked(prefs);
-        setChecked(prefs, newValue);
+        boolean newValue = !isChecked();
+        setChecked(newValue);
         applyEditorAnnotations(newValue);
         // XXX update the "toggled" state based on the current editor
         mainListener.ws.updateCheckState();
@@ -161,7 +160,7 @@ public class ToggleWhitespace extends AbstractAction {
         addAnnotations(aEditor, extension);
     }
 
-    private void addAnnotations(final AbstractEditor aEditor,
+    private static void addAnnotations(final AbstractEditor aEditor,
             final IAnnotationModelExtension extension) {
         final AnnotationModel annotationModel = new AnnotationModel();
         final IDocument doc = aEditor.getDocument();
@@ -179,7 +178,7 @@ public class ToggleWhitespace extends AbstractAction {
 
                 final Annotation sAnnotation = new Annotation(SPACES, false, "Spaces");
                 final Annotation tAnnotation = new Annotation(TABS, false, "Tabs");
-                boolean showTrailingDifferently = isTrailingShownDifferently(getCombinedPreferences());
+                boolean showTrailingDifferently = isTrailingShownDifferently();
                 for (int i = 0; i < lines && !monitor.isCanceled(); i++) {
                     monitor.internalWorked(1);
                     try {
@@ -209,12 +208,12 @@ public class ToggleWhitespace extends AbstractAction {
         job.schedule();
     }
 
-    private void addAnnotations(IAnnotationModel annotationModel, String line,
+    private static void addAnnotations(IAnnotationModel annotationModel, String line,
             IRegion region, char c, final Annotation annotation, IProgressMonitor monitor) {
         int startIdx = line.indexOf(c, 0);
         int stopIdx = startIdx;
-        boolean showTrailingDifferently = isTrailingShownDifferently(getCombinedPreferences());
-        boolean showTrailingOnly = isTrailingOnly(getCombinedPreferences());
+        boolean showTrailingDifferently = isTrailingShownDifferently();
+        boolean showTrailingOnly = isTrailingOnly();
         while (stopIdx >= 0 && !monitor.isCanceled()) {
             int oldStopIdx = stopIdx;
             stopIdx = line.indexOf(c, stopIdx + 1);
@@ -312,7 +311,7 @@ public class ToggleWhitespace extends AbstractAction {
             }
             ws.enableButton();
             part.addPropertyListener(this);
-            ws.applyEditorAnnotations(ws.isChecked(ws.getCombinedPreferences()));
+            ws.applyEditorAnnotations(ToggleWhitespace.isChecked());
         }
 
         @Override
@@ -430,7 +429,7 @@ public class ToggleWhitespace extends AbstractAction {
             if (ws.proxyAction != null && ws.proxyAction.isChecked()) {
                 AbstractEditor abstractEditor = ws.getEditor();
                 if (abstractEditor != null && !abstractEditor.isDirty()) {
-                    ws.applyEditorAnnotations(ws.isChecked(ws.getCombinedPreferences()));
+                    ws.applyEditorAnnotations(ToggleWhitespace.isChecked());
                 }
             }
         }
@@ -442,7 +441,7 @@ public class ToggleWhitespace extends AbstractAction {
                     && !IAnyEditConstants.SHOW_TRAILING_DIFFERENTLY.equals(key)) {
                 return;
             }
-            if(ws.isChecked(ws.getCombinedPreferences())){
+            if(ToggleWhitespace.isChecked()){
                 ws.applyEditorAnnotations(true);
             }
 
@@ -472,7 +471,7 @@ public class ToggleWhitespace extends AbstractAction {
         if(proxyAction == null) {
             return;
         }
-        boolean checked = isChecked(getCombinedPreferences());
+        boolean checked = isChecked();
         if(checked != proxyAction.isChecked()) {
             // XXX does not work with commands
             proxyAction.setChecked(checked);
@@ -485,20 +484,24 @@ public class ToggleWhitespace extends AbstractAction {
     }
 
 
-    protected boolean isChecked(CombinedPreferences prefs) {
-        return prefs.getBoolean(IAnyEditConstants.SHOW_WHITESPACE);
+    protected static boolean isChecked() {
+        return getPrefs().getBoolean(IAnyEditConstants.SHOW_WHITESPACE);
     }
 
-    protected void setChecked(CombinedPreferences prefs, boolean checked) {
-        prefs.setBoolean(IAnyEditConstants.SHOW_WHITESPACE, checked);
+    private static IPreferenceStore getPrefs() {
+        return AnyEditToolsPlugin.getDefault().getPreferenceStore();
     }
 
-    protected boolean isTrailingOnly(CombinedPreferences prefs) {
-        return prefs.getBoolean(IAnyEditConstants.SHOW_TRAILING_ONLY);
+    protected static void setChecked(boolean checked) {
+        getPrefs().setValue(IAnyEditConstants.SHOW_WHITESPACE, checked);
     }
 
-    protected boolean isTrailingShownDifferently(CombinedPreferences prefs) {
-        return prefs.getBoolean(IAnyEditConstants.SHOW_TRAILING_DIFFERENTLY);
+    protected static boolean isTrailingOnly() {
+        return getPrefs().getBoolean(IAnyEditConstants.SHOW_TRAILING_ONLY);
+    }
+
+    protected static boolean isTrailingShownDifferently() {
+        return getPrefs().getBoolean(IAnyEditConstants.SHOW_TRAILING_DIFFERENTLY);
     }
 
 }
