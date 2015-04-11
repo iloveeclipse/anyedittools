@@ -136,12 +136,14 @@ public class ToggleWhitespace extends AbstractAction {
     private void applyEditorAnnotations(boolean on) {
         AbstractEditor aEditor = getEditor();
         if (aEditor == null) {
-            disableButton();
+            // XXX ?
+            //            disableButton();
             return;
         }
         IDocumentProvider documentProvider = aEditor.getDocumentProvider();
         if (documentProvider == null) {
-            disableButton();
+            // XXX ?
+            //            disableButton();
             return;
         }
 
