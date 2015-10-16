@@ -26,17 +26,7 @@ public class AnyeditStartup implements IStartup {
 
     @Override
     public void earlyStartup() {
-        // hooks into the global toolbar/menu
-        try {
-            if(EclipseUtils.getWorkbenchVersion().compareTo(new Version(3,7,0)) >= 0) {
-                new StartupHelper2().init();
-            } else {
-                new StartupHelper().init();
-            }
-        } catch (NoSuchMethodError e){
-            // it's old Eclipse...
-            new StartupHelper().init();
-        }
+        new StartupHelper2().init();
         AnyEditToolsPlugin.setSaveHookInitialized(true);
     }
 

@@ -213,9 +213,6 @@ public interface IAnyEditConstants {
 
     String INCLUDE_DERIVED_RESOURCES = "incudeDerivedResources";
 
-    /** true to add "save all" action to the global toolbar */
-    String ADD_SAVE_ALL_TO_TOOLBAR = "addSaveAllToToolbar";
-
     /** true to remove "print" action from the global toolbar */
     String REMOVE_PRINT_FROM_TOOLBAR = "removePrintFromToolbar";
 

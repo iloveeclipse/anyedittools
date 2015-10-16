@@ -46,6 +46,7 @@ All rights reserved.
       <import plugin="org.eclipse.compare"/>
       <import plugin="org.eclipse.core.net"/>
       <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.7.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

@@ -64,7 +64,6 @@ AbstractPreferenceInitializer {
         store.setDefault(IAnyEditConstants.PREF_INACTIVE_FILTERS_LIST, "");
         store.setDefault(IAnyEditConstants.ASK_BEFORE_CONVERT_ALL_IN_FOLDER, true);
         store.setDefault(IAnyEditConstants.INCLUDE_DERIVED_RESOURCES, false);
-        store.setDefault(IAnyEditConstants.ADD_SAVE_ALL_TO_TOOLBAR, true);
         store.setDefault(IAnyEditConstants.REMOVE_PRINT_FROM_TOOLBAR, false);
         store.setDefault(IAnyEditConstants.USE_WORKSPACE_SCOPE_FOR_SEARCH, false);
         store.setDefault(IAnyEditConstants.SAVE_TO_OPEN_EDITOR, false);
