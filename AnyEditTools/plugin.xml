@@ -74,7 +74,7 @@
                  class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
                  definitionId="AnyEdit.compareWith.editor"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 icon="icons/editor_area.png"
                  id="AnyEdit.compareWith.editor"
                  label="%compareWithEditor"
                  menubarPath="compareWithMenu/compareWithGroup2">
@@ -104,7 +104,7 @@
                  class="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
                  definitionId="AnyEdit.compareWith.clipboard"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 icon="icons/clipboard_action.png"
                  id="AnyEdit.compareWith.clipboard"
                  label="%compareWithClipboard"
                  menubarPath="compareWithMenu/compareWithGroup2">
@@ -123,7 +123,7 @@
            <action
                  class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 icon="icons/editor_area.png"
                  id="AnyEdit.replaceWith.editor"
                  label="%compareWithEditor"
                  menubarPath="replaceWithMenu/replaceWithGroup2">
@@ -150,7 +150,7 @@
            <action
                  class="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 icon="icons/clipboard_action.png"
                  id="AnyEdit.replaceWith.clipboard"
                  label="%compareWithClipboard"
                  menubarPath="replaceWithMenu/replaceWithGroup2">
@@ -165,7 +165,7 @@
            <action
                  class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 icon="icons/editor_area.png"
                  id="AnyEdit.compareWith.editor"
                  label="%compareWithEditor"
                  menubarPath="compareWithMenu/compareWithGroup2">
@@ -192,7 +192,7 @@
            <action
                  class="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 icon="icons/clipboard_action.png"
                  id="AnyEdit.compareWith.clipboard"
                  label="%compareWithClipboard"
                  menubarPath="compareWithMenu/compareWithGroup2">
@@ -218,7 +218,7 @@
            <action
                  class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 icon="icons/editor_area.png"
                  id="AnyEdit.replaceWith.editor"
                  label="%compareWithEditor"
                  menubarPath="replaceWithMenu/replaceWithGroup2">
@@ -245,7 +245,7 @@
            <action
                  class="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 icon="icons/clipboard_action.png"
                  id="AnyEdit.replaceWith.clipboard"
                  label="%compareWithClipboard"
                  menubarPath="replaceWithMenu/replaceWithGroup2">
@@ -263,7 +263,7 @@
            <action
                  class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 icon="icons/editor_area.png"
                  id="AnyEdit.compareWith.editor"
                  label="%compareWithEditor"
                  menubarPath="compareWithMenu/compareWithGroup2">
@@ -290,7 +290,7 @@
            <action
                  class="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 icon="icons/clipboard_action.png"
                  id="AnyEdit.compareWith.clipboard"
                  label="%compareWithClipboard"
                  menubarPath="compareWithMenu/compareWithGroup2">
@@ -306,7 +306,7 @@
                  class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
                  definitionId="AnyEdit.replaceWith.editor"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/editor_area.gif"
+                 icon="icons/editor_area.png"
                  id="AnyEdit.replaceWith.editor"
                  label="%compareWithEditor"
                  menubarPath="replaceWithMenu/replaceWithGroup2">
@@ -336,7 +336,7 @@
                  class="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
                  definitionId="AnyEdit.replaceWith.clipboard"
                  enablesFor="?"
-                 icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/tasks_tsk.gif"
+                 icon="icons/clipboard_action.png"
                  id="AnyEdit.replaceWith.clipboard"
                  label="%compareWithClipboard"
                  menubarPath="replaceWithMenu/replaceWithGroup2">
@@ -1060,7 +1060,7 @@
 
         <command
                label="%openFile"
-               icon="platform:/plugin/org.eclipse.ui.ide/icons/full/elcl16/gotoobj_tsk.gif"
+               icon="icons/open_file.png"
                commandId="AnyEdit.openFileFromTextEditor.command"
                id="AnyEdit.openFileFromTextEditor">
             <visibleWhen
@@ -1232,7 +1232,7 @@
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
                commandId="AnyEdit.formatStackTrace.command"
-               icon="platform:/plugin/org.eclipse.ui.cheatsheets/icons/elcl16/restart_task.gif"
+               icon="icons/formatStackTrace.gif"
                id="AnyEdit.formatStackTrace"
                label="Format Stack Trace">
             <visibleWhen
