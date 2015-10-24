@@ -63,7 +63,7 @@ public class SupportPanel {
         link.addListener (SWT.Selection, new Listener () {
             @Override
             public void handleEvent(Event event) {
-                handleUrlClick("http://code.google.com/a/eclipselabs.org/p/anyedittools/issues/list");
+                handleUrlClick("https://github.com/iloveeclipse/anyedittools/issues");
             }
         });
 
