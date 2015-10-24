@@ -52,7 +52,10 @@ thisIsMyFieldName `<->` this\_is\_my\_field\_name)
 
 "Convert -> To / From Base64"
 
-You can install the plugin from [Eclipse Marketplace](https://marketplace.eclipse.org/content/anyedit-tools) 
-or download from [bintray](https://bintray.com/iloveeclipse/plugins/AnyEdit/view/files).
+Latest version of AnyEdit requires Eclipse >= 3.7 and Java >= 1.7.
+
+You can install the latest plugin version from [Eclipse Marketplace](https://marketplace.eclipse.org/content/anyedit-tools).
+
+Old versions can be downloaded from [bintray](https://bintray.com/iloveeclipse/plugins/AnyEdit/view/files).
 
 Originally hosted on code.google.com/p/anyedittools
