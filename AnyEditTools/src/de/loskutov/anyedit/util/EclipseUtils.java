@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
@@ -206,6 +207,9 @@ public final class EclipseUtils {
             }
             return location.toFile();
         }
+        if(o instanceof IEditorInput){
+            return getFile((IEditorInput)o);
+        }
         return null;
     }
 
@@ -293,7 +297,8 @@ public final class EclipseUtils {
                 return adapter;
             }
         }
-        if(!askPlatform){
+        // If the source object is a platform object then it's already tried calling AdapterManager.getAdapter
+        if(!askPlatform || o instanceof PlatformObject){
             return null;
         }
         Object adapted = Platform.getAdapterManager().getAdapter(o, target);

@@ -9,7 +9,6 @@
 package de.loskutov.anyedit.actions.compare;
 
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,10 +201,9 @@ public class CompareWithEditorAction extends CompareWithAction {
                         continue;
                     }
                     AbstractEditor abstractEditor = new AbstractEditor(reference.getEditor(initEditor));
-                    URI uri = abstractEditor.getURI();
 
                     File file = selectedContent.getFile();
-                    File anotherFile = EclipseUtils.getLocalFile(uri);
+                    File anotherFile = abstractEditor.getFile();
                     if(file != null && file.equals(anotherFile)){
                         // same file as selection
                         continue;
@@ -254,9 +252,9 @@ public class CompareWithEditorAction extends CompareWithAction {
             if(myEditor == null){
                 return false;
             }
-            URI myUri = myEditor.getURI();
-            URI anotherURI = abstractEditor.getURI();
-            return myUri != null && myUri.equals(anotherURI);
+            File myFile = myEditor.getFile();
+            File another = abstractEditor.getFile();
+            return myFile != null && myFile.equals(another);
         }
 
         private boolean similarEditor(IEditorReference reference) {

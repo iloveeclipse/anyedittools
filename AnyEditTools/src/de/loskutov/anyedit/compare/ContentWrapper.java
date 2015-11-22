@@ -9,7 +9,6 @@
 package de.loskutov.anyedit.compare;
 
 import java.io.File;
-import java.net.URI;
 
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.resources.IFile;
@@ -42,8 +41,8 @@ public class ContentWrapper implements IActionFilter {
         this.name = name;
         if (editor != null) {
             this.selection = editor.getSelection();
-            this.ifile = editor.getFile();
-            this.file = EclipseUtils.getLocalFile(editor.getURI());
+            this.ifile = editor.getIFile();
+            this.file = editor.getFile();
         } else {
             this.selection = null;
         }
@@ -119,20 +118,17 @@ public class ContentWrapper implements IActionFilter {
             return new ContentWrapper(title, type, editor1);
         }
 
-        IFile file = editor1.getFile();
-        if (file != null) {
-            if (file.getLocation() != null) {
-                return new ContentWrapper(file);
+        IFile ifile = editor1.getIFile();
+        if (ifile != null) {
+            if (ifile.getLocation() != null) {
+                return new ContentWrapper(ifile);
             }
-            return new ContentWrapper(file.getFullPath().toFile());
+            return new ContentWrapper(ifile.getFullPath().toFile());
         }
 
-        URI uri = editor1.getURI();
-        if (uri != null) {
-            File localFile = EclipseUtils.getLocalFile(uri);
-            if (localFile != null) {
-                return new ContentWrapper(localFile);
-            }
+        File file = editor1.getFile();
+        if(file != null){
+            return new ContentWrapper(file);
         }
         return null;
     }

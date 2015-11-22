@@ -14,7 +14,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -30,7 +29,6 @@ import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.actions.compare.CompareWithEditorAction;
 import de.loskutov.anyedit.actions.compare.CompareWithEditorAction.EditorsContentProvider;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
-import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
  * @author Andrey
@@ -67,7 +65,7 @@ public class ReplaceWithEditorAction extends ReplaceWithAction {
                 IEditorReference reference = (IEditorReference) objects[0];
                 IEditorPart editorPart = reference.getEditor(true);
                 AbstractEditor editor1 = new AbstractEditor(editorPart);
-                IFile file = editor1.getFile();
+                IFile file = editor1.getIFile();
                 if (file != null) {
                     if (file.getLocation() != null) {
                         try {
@@ -82,29 +80,26 @@ public class ReplaceWithEditorAction extends ReplaceWithAction {
                     } catch (FileNotFoundException e) {
                         AnyEditToolsPlugin.logError("File not found: " + file, e);
                     }
+                }
+
+                File localFile = editor1.getFile();
+                if (localFile != null) {
+                    try {
+                        return new FileInputStream(localFile);
+                    } catch (FileNotFoundException e) {
+                        AnyEditToolsPlugin.logError("File not found: "
+                                + localFile, e);
+                    }
                 } else {
-                    URI uri = editor1.getURI();
-                    if (uri != null) {
-                        File localFile = EclipseUtils.getLocalFile(uri);
-                        if (localFile != null) {
+                    IDocument document = editor1.getDocument();
+                    if(document != null) {
+                        String content = document.get();
+                        if (content != null) {
                             try {
-                                return new FileInputStream(localFile);
-                            } catch (FileNotFoundException e) {
-                                AnyEditToolsPlugin.logError("File not found: "
-                                        + localFile, e);
-                            }
-                        }
-                    } else {
-                        IDocument document = editor1.getDocument();
-                        if(document != null) {
-                            String content = document.get();
-                            if (content != null) {
-                                try {
-                                    return new ByteArrayInputStream(content.getBytes(editor1
-                                            .computeEncoding()));
-                                } catch (UnsupportedEncodingException e) {
-                                    return new ByteArrayInputStream(content.getBytes());
-                                }
+                                return new ByteArrayInputStream(content.getBytes(editor1
+                                        .computeEncoding()));
+                            } catch (UnsupportedEncodingException e) {
+                                return new ByteArrayInputStream(content.getBytes());
                             }
                         }
                     }

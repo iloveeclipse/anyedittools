@@ -10,8 +10,8 @@
 package de.loskutov.anyedit.ui.editor;
 
 import static de.loskutov.anyedit.util.EclipseUtils.getAdapter;
-import static de.loskutov.anyedit.util.EclipseUtils.getIFile;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
 
@@ -162,18 +162,44 @@ public class AbstractEditor implements ITextEditorExtension2 {
      * @return may return null
      */
     @Nullable
-    public IFile getFile(){
+    public IFile getIFile(){
+        if(wPart == null){
+            return null;
+        }
         IEditorInput input = getInput();
         if(input != null){
-            IFile adapter = getIFile(input, true);
+            IFile adapter = EclipseUtils.getIFile(input, true);
             if(adapter != null){
                 return adapter;
             }
         }
+        IFile adapter = EclipseUtils.getIFile(wPart, true);
+        return adapter;
+    }
+
+    @Nullable
+    public File getFile(){
         if(wPart == null){
             return null;
         }
-        IFile adapter = getIFile(wPart, true);
+        IEditorInput input = getInput();
+        if(input != null){
+            File adapter = EclipseUtils.getFile(input, true);
+            if(adapter != null){
+                return adapter;
+            }
+        }
+        File adapter = EclipseUtils.getFile(wPart, true);
+        if(adapter != null){
+            return adapter;
+        }
+        ISelectionProvider sp = getSelectionProvider();
+        if(sp != null){
+            ISelection selection = sp.getSelection();
+            if(selection != null){
+                adapter = EclipseUtils.getFile(selection, true);
+            }
+        }
         return adapter;
     }
 
@@ -183,10 +209,16 @@ public class AbstractEditor implements ITextEditorExtension2 {
     @Nullable
     public String getContentType(){
         URI uri = getURI();
-        if(uri == null){
-            return null;
+        String path;
+        if(uri != null) {
+            path = uri.toString();
+        } else {
+            File file = getFile();
+            if(file == null) {
+                return null;
+            }
+            path = file.getAbsolutePath();
         }
-        String path = uri.toString();
         int dot = path.lastIndexOf('.') + 1;
         if(dot >= 0){
             return path.substring(dot);
@@ -207,13 +239,13 @@ public class AbstractEditor implements ITextEditorExtension2 {
      * @return may return null
      */
     @Nullable
-    public URI getURI(){
+    private URI getURI(){
         return EclipseUtils.getURI(getInput());
     }
 
     @NonNull
     public String computeEncoding() {
-        IFile file = getFile();
+        IFile file = getIFile();
         if(file != null) {
             try {
                 String charset = file.getCharset();

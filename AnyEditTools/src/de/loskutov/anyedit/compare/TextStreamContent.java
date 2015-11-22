@@ -323,8 +323,15 @@ IEditableContentExtension {
         if(editor.isDisposed()){
             return;
         }
-        IEditorInput input = editor.getInput();
         IDocumentProvider documentProvider = editor.getDocumentProvider();
+        if(documentProvider == null){
+            return;
+        }
+        IEditorInput input = editor.getInput();
+        if(input == null){
+            return;
+        }
+
         IAnnotationModel extension = documentProvider.getAnnotationModel(input);
         if (!(extension instanceof IAnnotationModelExtension)) {
             return;
@@ -344,8 +351,14 @@ IEditableContentExtension {
         if(editor.isDisposed()){
             return;
         }
-        IEditorInput input = editor.getInput();
         IDocumentProvider documentProvider = editor.getDocumentProvider();
+        if(documentProvider == null){
+            return;
+        }
+        IEditorInput input = editor.getInput();
+        if(input == null){
+            return;
+        }
         IAnnotationModel extension = documentProvider.getAnnotationModel(input);
         if (!(extension instanceof IAnnotationModelExtension)) {
             return;

@@ -129,7 +129,7 @@ implements IWorkbenchWindowActionDelegate, IViewActionDelegate, IEditorActionDel
     public IFile getFile() {
         IFile myFile = file;
         if(myFile == null && getEditor() != null){
-            myFile = getEditor().getFile();
+            myFile = getEditor().getIFile();
         }
         return myFile;
     }
