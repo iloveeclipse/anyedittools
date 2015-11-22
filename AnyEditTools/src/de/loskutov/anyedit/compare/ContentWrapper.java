@@ -13,8 +13,6 @@ import java.net.URI;
 
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
@@ -152,26 +150,16 @@ public class ContentWrapper implements IActionFilter {
         if (element instanceof AbstractEditor) {
             return create((AbstractEditor) element);
         }
-        if (element instanceof IAdaptable) {
-            IAdaptable adaptable = (IAdaptable) element;
-            IFile ifile = (IFile) adaptable.getAdapter(IFile.class);
-            if (ifile != null) {
-                return new ContentWrapper(ifile);
-            }
-            IResource ires = (IResource) adaptable.getAdapter(IResource.class);
-            if (ires != null && ires.getType() == IResource.FILE) {
-                return new ContentWrapper((IFile) ires);
-            }
-            File file = (File) adaptable.getAdapter(File.class);
-            if (file != null) {
-                return new ContentWrapper(file);
-            }
-            ContentWrapper content = (ContentWrapper) adaptable.getAdapter(ContentWrapper.class);
-            if (content != null) {
-                return content;
-            }
+        IFile ifile = EclipseUtils.getIFile(element, true);
+        if (ifile != null) {
+            return new ContentWrapper(ifile);
         }
-        return null;
+        File file = EclipseUtils.getFile(element, true);
+        if (file != null) {
+            return new ContentWrapper(file);
+        }
+        ContentWrapper content = EclipseUtils.getAdapter(element, ContentWrapper.class);
+        return content;
     }
 
     public void setModifiable(boolean modifiable) {
