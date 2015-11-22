@@ -23,6 +23,7 @@ import org.eclipse.ui.part.PageBookView;
 
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
 import de.loskutov.anyedit.ui.editor.EditorPropertyTester;
+import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
  * @author Andrey
@@ -53,7 +54,7 @@ implements IEditorActionDelegate {
                 doPageBookViewAction((PageBookView) vp);
                 return;
             }
-            TextViewer viewer = (TextViewer)vp.getAdapter(TextViewer.class);
+            TextViewer viewer = EclipseUtils.getAdapter(vp, TextViewer.class);
             if(viewer != null) {
                 runWithViewer(viewer);
             }

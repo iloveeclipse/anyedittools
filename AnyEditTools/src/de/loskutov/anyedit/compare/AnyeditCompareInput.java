@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.progress.UIJob;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
+import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
  * @author Andrey
@@ -82,11 +83,11 @@ public class AnyeditCompareInput extends CompareEditorInput  {
     @Override
     public Object getAdapter(Class adapter) {
         if(IFile.class == adapter) {
-            Object object = left.getAdapter(adapter);
+            Object object = EclipseUtils.getIFile(left, false);
             if(object != null) {
                 return object;
             }
-            return right.getAdapter(adapter);
+            return EclipseUtils.getIFile(right, false);
         }
         return super.getAdapter(adapter);
     }

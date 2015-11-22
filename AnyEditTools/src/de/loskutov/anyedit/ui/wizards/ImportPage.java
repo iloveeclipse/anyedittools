@@ -212,11 +212,11 @@ public class ImportPage extends WSPage {
         }
     }
 
-    private void removeNonExistingChildren(IWorkingSet workingSet) {
+    private static void removeNonExistingChildren(IWorkingSet workingSet) {
         IAdaptable[] elements = workingSet.getElements();
-        List<IResource> existing = new ArrayList<IResource>();
+        List<IResource> existing = new ArrayList<>();
         for (int i = 0; i < elements.length; i++) {
-            IResource resource = (IResource) elements[i].getAdapter(IResource.class);
+            IResource resource =  EclipseUtils.getResource(elements[i]);
             if (resource != null && resource.exists()) {
                 existing.add(resource);
             }

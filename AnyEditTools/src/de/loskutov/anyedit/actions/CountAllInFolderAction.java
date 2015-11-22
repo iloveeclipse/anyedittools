@@ -20,7 +20,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -32,6 +31,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.Messages;
+import de.loskutov.anyedit.util.EclipseUtils;
 
 public class CountAllInFolderAction extends ConvertAllInFolderAction implements IHandler {
 
@@ -40,16 +40,13 @@ public class CountAllInFolderAction extends ConvertAllInFolderAction implements 
         if(selection instanceof IContainer) {
             return (IResource)selection;
         }
-        if(selection instanceof IAdaptable) {
-            IAdaptable adaptable= (IAdaptable) selection;
-            Object adapter = adaptable.getAdapter(IResource.class);
+        if(selection != null) {
+            IResource adapter = EclipseUtils.getResource(selection);
             if(adapter instanceof IContainer){
-                return (IResource) adapter;
+                return adapter;
             }
-            adapter = adaptable.getAdapter(IProject.class);
-            if(adapter instanceof IProject){
-                return (IResource) adapter;
-            }
+            adapter = EclipseUtils.getAdapter(selection, IProject.class);
+            return adapter;
         }
         return null;
     }

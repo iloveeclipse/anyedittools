@@ -17,8 +17,8 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -31,6 +31,7 @@ import org.eclipse.ui.PlatformUI;
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
 import de.loskutov.anyedit.Messages;
+import de.loskutov.anyedit.util.EclipseUtils;
 
 public class ConvertAllInFolderAction extends ConvertAllAction {
 
@@ -60,16 +61,14 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
         return !selectedResources.isEmpty();
     }
 
+    @Nullable
     protected IResource getResource(Object selection) {
         if(selection instanceof IContainer || selection instanceof IFile) {
             return (IResource)selection;
         }
-        if(selection instanceof IAdaptable) {
-            IAdaptable adaptable= (IAdaptable) selection;
-            Object adapter = adaptable.getAdapter(IResource.class);
-            if(adapter instanceof IContainer || adapter instanceof IFile){
-                return (IResource) adapter;
-            }
+        IResource resource = EclipseUtils.getResource(selection);
+        if(resource instanceof IContainer || resource instanceof IFile){
+            return resource;
         }
         return null;
     }

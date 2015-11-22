@@ -115,16 +115,12 @@ public final class EclipseUtils {
         if (currentInput == null) {
             return null;
         }
-        IFile file = (IFile) currentInput.getAdapter(IFile.class);
-        if (file != null) {
-            return file.getProject();
+        IResource resource = getResource(currentInput);
+        if (resource != null) {
+            return resource.getProject();
         }
         IProject project = null;
-        if (currentInput instanceof IFileEditorInput) {
-            IFileEditorInput fileInput = (IFileEditorInput) currentInput;
-            IFile currentFile = fileInput.getFile();
-            project = currentFile.getProject();
-        } else if (hasJDT && isJavaInput(currentInput)) {
+        if (hasJDT && isJavaInput(currentInput)) {
             // it must be a class because java source *files* are IFileEditorInput's
             project = JdtUtils.getProjectForClass(currentInput);
         }

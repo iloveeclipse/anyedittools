@@ -33,6 +33,7 @@ import org.eclipse.ui.IEditorPart;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IAnyEditConstants;
+import de.loskutov.anyedit.util.EclipseUtils;
 
 /**
  * @author Andrey
@@ -191,7 +192,7 @@ public final class JdtUtils {
      */
     public static IProject getProjectForClass(IEditorInput currentInput) {
         IProject project = null;
-        Object adapter = currentInput.getAdapter(IClassFile.class);
+        Object adapter = EclipseUtils.getAdapter(currentInput, IClassFile.class);
         if (adapter instanceof IClassFile) {
             IClassFile classFile = (IClassFile) adapter;
             IJavaProject javaProject = classFile.getJavaProject();
