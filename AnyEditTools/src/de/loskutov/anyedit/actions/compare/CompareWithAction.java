@@ -35,7 +35,7 @@ import de.loskutov.anyedit.ui.editor.AbstractEditor;
  * @author Andrey
  *
  */
-public abstract class CompareWithAction extends AbstractHandler implements IObjectActionDelegate /*, IWorkbenchWindowActionDelegate*/ {
+public abstract class CompareWithAction extends AbstractHandler implements IObjectActionDelegate {
 
     protected ContentWrapper selectedContent;
     protected AbstractEditor editor;
@@ -89,6 +89,9 @@ public abstract class CompareWithAction extends AbstractHandler implements IObje
         } catch (CoreException e) {
             left.dispose();
             AnyEditToolsPlugin.logError("Can't perform compare", e);
+        } finally {
+            selectedContent = null;
+            editor = null;
         }
     }
 
@@ -144,7 +147,7 @@ public abstract class CompareWithAction extends AbstractHandler implements IObje
     public void selectionChanged(IAction action, ISelection selection) {
         if (!(selection instanceof IStructuredSelection) || selection.isEmpty()) {
             // happens only on first initialization in fresh started eclipse, in editor
-            if(!editor.isDisposed()){
+            if(!editor.isDisposed() || selectedContent == null){
                 selectedContent = ContentWrapper.create(editor);
             }
             action.setEnabled(selectedContent != null);
