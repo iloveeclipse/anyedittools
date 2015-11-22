@@ -45,6 +45,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.console.IConsole;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -187,10 +188,92 @@ public final class EclipseUtils {
 
     /**
      * @param o
+     *     selection or some object which is or can be adapted to file
+     * @param askPlatform
+     * @return adapter from given object to file, may return null
+     */
+    @Nullable
+    public static File getFile(Object o, boolean askPlatform) {
+        File f = getAdapter(o, File.class, askPlatform);
+        if(f != null){
+            return f;
+        }
+        IResource r = getResource(o, askPlatform);
+        if(r != null){
+            IPath location = r.getLocation();
+            if(location == null){
+                return null;
+            }
+            return location.toFile();
+        }
+        return null;
+    }
+
+    /**
+     * @param o
+     *     selection or some object which is or can be adapted to {@link IFile}
+     * @param b
+     * @return adapter from given object to {@link IFile}, may return null
+     */
+    @Nullable
+    public static IFile getIFile(Object o, boolean askPlatform) {
+        IResource r = getAdapter(o, IResource.class, askPlatform);
+        if (r != null) {
+            if(r instanceof IFile) {
+                return (IFile) r;
+            }
+        }
+        return getAdapter(o, IFile.class, askPlatform);
+    }
+
+    /**
+     * Adapt object to given target class type
+     *
+     * @param object
+     * @param target
+     * @param <V> type of target
+     * @return adapter from given object to given type, may return null
+     */
+    @Nullable
+    public static <V> V getAdapter(Object object, Class<V> target) {
+        return getAdapter(object, target, true);
+    }
+
+    /**
+     * @param o
      *     selection or some object which is or can be adapted to resource
      * @return given object as resource, may return null
      */
     public static IResource getResource(Object o) {
+        return getResource(o, true);
+    }
+
+    /**
+     * @param o
+     *     selection or some object which is or can be adapted to resource
+     * @param askPlatform
+     * @return adapter from given object to resource, may return null
+     */
+    @Nullable
+    public static IResource getResource(Object o, boolean askPlatform) {
+        IResource r = getAdapter(o, IResource.class, askPlatform);
+        if (r != null) {
+            return r;
+        }
+        return getAdapter(o, IFile.class, askPlatform);
+    }
+
+    /**
+     * Adapt object to given target class type
+     *
+     * @param o
+     *     selection or some object which is or can be adapted to given type
+     * @param target
+     * @param <V> type of target
+     * @return adapter from given object to given type, may return null
+     */
+    @Nullable
+    public static <V> V getAdapter(Object o, Class<V> target, boolean askPlatform) {
         if(o instanceof IStructuredSelection) {
             IStructuredSelection selection = (IStructuredSelection) o;
             if(selection.isEmpty()) {
@@ -201,21 +284,40 @@ public final class EclipseUtils {
         if(o == null) {
             return null;
         }
-        if (o instanceof IResource) {
-            return (IResource) o;
+        if (target.isInstance(o)) {
+            return target.cast(o);
         }
         if (o instanceof IAdaptable) {
-            IAdaptable adaptable = (IAdaptable) o;
-            IResource adapter = (IResource) adaptable.getAdapter(IResource.class);
-            if (adapter != null) {
-                return adapter;
-            }
-            adapter = (IResource) adaptable.getAdapter(IFile.class);
-            if (adapter != null) {
+            V adapter = getAdapter(((IAdaptable) o), target);
+            if(adapter != null) {
                 return adapter;
             }
         }
-        return (IResource) Platform.getAdapterManager().getAdapter(o, IResource.class);
+        if(!askPlatform){
+            return null;
+        }
+        Object adapted = Platform.getAdapterManager().getAdapter(o, target);
+        return target.cast(adapted);
+    }
+
+    /**
+     * Returns the adapter corresponding to the given adapter class.
+     * <p>
+     * Workaround for "Unnecessary cast" errors, see bug 460685. Can be removed
+     * when plugin depends on Eclipse 4.5 or higher.
+     *
+     * @param adaptable
+     *            the adaptable
+     * @param adapterClass
+     *            the adapter class to look up
+     * @return a object of the given class, or <code>null</code> if this object
+     *         does not have an adapter for the given class
+     */
+    @SuppressWarnings("unchecked")
+    @Nullable
+    public static <T> T getAdapter(IAdaptable adaptable, Class<T> adapterClass) {
+        Object adapter = adaptable.getAdapter(adapterClass);
+        return (T) adapter;
     }
 
     public static IFile getResource(IProject project, IEditorInput currentInput,
@@ -340,6 +442,7 @@ public final class EclipseUtils {
      * @return may return null or external file, which location in workspace is null. For
      *         files located inside the root of the file system, always returns null.
      */
+    @Nullable
     public static IFile getIFile(IPath iPath) throws OperationCanceledException {
         IFile resource = getWorkspaceFile(iPath.toFile());
         if (resource != null) {
@@ -420,6 +523,7 @@ public final class EclipseUtils {
         return currentPath.toString();
     }
 
+    @Nullable
     public final static IFile getWorkspaceFile() {
         try {
             IFile file = queryFile(null, ResourcesPlugin.getWorkspace().getRoot());
@@ -465,6 +569,7 @@ public final class EclipseUtils {
         return fileBuffer;
     }
 
+    @Nullable
     public static URI getURI(IEditorInput input){
         if(input == null){
             return null;
@@ -476,9 +581,23 @@ public final class EclipseUtils {
         return null;
     }
 
+    @Nullable
+    public static File getFile(IEditorInput input) {
+        URI uri = getURI(input);
+        if(uri == null){
+            return null;
+        }
+        try {
+            return new File(uri);
+        } catch (IllegalArgumentException e) {
+            return getLocalFile(uri);
+        }
+    }
+
     /**
      * @return may return null
      */
+    @Nullable
     public static File getLocalFile(URI uri) {
         if (uri != null) {
             try {

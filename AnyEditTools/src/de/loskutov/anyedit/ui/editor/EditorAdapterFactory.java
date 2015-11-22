@@ -14,8 +14,8 @@ import java.net.URI;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.jdt.internal.ui.javaeditor.IClassFileEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.editors.text.ILocationProvider;
-import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import de.loskutov.anyedit.compare.ContentWrapper;
@@ -25,8 +25,8 @@ public class EditorAdapterFactory implements IAdapterFactory {
 
     @Override
     public Object getAdapter(Object adaptableObject, Class adapterType) {
-        if(adaptableObject instanceof FileStoreEditorInput) {
-            FileStoreEditorInput editorInput = (FileStoreEditorInput) adaptableObject;
+        if(adaptableObject instanceof IURIEditorInput) {
+            IURIEditorInput editorInput = (IURIEditorInput) adaptableObject;
             if(adapterType == File.class) {
                 URI uri = editorInput.getURI();
                 return EclipseUtils.getLocalFile(uri);
@@ -62,6 +62,9 @@ public class EditorAdapterFactory implements IAdapterFactory {
                     return content;
                 }
             }
+        }
+        if(adapterType == File.class){
+            return EclipseUtils.getFile(adaptableObject, true);
         }
         return null;
     }
