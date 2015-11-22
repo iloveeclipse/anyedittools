@@ -49,304 +49,9 @@
       </page>
    </extension>
 
-  <extension point="org.eclipse.core.runtime.preferences">
-    <initializer class="de.loskutov.anyedit.ui.preferences.AndyEditPreferenceInitializer"/>
-  </extension>
-  <!-- see changelist 01251: now we do not need this
-  <extension point="org.eclipse.ui.editors.documentProviders">
-      <provider
-            class="org.eclipse.ui.editors.text.TextFileDocumentProvider"
-            inputTypes="de.loskutov.anyedit.actions.ExternalFileEditorInput"
-            id="de.loskutov.anyedit.actions.ExternalFileEditorInput">
-      </provider>
+   <extension point="org.eclipse.core.runtime.preferences">
+       <initializer class="de.loskutov.anyedit.ui.preferences.AndyEditPreferenceInitializer"/>
    </extension>
-   -->
-
-   <extension
-         point="org.eclipse.ui.popupMenus">
-
-        <objectContribution
-              adaptable="true"
-              id="de.loskutov.anyedit.c2editor"
-              objectClass="org.eclipse.core.resources.IFile">
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
-                 definitionId="AnyEdit.compareWith.editor"
-                 enablesFor="?"
-                 icon="icons/editor_area.png"
-                 id="AnyEdit.compareWith.editor"
-                 label="%compareWithEditor"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithExternalAction"
-                 definitionId="AnyEdit.compareWith.external"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.compareWith.external"
-                 label="%compareWithExternalFile"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithResourceAction"
-                 definitionId="AnyEdit.compareWith.file"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.compareWith.file"
-                 label="%compareWithFile"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
-                 definitionId="AnyEdit.compareWith.clipboard"
-                 enablesFor="?"
-                 icon="icons/clipboard_action.png"
-                 id="AnyEdit.compareWith.clipboard"
-                 label="%compareWithClipboard"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-        </objectContribution>
-
-
-        <!-- contribution to external files
-        "Replace" menu hast to be defined before "Compare", to appear after...
-         -->
-        <objectContribution
-              adaptable="true"
-              id="de.loskutov.anyedit.r2editor2"
-              objectClass="java.io.File">
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
-                 enablesFor="?"
-                 icon="icons/editor_area.png"
-                 id="AnyEdit.replaceWith.editor"
-                 label="%compareWithEditor"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithExternalAction"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.replaceWith.external"
-                 label="%compareWithExternalFile"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithResourceAction"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.replaceWith.file"
-                 label="%compareWithFile"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
-                 enablesFor="?"
-                 icon="icons/clipboard_action.png"
-                 id="AnyEdit.replaceWith.clipboard"
-                 label="%compareWithClipboard"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-        </objectContribution>
-
-        <objectContribution
-              adaptable="true"
-              id="de.loskutov.anyedit.c2editor2"
-              objectClass="java.io.File">
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
-                 enablesFor="?"
-                 icon="icons/editor_area.png"
-                 id="AnyEdit.compareWith.editor"
-                 label="%compareWithEditor"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithExternalAction"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.compareWith.external"
-                 label="%compareWithExternalFile"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithResourceAction"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.compareWith.file"
-                 label="%compareWithFile"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
-                 enablesFor="?"
-                 icon="icons/clipboard_action.png"
-                 id="AnyEdit.compareWith.clipboard"
-                 label="%compareWithClipboard"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-        </objectContribution>
-
-        <!-- contribution to class files and "unnamed" editor
-        "Replace" menu hast to be defined before "Compare", to appear after...
-         -->
-        <objectContribution
-              adaptable="true"
-              id="de.loskutov.anyedit.r2editor3"
-              objectClass="de.loskutov.anyedit.compare.ContentWrapper">
-
-             <!-- Eclipse doesn't provide "Replace With..." menu for external files -->
-           <visibility>
-              <objectState
-                    name="isModifiable"
-                    value="true">
-              </objectState>
-           </visibility>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
-                 enablesFor="?"
-                 icon="icons/editor_area.png"
-                 id="AnyEdit.replaceWith.editor"
-                 label="%compareWithEditor"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithExternalAction"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.replaceWith.external"
-                 label="%compareWithExternalFile"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithResourceAction"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.replaceWith.file"
-                 label="%compareWithFile"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
-                 enablesFor="?"
-                 icon="icons/clipboard_action.png"
-                 id="AnyEdit.replaceWith.clipboard"
-                 label="%compareWithClipboard"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-        </objectContribution>
-
-
-
-        <!-- contribution to class files and "unnamed" editor -->
-        <objectContribution
-              adaptable="true"
-              id="de.loskutov.anyedit.c2editor3"
-              objectClass="de.loskutov.anyedit.compare.ContentWrapper">
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithEditorAction"
-                 enablesFor="?"
-                 icon="icons/editor_area.png"
-                 id="AnyEdit.compareWith.editor"
-                 label="%compareWithEditor"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithExternalAction"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.compareWith.external"
-                 label="%compareWithExternalFile"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithResourceAction"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.compareWith.file"
-                 label="%compareWithFile"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.compare.CompareWithClipboardAction"
-                 enablesFor="?"
-                 icon="icons/clipboard_action.png"
-                 id="AnyEdit.compareWith.clipboard"
-                 label="%compareWithClipboard"
-                 menubarPath="compareWithMenu/compareWithGroup2">
-           </action>
-        </objectContribution>
-
-        <objectContribution
-              adaptable="true"
-              id="de.loskutov.anyedit.r2editor"
-              objectClass="org.eclipse.core.resources.IFile">
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithEditorAction"
-                 definitionId="AnyEdit.replaceWith.editor"
-                 enablesFor="?"
-                 icon="icons/editor_area.png"
-                 id="AnyEdit.replaceWith.editor"
-                 label="%compareWithEditor"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithExternalAction"
-                 definitionId="AnyEdit.replaceWith.external"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.replaceWith.external"
-                 label="%compareWithExternalFile"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithResourceAction"
-                 definitionId="AnyEdit.replaceWith.file"
-                 enablesFor="?"
-                 icon="icons/open_resource.gif"
-                 id="AnyEdit.replaceWith.file"
-                 label="%compareWithFile"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-
-           <action
-                 class="de.loskutov.anyedit.actions.replace.ReplaceWithClipboardAction"
-                 definitionId="AnyEdit.replaceWith.clipboard"
-                 enablesFor="?"
-                 icon="icons/clipboard_action.png"
-                 id="AnyEdit.replaceWith.clipboard"
-                 label="%compareWithClipboard"
-                 menubarPath="replaceWithMenu/replaceWithGroup2">
-           </action>
-        </objectContribution>
-
-
-   </extension>
-
-
 
    <!-- Action set for command bindings -->
    <extension
@@ -696,6 +401,12 @@
             defaultHandler="de.loskutov.anyedit.actions.sort.SortNumericallyDescending"
             id="AnyEdit.sortNumericallyDescending.command"
             name="%sortNumericallyDescending"/>
+
+      <command
+            defaultHandler="de.loskutov.anyedit.console.SplitStackTraceHandler"
+            id="AnyEdit.formatStackTrace.command"
+            name="Format Stack Trace" />
+
    </extension>
 
    <extension
@@ -704,6 +415,7 @@
             class="de.loskutov.anyedit.actions.internal.AnyeditStartup">
       </startup>
    </extension>
+
    <extension
          id="anyedit.whitespace"
          name="%showWhitespace"
@@ -721,6 +433,7 @@
             markerType="AnyEditTools.compare"
             name="AnyEditTools.compare"/>
    </extension>
+
    <extension
          id="anyedit.ws.marker"
          name="%showWhitespace"
@@ -901,25 +614,21 @@
    <extension
          point="org.eclipse.core.runtime.adapters">
       <factory
-            adaptableType="org.eclipse.ui.ide.FileStoreEditorInput"
+            adaptableType="org.eclipse.ui.IURIEditorInput"
             class="de.loskutov.anyedit.ui.editor.EditorAdapterFactory">
-         <adapter
-               type="java.io.File">
-         </adapter>
+         <adapter type="java.io.File" />
       </factory>
+
       <factory
             adaptableType="org.eclipse.ui.internal.editors.text.NonExistingFileEditorInput"
             class="de.loskutov.anyedit.ui.editor.EditorAdapterFactory">
-         <adapter
-               type="de.loskutov.anyedit.compare.ContentWrapper">
-         </adapter>
+         <adapter type="de.loskutov.anyedit.compare.ContentWrapper" />
       </factory>
+
       <factory
             adaptableType="org.eclipse.jdt.internal.ui.javaeditor.IClassFileEditorInput"
             class="de.loskutov.anyedit.ui.editor.EditorAdapterFactory">
-         <adapter
-               type="de.loskutov.anyedit.compare.ContentWrapper">
-         </adapter>
+         <adapter type="de.loskutov.anyedit.compare.ContentWrapper" />
       </factory>
    </extension>
 
@@ -1183,9 +892,39 @@
                name="AnyEditTools.separator4"
                visible="true">
          </separator>
+
          <menu
                id="compareWithMenu"
                label="Comp&amp;are With">
+
+            <command commandId="AnyEdit.compareWith.clipboard"
+                  icon="icons/clipboard_action.png" label="Clipboard" style="push">
+               <visibleWhen checkEnabled="false">
+                     <reference definitionId="AnyEditTools.isComparable" />
+               </visibleWhen>
+            </command>
+
+            <command commandId="AnyEdit.compareWith.file"
+                  icon="icons/open_resource.gif" label="Workspace File..." style="push">
+               <visibleWhen checkEnabled="false">
+                     <reference definitionId="AnyEditTools.isComparable" />
+               </visibleWhen>
+            </command>
+
+            <command commandId="AnyEdit.compareWith.external"
+                  icon="icons/open_resource.gif" label="External File..." style="push">
+               <visibleWhen checkEnabled="false">
+                     <reference definitionId="AnyEditTools.isComparable" />
+               </visibleWhen>
+            </command>
+
+            <command commandId="AnyEdit.compareWith.editor"
+                  icon="icons/editor_area.png" label="Opened Editor..." style="push">
+               <visibleWhen checkEnabled="false">
+                     <reference definitionId="AnyEditTools.isComparable" />
+               </visibleWhen>
+            </command>
+
             <separator
                   name="compareWithGroup2"
                   visible="true">
@@ -1195,9 +934,39 @@
                   visible="true">
             </separator>
          </menu>
+
          <menu
                id="replaceWithMenu"
                label="Rep&amp;lace With">
+
+            <command commandId="AnyEdit.replaceWith.clipboard"
+                  icon="icons/clipboard_action.png" label="Clipboard" style="push">
+               <visibleWhen checkEnabled="false">
+                     <reference definitionId="AnyEditTools.isReplaceable" />
+               </visibleWhen>
+            </command>
+
+            <command commandId="AnyEdit.replaceWith.file"
+                  icon="icons/open_resource.gif" label="Workspace File..." style="push">
+               <visibleWhen checkEnabled="false">
+                     <reference definitionId="AnyEditTools.isReplaceable" />
+               </visibleWhen>
+            </command>
+
+            <command commandId="AnyEdit.replaceWith.external"
+                  icon="icons/open_resource.gif" label="External File..." style="push">
+               <visibleWhen checkEnabled="false">
+                     <reference definitionId="AnyEditTools.isReplaceable" />
+               </visibleWhen>
+            </command>
+
+            <command commandId="AnyEdit.replaceWith.editor"
+                  icon="icons/editor_area.png" label="Opened Editor..." style="push">
+               <visibleWhen checkEnabled="false">
+                     <reference definitionId="AnyEditTools.isReplaceable" />
+               </visibleWhen>
+            </command>
+
             <separator
                   name="replaceWithGroup2"
                   visible="true">
@@ -1207,27 +976,13 @@
                   visible="true">
             </separator>
          </menu>
+
          <separator
                name="AnyEditTools.separator5"
                visible="false">
          </separator>
       </menuContribution>
 
-   </extension>
-
-   <extension
-         point="org.eclipse.core.expressions.propertyTesters">
-      <propertyTester
-            class="de.loskutov.anyedit.ui.editor.EditorPropertyTester"
-            id="AnyEditTools.EditorPropertyTester"
-            namespace="AnyEditTools.EditorPropertyTester"
-            properties="hasDocument,hasModifiableDocument,showOpenType"
-            type="org.eclipse.ui.IWorkbenchPart">
-      </propertyTester>
-   </extension>
-
-   <extension
-         point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
@@ -1237,37 +992,45 @@
                label="Format Stack Trace">
             <visibleWhen
                   checkEnabled="false">
-                  <and>
-                     <with
-                           variable="activePartId">
-                        <equals
-                              value="org.eclipse.ui.console.ConsoleView">
-                        </equals>
-                     </with>
-                 <with
-                     variable="activePart">
-                   <test
-                         forcePluginActivation="true"
-                         property="AnyEditTools.formatStackTrace.isJStackConsole"
-                         value="true">
-                   </test>
-               </with>
+               <and>
+                  <with
+                        variable="activePartId">
+                     <equals
+                           value="org.eclipse.ui.console.ConsoleView">
+                     </equals>
+                  </with>
+                  <with
+                        variable="activePart">
+                     <test
+                           forcePluginActivation="true"
+                           property="AnyEditTools.formatStackTrace.isJStackConsole"
+                           value="true">
+                     </test>
+                  </with>
                </and>
-
             </visibleWhen>
          </command>
       </menuContribution>
    </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            defaultHandler="de.loskutov.anyedit.console.SplitStackTraceHandler"
-            id="AnyEdit.formatStackTrace.command"
-            name="Format Stack Trace">
-      </command>
-   </extension>
+
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="de.loskutov.anyedit.ui.editor.EditorPropertyTester"
+            id="AnyEditTools.EditorPropertyTester"
+            namespace="AnyEditTools.EditorPropertyTester"
+            properties="hasDocument,hasModifiableDocument,showOpenType,isComparable"
+            type="org.eclipse.ui.IWorkbenchPart">
+      </propertyTester>
+
+      <propertyTester
+            class="de.loskutov.anyedit.ui.util.SelectionTester"
+            id="AnyEditTools.SelectionTester"
+            namespace="AnyEditTools.SelectionTester"
+            properties="isComparable"
+            type="org.eclipse.jface.viewers.ISelection">
+      </propertyTester>
+
       <propertyTester
             class="de.loskutov.anyedit.console.SplitStackPropertyTester"
             id="AnyEditTools.splitstacktracetester"
@@ -1275,6 +1038,40 @@
             properties="isJStackConsole"
             type="org.eclipse.ui.IViewPart">
       </propertyTester>
+   </extension>
+
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="AnyEditTools.isComparable">
+                  <or>
+                      <with variable="selection">
+                          <test
+                               forcePluginActivation="true"
+                               property="AnyEditTools.SelectionTester.isComparable" />
+                      </with>
+                      <with variable="activePart">
+                          <test
+                               forcePluginActivation="true"
+                               property="AnyEditTools.EditorPropertyTester.hasDocument" />
+                      </with>
+                  </or>
+      </definition>
+      <definition
+            id="AnyEditTools.isReplaceable">
+                  <or>
+                      <with variable="selection">
+                          <test
+                               forcePluginActivation="true"
+                               property="AnyEditTools.SelectionTester.isComparable" />
+                      </with>
+                      <with variable="activePart">
+                          <test
+                               forcePluginActivation="true"
+                               property="AnyEditTools.EditorPropertyTester.hasModifiableDocument" />
+                      </with>
+                  </or>
+      </definition>
    </extension>
 
 </plugin>
