@@ -171,7 +171,7 @@ public class ToggleWhitespace extends AbstractAction {
 
             @Override
             public IStatus run(IProgressMonitor monitor) {
-                if(aEditor.isDisposed() || aEditor.getEditorPart() == null){
+                if(aEditor.isDisposed() || aEditor.getPart() == null){
                     return Status.CANCEL_STATUS;
                 }
 

@@ -17,7 +17,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -65,12 +64,7 @@ public abstract class CompareWithAction extends AbstractHandler implements IObje
 
     @Override
     public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-        if (targetPart instanceof IEditorPart) {
-            editor = new AbstractEditor((IEditorPart) targetPart);
-        } else {
-            editor = new AbstractEditor(null);
-        }
-
+        editor = new AbstractEditor(targetPart);
     }
 
     @Override

@@ -30,8 +30,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.dialogs.ListDialog;
 import org.eclipse.ui.progress.UIJob;
 
@@ -196,7 +196,7 @@ public class CompareWithEditorAction extends CompareWithAction {
                 }
 
                 // if we are called from navigator (not from editor menu)
-                if(myEditor == null || myEditor.getEditorPart() == null){
+                if(myEditor == null || myEditor.getPart() == null){
                     // if navigator context menu has no valid selection
                     if(selectedContent == null) {
                         continue;
@@ -216,7 +216,7 @@ public class CompareWithEditorAction extends CompareWithAction {
 
                 // here we was called from the editor menu
                 AbstractEditor abstractEditor = new AbstractEditor(reference.getEditor(initEditor));
-                if (abstractEditor.getEditorPart() == null || sameEditor(abstractEditor)) {
+                if (abstractEditor.getPart() == null || sameEditor(abstractEditor)) {
                     continue;
                 }
                 refs.add(editorReferences[i]);
@@ -263,7 +263,7 @@ public class CompareWithEditorAction extends CompareWithAction {
             if(myEditor == null) {
                 return false;
             }
-            IEditorPart part = myEditor.getEditorPart();
+            IWorkbenchPart part = myEditor.getPart();
             if(part == null) {
                 return false;
             }

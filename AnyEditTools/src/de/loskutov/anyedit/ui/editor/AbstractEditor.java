@@ -9,6 +9,9 @@
 
 package de.loskutov.anyedit.ui.editor;
 
+import static de.loskutov.anyedit.util.EclipseUtils.getAdapter;
+import static de.loskutov.anyedit.util.EclipseUtils.getIFile;
+
 import java.lang.reflect.Method;
 import java.net.URI;
 
@@ -16,6 +19,8 @@ import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentRewriteSession;
 import org.eclipse.jface.text.DocumentRewriteSessionType;
@@ -25,13 +30,20 @@ import org.eclipse.jface.text.IDocumentExtension4;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.IRewriteTarget;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISaveablePart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.editors.text.IStorageDocumentProvider;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.PageBookView;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorExtension;
@@ -45,17 +57,18 @@ import de.loskutov.anyedit.util.TextUtil;
  * @author Andrey
  */
 public class AbstractEditor implements ITextEditorExtension2 {
-    private IEditorPart editorPart;
+    private IWorkbenchPart wPart;
     private boolean multipage;
 
     /**
      * Proxy for different editor types
      */
-    public AbstractEditor(IEditorPart editorPart) {
+    public AbstractEditor(final @Nullable IWorkbenchPart editorPart) {
         this();
+        wPart = editorPart;
         if(editorPart instanceof FormEditor){
             FormEditor fe = (FormEditor)editorPart;
-            editorPart = fe.getActiveEditor();
+            wPart = fe.getActiveEditor();
             multipage = true;
         } else if(editorPart instanceof MultiPageEditorPart){
             MultiPageEditorPart me = (MultiPageEditorPart)editorPart;
@@ -65,13 +78,14 @@ public class AbstractEditor implements ITextEditorExtension2 {
                 Method method = MultiPageEditorPart.class.getDeclaredMethod(
                         "getActiveEditor", null);
                 method.setAccessible(true);
-                editorPart = (IEditorPart) method.invoke(me, null);
+                wPart = (IEditorPart) method.invoke(me, null);
                 multipage = true;
             } catch (Exception e) {
                 AnyEditToolsPlugin.logError("Can't get current page", e);
             }
         } else if(editorPart!= null
-                && !(editorPart instanceof ITextEditor)) {
+                && !(editorPart instanceof ITextEditor)
+                && !(editorPart instanceof IViewPart)) {
             /*
              * added to support different multipage editors which are not extending
              * MultiPageEditorPart, like adobe Flex family editors
@@ -87,10 +101,11 @@ public class AbstractEditor implements ITextEditorExtension2 {
                             ||  "getTextEditor".equals(methodName))
                             && method.getParameterTypes().length == 0){
                         method.setAccessible(true);
-                        editorPart = (IEditorPart) method.invoke(editorPart, null);
-                        if(editorPart == null) {
+                        IEditorPart ePart = (IEditorPart) method.invoke(editorPart, null);
+                        if(ePart == null) {
                             continue;
                         }
+                        wPart = ePart;
                         multipage = true;
                         break;
                     }
@@ -99,7 +114,6 @@ public class AbstractEditor implements ITextEditorExtension2 {
                 AnyEditToolsPlugin.logError("Can't get current page", e);
             }
         }
-        this.editorPart = editorPart;
     }
 
     private AbstractEditor() {
@@ -108,7 +122,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
 
     public AbstractEditor recreate(){
         AbstractEditor ae = new AbstractEditor();
-        ae.editorPart = editorPart;
+        ae.wPart = wPart;
         ae.multipage = multipage;
         return ae;
     }
@@ -120,51 +134,53 @@ public class AbstractEditor implements ITextEditorExtension2 {
     /**
      * @return may return null
      */
+    @Nullable
     public IDocumentProvider getDocumentProvider() {
-        if (editorPart == null) {
+        if (wPart == null) {
             return null;
         }
-        if (editorPart instanceof ITextEditor) {
-            return ((ITextEditor) editorPart).getDocumentProvider();
+        if (wPart instanceof ITextEditor) {
+            return ((ITextEditor) wPart).getDocumentProvider();
         }
 
-        IDocumentProvider docProvider =
-                (IDocumentProvider) editorPart.getAdapter(IDocumentProvider.class);
+        IDocumentProvider docProvider = getAdapter(wPart, IDocumentProvider.class);
         return docProvider;
     }
 
     /**
      * @return may return null
      */
+    @Nullable
     public IEditorInput getInput() {
-        if (editorPart == null) {
+        if (!(wPart instanceof IEditorPart)) {
             return null;
         }
-        return editorPart.getEditorInput();
+        return ((IEditorPart) wPart).getEditorInput();
     }
 
     /**
      * @return may return null
      */
+    @Nullable
     public IFile getFile(){
         IEditorInput input = getInput();
-        if(input == null){
+        if(input != null){
+            IFile adapter = getIFile(input, true);
+            if(adapter != null){
+                return adapter;
+            }
+        }
+        if(wPart == null){
             return null;
         }
-        Object adapter = input.getAdapter(IFile.class);
-        if(adapter instanceof IFile){
-            return (IFile) adapter;
-        }
-        adapter = getAdapter(IFile.class);
-        if(adapter instanceof IFile){
-            return (IFile) adapter;
-        }
-        return null;
+        IFile adapter = getIFile(wPart, true);
+        return adapter;
     }
 
     /**
      * @see ITypedElement#getType()
      */
+    @Nullable
     public String getContentType(){
         URI uri = getURI();
         if(uri == null){
@@ -178,21 +194,24 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return path;
     }
 
+    @NonNull
     public String getTitle(){
-        IEditorPart part = getEditorPart();
-        if(part == null){
+        if(wPart == null){
             return "";
         }
-        return part.getTitle();
+        String title = wPart.getTitle();
+        return title != null? title : "";
     }
 
     /**
      * @return may return null
      */
+    @Nullable
     public URI getURI(){
         return EclipseUtils.getURI(getInput());
     }
 
+    @NonNull
     public String computeEncoding() {
         IFile file = getFile();
         if(file != null) {
@@ -216,32 +235,62 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return TextUtil.SYSTEM_CHARSET;
     }
 
+    @Nullable
     public ISelectionProvider getSelectionProvider() {
-        if (editorPart == null) {
+        if (wPart == null) {
             return null;
         }
-        if (editorPart instanceof ITextEditor) {
-            return ((ITextEditor) editorPart).getSelectionProvider();
+        if (wPart instanceof ITextEditor) {
+            return ((ITextEditor) wPart).getSelectionProvider();
         }
         // PDEMultiPageEditor doesn't implement ITextEditor interface
-        if (editorPart instanceof ISelectionProvider) {
-            return (ISelectionProvider) editorPart;
+        ISelectionProvider adapter = getAdapter(wPart, ISelectionProvider.class);
+        if(adapter != null){
+            return adapter;
         }
-        Object adapter = editorPart.getAdapter(ISelectionProvider.class);
-        if(adapter instanceof ISelectionProvider){
-            return (ISelectionProvider) adapter;
+        ISelectionProvider sp = wPart.getSite().getSelectionProvider();
+        if(sp != null){
+            return sp;
+        }
+        TextViewer viewer = getAdapter(wPart, TextViewer.class);
+        if(viewer != null){
+            return viewer.getSelectionProvider();
         }
         return null;
     }
 
+    @Nullable
     public IDocument getDocument() {
-        IDocumentProvider provider = getDocumentProvider();
-        if (provider != null) {
-            return provider.getDocument(getInput());
+        IEditorInput input = getInput();
+        if(input != null) {
+            IDocumentProvider provider = getDocumentProvider();
+            if (provider != null) {
+                return provider.getDocument(input);
+            }
+        }
+        if (wPart instanceof PageBookView) {
+            IPage page = ((PageBookView) wPart).getCurrentPage();
+            ITextViewer viewer = EditorPropertyTester.getViewer(page);
+            if( viewer != null ) {
+                return  viewer.getDocument();
+            }
+        }
+        if (wPart instanceof IViewPart) {
+            ISelectionProvider sp = ((IViewPart) wPart).getViewSite().getSelectionProvider();
+            if(sp instanceof ITextViewer){
+                return ((ITextViewer) sp).getDocument();
+            }
+        }
+        if(wPart != null){
+            TextViewer viewer = getAdapter(wPart, TextViewer.class);
+            if(viewer != null){
+                return viewer.getDocument();
+            }
         }
         return null;
     }
 
+    @Nullable
     public ITextSelection getSelection(){
         ISelectionProvider selectionProvider = getSelectionProvider();
         if (selectionProvider == null) {
@@ -254,6 +303,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return null;
     }
 
+    @Nullable
     public String getSelectedText(){
         ITextSelection selection = getSelection();
         if(selection == null){
@@ -267,72 +317,69 @@ public class AbstractEditor implements ITextEditorExtension2 {
     }
 
     public void selectAndReveal(int lineNumber){
-        if (editorPart == null) {
+        if (!(wPart instanceof ITextEditor)) {
             return;
         }
-        if (editorPart instanceof ITextEditor) {
-            ITextEditor editor = (ITextEditor)editorPart;
-            IDocument document = getDocument();
-            if(document != null){
-                IRegion lineInfo = null;
-                try {
-                    // line count internaly starts with 0, and not with 1 like in GUI
-                    lineInfo = document.getLineInformation(lineNumber - 1);
-                } catch (BadLocationException e) {
-                    //e.printStackTrace();
-                    //ignored because line number may not really exist in document, we guess this...
-                    //AnyEditToolsPlugin.error(null, e);
-                }
+        IDocument document = getDocument();
+        if(document != null){
+            try {
+                // line count internally starts with 0, and not with 1 like in GUI
+                IRegion lineInfo = document.getLineInformation(lineNumber - 1);
                 if(lineInfo != null){
-                    editor.selectAndReveal(lineInfo.getOffset(), lineInfo.getLength());
+                    ((ITextEditor)wPart).selectAndReveal(lineInfo.getOffset(), lineInfo.getLength());
                 }
+            } catch (BadLocationException e) {
+                //ignored because line number may not really exist in document, we guess this...
             }
         }
     }
 
     public boolean isDirty(){
-        if (editorPart == null) {
+        if (!(wPart instanceof ISaveablePart)) {
             return false;
         }
-        return editorPart.isDirty();
+        return ((ISaveablePart) wPart).isDirty();
     }
 
-    private Object getAdapter(Class<?> clazz){
-        if (editorPart == null) {
+    @Nullable
+    private <T> T getAdapterFromPart(Class<T> clazz){
+        if (wPart == null) {
             return null;
         }
-        return editorPart.getAdapter(clazz);
+        return getAdapter(wPart, clazz);
     }
 
     public void doSave(IProgressMonitor moni){
-        if (editorPart == null) {
+        if (!(wPart instanceof ISaveablePart)) {
             return;
         }
-        editorPart.doSave(moni);
+        ((ISaveablePart) wPart).doSave(moni);
     }
 
     @Override
     public boolean isEditorInputModifiable() {
-        if (editorPart == null) {
+        if (wPart == null) {
             return false;
         }
-        if (editorPart instanceof ITextEditorExtension2) {
-            return ((ITextEditorExtension2)editorPart).isEditorInputModifiable();
-        } else if (editorPart instanceof ITextEditorExtension) {
-            return !((ITextEditorExtension) editorPart).isEditorInputReadOnly();
-        } else if (editorPart instanceof ITextEditor) {
-            return ((ITextEditor)editorPart).isEditable();
+        if (wPart instanceof ITextEditorExtension2) {
+            return ((ITextEditorExtension2)wPart).isEditorInputModifiable();
+        }
+        if (wPart instanceof ITextEditorExtension) {
+            return !((ITextEditorExtension) wPart).isEditorInputReadOnly();
+        }
+        if (wPart instanceof ITextEditor) {
+            return ((ITextEditor)wPart).isEditable();
         }
         return true;
     }
 
     @Override
     public boolean validateEditorInputState() {
-        if (editorPart == null) {
+        if (wPart == null) {
             return false;
         }
-        if (editorPart instanceof ITextEditorExtension2) {
-            return ((ITextEditorExtension2)editorPart).validateEditorInputState();
+        if (wPart instanceof ITextEditorExtension2) {
+            return ((ITextEditorExtension2)wPart).validateEditorInputState();
         }
         return true;
     }
@@ -350,9 +397,8 @@ public class AbstractEditor implements ITextEditorExtension2 {
             extension.stopSequentialRewrite();
         }
 
-        Object adapter = getAdapter(IRewriteTarget.class);
-        if (adapter instanceof IRewriteTarget) {
-            IRewriteTarget target = (IRewriteTarget) adapter;
+        IRewriteTarget target = getAdapterFromPart(IRewriteTarget.class);
+        if (target != null) {
             target.endCompoundChange();
             target.setRedraw(true);
         }
@@ -363,16 +409,16 @@ public class AbstractEditor implements ITextEditorExtension2 {
      * @param normalized <code>true</code> if the rewrite is performed
      * from the start to the end of the document
      */
+    @Nullable
     public DocumentRewriteSession startSequentialRewriteMode(boolean normalized) {
-        DocumentRewriteSession rewriteSession = null;
         // de/activate listeners etc, prepare multiple replace
-        Object adapter = getAdapter(IRewriteTarget.class);
-        if (adapter instanceof IRewriteTarget) {
-            IRewriteTarget target = (IRewriteTarget) adapter;
+        IRewriteTarget target = getAdapterFromPart(IRewriteTarget.class);
+        if (target != null) {
             target.setRedraw(false);
             target.beginCompoundChange();
         }
 
+        DocumentRewriteSession rewriteSession = null;
         IDocument document = getDocument();
         if (document instanceof IDocumentExtension4) {
             IDocumentExtension4 extension= (IDocumentExtension4) document;
@@ -394,11 +440,11 @@ public class AbstractEditor implements ITextEditorExtension2 {
      * clean reference to wrapped "real" editor object
      */
     public void dispose(){
-        editorPart = null;
+        wPart = null;
     }
 
     public boolean isDisposed(){
-        return editorPart == null;
+        return wPart == null;
     }
 
     @Override
@@ -412,6 +458,9 @@ public class AbstractEditor implements ITextEditorExtension2 {
         if(input != null){
             code += input.hashCode();
         }
+        if(wPart != null){
+            code += wPart.hashCode();
+        }
         return code;
     }
 
@@ -424,7 +473,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
             return false;
         }
         AbstractEditor other = (AbstractEditor) obj;
-        if(this.editorPart != other.editorPart){
+        if(this.wPart != other.wPart){
             return false;
         }
         // now check for multi page stuff
@@ -434,10 +483,12 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return this.hashCode() == other.hashCode();
     }
 
-    public IEditorPart getEditorPart() {
-        return editorPart;
+    @Nullable
+    public IWorkbenchPart getPart() {
+        return wPart;
     }
 
+    @Nullable
     public String getText() {
         IDocument doc = getDocument();
         return doc != null? doc.get() : null;

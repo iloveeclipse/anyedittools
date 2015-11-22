@@ -86,7 +86,7 @@ IEditableContentExtension {
         this.selectedText = selectedText;
         this.position = position;
         this.partListener = new PartListener2Impl();
-        if(this.editor.getEditorPart() != null) {
+        if(this.editor.getPart() != null) {
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(
                     partListener);
             IDocument document = this.editor.getDocument();
@@ -370,7 +370,7 @@ IEditableContentExtension {
 
         @Override
         public void partClosed(IWorkbenchPartReference partRef) {
-            if (editor.getEditorPart() == partRef.getPart(false)) {
+            if (editor.getPart() == partRef.getPart(false)) {
 
                 positionUpdater = null;
                 dispose();
