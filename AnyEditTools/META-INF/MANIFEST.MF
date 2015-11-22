@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: de.loskutov.anyedit.AnyEditTools;singleton:=true
-Bundle-Version: 2.5.0.qualifier
+Bundle-Version: 2.6.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: de.loskutov.anyedit.AnyEditToolsPlugin
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.core.runtime;bundle-version="3.6.0",
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0",
  org.eclipse.core.filesystem,
  org.eclipse.ui,
  org.eclipse.ui.ide,
@@ -24,7 +24,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.jdt.ui;resolution:=optional,
  org.eclipse.jdt.core;resolution:=optional,
  org.junit;resolution:=optional,
- org.eclipse.ui.workbench;bundle-version="3.7.0"
+ org.eclipse.ui.workbench;bundle-version="3.8.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: de.loskutov.anyedit,
  de.loskutov.anyedit.actions,
