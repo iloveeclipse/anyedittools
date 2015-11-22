@@ -34,25 +34,27 @@ public class EditorPropertyTester extends PropertyTester {
 
     @Override
     public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-        if("hasModifiableDocument".equals(property) && receiver instanceof IWorkbenchPart){
-            return hasModifiableDocument((IWorkbenchPart)receiver, args, expectedValue);
-        }
-        if("hasDocument".equals(property) && receiver instanceof IWorkbenchPart){
-            return hasDocument((IWorkbenchPart)receiver, args, expectedValue);
-        }
-        if("showOpenType".equals(property) && receiver instanceof IWorkbenchPart){
-            return showOpenType((IWorkbenchPart)receiver, args, expectedValue);
+        if(receiver instanceof IWorkbenchPart) {
+            if ("hasModifiableDocument".equals(property)) {
+                return hasModifiableDocument((IWorkbenchPart)receiver, args, expectedValue);
+            }
+            if ("hasDocument".equals(property)) {
+                return hasDocument((IWorkbenchPart)receiver, args, expectedValue);
+            }
+            if ("showOpenType".equals(property)) {
+                return showOpenType((IWorkbenchPart)receiver, args, expectedValue);
+            }
         }
         return false;
     }
 
-    private boolean showOpenType(IWorkbenchPart receiver, Object[] args, Object expectedValue) {
+    private static boolean showOpenType(IWorkbenchPart receiver, Object[] args, Object expectedValue) {
         boolean hide = !EclipseUtils.hasJDT() || AnyEditToolsPlugin.getDefault().getPreferenceStore().getBoolean(
                 IAnyEditConstants.HIDE_OPEN_TYPE_ACTION);
         return !hide;
     }
 
-    private boolean hasModifiableDocument(IWorkbenchPart part, Object[] args,
+    private static boolean hasModifiableDocument(IWorkbenchPart part, Object[] args,
             Object expectedValue) {
         if(!(part instanceof IEditorPart)){
             return false;
@@ -61,7 +63,7 @@ public class EditorPropertyTester extends PropertyTester {
         return ae.isEditorInputModifiable() && ae.getDocument() != null;
     }
 
-    private boolean hasDocument(IWorkbenchPart part, Object[] args, Object expectedValue) {
+    private static boolean hasDocument(IWorkbenchPart part, Object[] args, Object expectedValue) {
         if(part instanceof IEditorPart){
             AbstractEditor ae = new AbstractEditor((IEditorPart) part);
             return ae.getDocument() != null;
@@ -75,7 +77,7 @@ public class EditorPropertyTester extends PropertyTester {
             ITextViewer viewer = getViewer(page);
             return viewer != null && viewer.getDocument() != null;
         }
-        TextViewer viewer = (TextViewer)vp.getAdapter(TextViewer.class);
+        TextViewer viewer = (TextViewer) vp.getAdapter(TextViewer.class);
         if(viewer != null){
             return viewer.getDocument() != null;
         }
