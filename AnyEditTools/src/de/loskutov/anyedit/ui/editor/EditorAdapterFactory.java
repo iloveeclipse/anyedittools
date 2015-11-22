@@ -63,9 +63,6 @@ public class EditorAdapterFactory implements IAdapterFactory {
                 }
             }
         }
-        if(adapterType == File.class){
-            return EclipseUtils.getFile(adaptableObject, true);
-        }
         return null;
     }
 

@@ -570,7 +570,7 @@ public final class EclipseUtils {
     }
 
     @Nullable
-    public static URI getURI(IEditorInput input){
+    public static URI getURI(@Nullable IEditorInput input){
         if(input == null){
             return null;
         }
@@ -582,7 +582,7 @@ public final class EclipseUtils {
     }
 
     @Nullable
-    public static File getFile(IEditorInput input) {
+    public static File getFile(@Nullable IEditorInput input) {
         URI uri = getURI(input);
         if(uri == null){
             return null;
@@ -598,7 +598,7 @@ public final class EclipseUtils {
      * @return may return null
      */
     @Nullable
-    public static File getLocalFile(URI uri) {
+    public static File getLocalFile(@Nullable URI uri) {
         if (uri != null) {
             try {
                 IFileStore store = EFS.getStore(uri);
