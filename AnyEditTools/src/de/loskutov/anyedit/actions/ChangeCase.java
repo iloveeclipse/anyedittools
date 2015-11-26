@@ -22,6 +22,7 @@ public class ChangeCase extends AbstractReplaceAction {
     private static final int KEY_INVERT_CASE = 2;
     private static final int KEY_CAPITALIZE = 3;
     private static final int KEY_CAMEL = 4;
+    private static final int KEY_CAMEL_TO_PASCAL = 5;
 
     @Override
     protected String performReplace(String line, int actionKey) {
@@ -49,6 +50,16 @@ public class ChangeCase extends AbstractReplaceAction {
         case KEY_INVERT_CASE :{
             return TextUtil.invertCase(line);
         }
+        case KEY_CAMEL_TO_PASCAL :{
+            boolean b = line.matches("[A-Z]+.*");
+            String s = null;
+            if (b) {
+                s = TextUtil.fromCamelCaseToPascalCaseBidirectional(line, true);
+            } else {
+                s = TextUtil.fromCamelCaseToPascalCaseBidirectional(line, false);
+            }
+            return s;
+        }
         }
     }
 
@@ -60,6 +71,8 @@ public class ChangeCase extends AbstractReplaceAction {
             return KEY_TO_UPPER;
         } else if(actionID.startsWith(ACTION_ID_CAPITALIZE)){
             return KEY_CAPITALIZE;
+        } else if (actionID.startsWith(ACTION_ID_CAMEL_TO_PASCAL)) {
+            return KEY_CAMEL_TO_PASCAL;
         } else if(actionID.startsWith(ACTION_ID_CAMEL)){
             return KEY_CAMEL;
         }
