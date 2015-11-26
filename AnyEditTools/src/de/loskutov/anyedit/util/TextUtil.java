@@ -159,6 +159,45 @@ public class TextUtil {
         return sb.toString();
     }
 
+    /**
+     * @param string in the "camel" notation like "beMyCamel"
+     * @param b determines the direction of conversion, true-to Camel, false-to Pascal
+     * @return the resulting string in Pascal notation like "BeMyCamel"
+     */
+    public static String fromCamelCaseToPascalCaseBidirectional(String string, boolean b) {
+        int size = string.length();
+        StringBuffer sb = new StringBuffer(size);
+        boolean isNewWord = true;
+        for (int i = 0; i < size; i++) {
+            char c = string.charAt(i);
+            if(!Character.isWhitespace(c) && isNewWord == true){
+                isNewWord = false;
+                if(b == true){
+                    if(Character.isLetter(c) && Character.isUpperCase(c)){
+                        sb.append(Character.toLowerCase(c));
+                    }
+                    else{
+                        sb.append(c);
+                    }
+                }
+                if(b == false){
+                    if(Character.isLetter(c) && Character.isLowerCase(c)){
+                        sb.append(Character.toUpperCase(c));
+                    }
+                    else{
+                        sb.append(c);
+                    }
+                }
+            }else{
+                if(Character.isWhitespace(c)){
+                    isNewWord = true;
+                }
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
     /** Check String to match real path name
      * @return false if this path is may be not a File/Dir path, i.e. contains
      * not alloved characters etc.

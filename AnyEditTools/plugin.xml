@@ -166,6 +166,12 @@
             contextId="org.eclipse.ui.textEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
 
+      <key
+            sequence="Ctrl+Alt+B"
+            commandId="AnyEdit.camelToPascal.command"
+            contextId="org.eclipse.ui.textEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+
             <!-- TODO no meaningful keys...
       <key
             commandId="AnyEdit.base64encode.command"
@@ -275,6 +281,12 @@
             defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
             id="AnyEdit.camel.command"
             name="%camel"/>
+
+      <command
+            categoryId="AnyEdit.category"
+            defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
+            id="AnyEdit.camelToPascal.command"
+            name="%camelToPascal"/>
 
       <command
             categoryId="AnyEdit.category"
@@ -697,6 +709,11 @@
                    icon="icons/camel.gif"
                    commandId="AnyEdit.camel.command"
                    id="AnyEdit.camel"/>
+
+             <command
+                   label="%camelToPascal"
+                   commandId="AnyEdit.camelToPascal.command"
+                   id="AnyEdit.camelToPascal"/>
 
              <command
                    label="%capitalize"

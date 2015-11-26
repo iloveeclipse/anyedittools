@@ -41,6 +41,7 @@ public abstract class AbstractTextAction extends AbstractAction {
     public static final String ACTION_ID_TO_LOWER = "AnyEdit.toLowerCase";
     public static final String ACTION_ID_CAPITALIZE = "AnyEdit.capitalize";
     public static final String ACTION_ID_CAMEL = "AnyEdit.camel";
+    public static final String ACTION_ID_CAMEL_TO_PASCAL = "AnyEdit.camelToPascal";
 
     protected TextUtil textUtil;
     private boolean isUsedOnSave;
