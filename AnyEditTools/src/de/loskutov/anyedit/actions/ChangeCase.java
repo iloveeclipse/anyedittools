@@ -25,7 +25,7 @@ public class ChangeCase extends AbstractReplaceAction {
     private static final int KEY_CAPITALIZE = 3;
     private static final int KEY_CAMEL = 4;
     private static final int KEY_CAMEL_TO_PASCAL = 5;
-    private static final Pattern PASCAL = Pattern.compile("[A-Z]+.*");
+    private static final Pattern PASCAL = Pattern.compile("\\s*[A-Z]+.*");
 
     @Override
     protected String performReplace(String line, int actionKey) {
