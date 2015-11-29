@@ -37,8 +37,12 @@ AnyEdit adds context menu actions to supported text editors:
 - useful if working in bilingual team to convert é's, ô's, ä's etc between html and other sources ;)
 
 "Convert `->` Camel `<->` Underscores"
-(auto-convert variable names from/to "camel" notation, like
+(convert words from/to "camel" notation, like
 thisIsMyFieldName `<->` this\_is\_my\_field\_name)
+
+"Convert `->` Camel `<->` Pascal"
+(convert words from "Camel" to "Pascal" notation and back, like
+myVariable `<->` MyVariable)
 
 "Convert -> Capitalize"
 
@@ -52,7 +56,7 @@ thisIsMyFieldName `<->` this\_is\_my\_field\_name)
 
 "Convert -> To / From Base64"
 
-Latest version of AnyEdit requires Eclipse >= 3.7 and Java >= 1.7.
+Latest version of AnyEdit requires Eclipse >= 3.8 and Java >= 1.7.
 
 You can install the latest plugin version from [Eclipse Marketplace](https://marketplace.eclipse.org/content/anyedit-tools).
 
