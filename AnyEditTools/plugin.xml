@@ -712,6 +712,7 @@
 
              <command
                    label="%camelToPascal"
+                   icon="icons/pascal.png"
                    commandId="AnyEdit.camelToPascal.command"
                    id="AnyEdit.camelToPascal"/>
 
