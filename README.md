@@ -63,3 +63,11 @@ You can install the latest plugin version from [Eclipse Marketplace](https://mar
 Old versions can be downloaded from [bintray](https://bintray.com/iloveeclipse/plugins/AnyEdit/view/files).
 
 Originally hosted on code.google.com/p/anyedittools
+
+Support plugin development:
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick" />
+<input type="hidden" name="hosted_button_id" value="R5SHJLNGUXKHU" />
+<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG_global.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." />
+<!--<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1">-->
+</form>
