@@ -9,6 +9,8 @@
 
 package de.loskutov.anyedit.actions;
 
+import java.util.regex.Pattern;
+
 import de.loskutov.anyedit.util.TextUtil;
 
 /**
@@ -23,6 +25,7 @@ public class ChangeCase extends AbstractReplaceAction {
     private static final int KEY_CAPITALIZE = 3;
     private static final int KEY_CAMEL = 4;
     private static final int KEY_CAMEL_TO_PASCAL = 5;
+    private static final Pattern PASCAL = Pattern.compile("[A-Z]+.*");
 
     @Override
     protected String performReplace(String line, int actionKey) {
@@ -50,15 +53,9 @@ public class ChangeCase extends AbstractReplaceAction {
         case KEY_INVERT_CASE :{
             return TextUtil.invertCase(line);
         }
-        case KEY_CAMEL_TO_PASCAL :{
-            boolean b = line.matches("[A-Z]+.*");
-            String s = null;
-            if (b) {
-                s = TextUtil.fromCamelCaseToPascalCaseBidirectional(line, true);
-            } else {
-                s = TextUtil.fromCamelCaseToPascalCaseBidirectional(line, false);
-            }
-            return s;
+        case KEY_CAMEL_TO_PASCAL: {
+            boolean isPascal = PASCAL.matcher(line).matches();
+            return TextUtil.fromCamelCaseToPascalCaseBidirectional(line, isPascal);
         }
         }
     }

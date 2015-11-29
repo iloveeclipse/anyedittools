@@ -161,39 +161,34 @@ public class TextUtil {
 
     /**
      * @param string in the "camel" notation like "beMyCamel"
-     * @param b determines the direction of conversion, true-to Camel, false-to Pascal
+     * @param toCamel determines the direction of conversion, true-to Camel, false-to Pascal
      * @return the resulting string in Pascal notation like "BeMyCamel"
      */
-    public static String fromCamelCaseToPascalCaseBidirectional(String string, boolean b) {
+    public static String fromCamelCaseToPascalCaseBidirectional(String string, boolean toCamel) {
         int size = string.length();
         StringBuffer sb = new StringBuffer(size);
         boolean isNewWord = true;
         for (int i = 0; i < size; i++) {
             char c = string.charAt(i);
-            if(!Character.isWhitespace(c) && isNewWord == true){
+            if(isNewWord == true && !Character.isWhitespace(c)){
                 isNewWord = false;
-                if(b == true){
-                    if(Character.isLetter(c) && Character.isUpperCase(c)){
-                        sb.append(Character.toLowerCase(c));
-                    }
-                    else{
-                        sb.append(c);
-                    }
-                }
-                if(b == false){
-                    if(Character.isLetter(c) && Character.isLowerCase(c)){
-                        sb.append(Character.toUpperCase(c));
-                    }
-                    else{
-                        sb.append(c);
+                if(Character.isLetter(c)){
+                    if(toCamel){
+                        if(Character.isUpperCase(c)){
+                            c = Character.toLowerCase(c);
+                        }
+                    } else {
+                        if(Character.isLowerCase(c)){
+                            c = Character.toUpperCase(c);
+                        }
                     }
                 }
-            }else{
+            } else {
                 if(Character.isWhitespace(c)){
                     isNewWord = true;
                 }
-                sb.append(c);
             }
+            sb.append(c);
         }
         return sb.toString();
     }
