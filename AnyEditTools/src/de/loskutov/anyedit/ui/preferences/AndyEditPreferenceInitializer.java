@@ -60,7 +60,7 @@ AbstractPreferenceInitializer {
                 IAnyEditConstants.ACTION_ID_CONVERT_TABS);
         store.setDefault(IAnyEditConstants.REPLACE_ALL_TABS_WITH_SPACES, false);
         store.setDefault(IAnyEditConstants.REPLACE_ALL_SPACES_WITH_TABS, false);
-        store.setDefault(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST, "*.makefile,makefile,*.Makefile,Makefile,Makefile.*,*.mk,MANIFEST.MF,.project");
+        store.setDefault(IAnyEditConstants.PREF_ACTIVE_FILTERS_LIST, "*.makefile,makefile,*.Makefile,Makefile,Makefile.*,*.mk,MANIFEST.MF,.project,*.yml");
         store.setDefault(IAnyEditConstants.PREF_INACTIVE_FILTERS_LIST, "");
         store.setDefault(IAnyEditConstants.ASK_BEFORE_CONVERT_ALL_IN_FOLDER, true);
         store.setDefault(IAnyEditConstants.INCLUDE_DERIVED_RESOURCES, false);
