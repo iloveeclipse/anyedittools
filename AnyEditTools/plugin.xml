@@ -232,85 +232,85 @@
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.Spaces"
             id="AnyEdit.CnvrtTabToSpaces.command"
-            name="%tabsToSpaces"/>
+            name="%_tabsToSpaces"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.Spaces"
             id="AnyEdit.CnvrtSpacesToTabs.command"
-            name="%spacesToTabs"/>
+            name="%_spacesToTabs"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.UnEscape"
             id="AnyEdit.unescape.command"
-            name="%htmlToChar"/>
+            name="%_htmlToChar"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.UnEscape"
             id="AnyEdit.escape.command"
-            name="%charToHtml"/>
+            name="%_charToHtml"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
             id="AnyEdit.toLowerCase.command"
-            name="%caseToLower"/>
+            name="%_caseToLower"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
             id="AnyEdit.toUpperCase.command"
-            name="%caseToUpper"/>
+            name="%_caseToUpper"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
             id="AnyEdit.invertCase.command"
-            name="%invertCase"/>
+            name="%_invertCase"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
             id="AnyEdit.capitalize.command"
-            name="%capitalize"/>
+            name="%_capitalize"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
             id="AnyEdit.camel.command"
-            name="%camel"/>
+            name="%_camel"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.ChangeCase"
             id="AnyEdit.camelToPascal.command"
-            name="%camelToPascal"/>
+            name="%_camelToPascal"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.Base64UnEncode"
             id="AnyEdit.base64encode.command"
-            name="%base64encode"/>
+            name="%_base64encode"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.Base64UnEncode"
             id="AnyEdit.base64decode.command"
-            name="%base64decode"/>
+            name="%_base64decode"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.ConvertUnicode"
             id="AnyEdit.deunicode.command"
-            name="%fromUnicode"/>
+            name="%_fromUnicode"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.ConvertUnicode"
             id="AnyEdit.unicodify.command"
-            name="%toUnicode"/>
+            name="%_toUnicode"/>
 
       <command
             categoryId="AnyEdit.category"
@@ -369,50 +369,50 @@
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseSensitiveAscending"
             id="AnyEdit.sortAlphabeticallyCaseSensitiveAscending.command"
-            name="%sortAlphabeticallyCaseSensitiveAscending"/>
+            name="%_sortAlphabeticallyCaseSensitiveAscending"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseSensitiveDescending"
             id="AnyEdit.sortAlphabeticallyCaseSensitiveDescending.command"
-            name="%sortAlphabeticallyCaseSensitiveDescending"/>
+            name="%_sortAlphabeticallyCaseSensitiveDescending"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseInsensitiveAscending"
             id="AnyEdit.sortAlphabeticallyCaseInsensitiveAscending.command"
-            name="%sortAlphabeticallyCaseInsensitiveAscending"/>
+            name="%_sortAlphabeticallyCaseInsensitiveAscending"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortAlphabeticallyCaseInsensitiveDescending"
             id="AnyEdit.sortAlphabeticallyCaseInsensitiveDescending.command"
-            name="%sortAlphabeticallyCaseInsensitiveDescending"/>
+            name="%_sortAlphabeticallyCaseInsensitiveDescending"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortLineLengthAscending"
             id="AnyEdit.SortLineLengthAscending.command"
-            name="%sortLineLengthAscending"/>
+            name="%_sortLineLengthAscending"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortLineLengthDescending"
             id="AnyEdit.SortLineLengthDescending.command"
-            name="%sortLineLengthDescending"/>
+            name="%_sortLineLengthDescending"/>
 
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortNumericallyAscending"
             id="AnyEdit.sortNumericallyAscending.command"
-            name="%sortNumericallyAscending"/>
+            name="%_sortNumericallyAscending"/>
 
       <command
             categoryId="AnyEdit.category"
             defaultHandler="de.loskutov.anyedit.actions.sort.SortNumericallyDescending"
             id="AnyEdit.sortNumericallyDescending.command"
-            name="%sortNumericallyDescending"/>
+            name="%_sortNumericallyDescending"/>
 
       <command
             defaultHandler="de.loskutov.anyedit.console.SplitStackTraceHandler"
