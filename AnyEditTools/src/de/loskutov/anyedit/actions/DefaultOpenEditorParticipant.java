@@ -12,6 +12,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -41,7 +45,7 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
-import de.loskutov.anyedit.IOpenEditorParticipant;
+import de.loskutov.anyedit.IOpenEditorsParticipant;
 import de.loskutov.anyedit.util.EclipseUtils;
 import de.loskutov.anyedit.util.TextUtil;
 import de.loskutov.anyedit.util.TextUtil.LineAndCaret;
@@ -49,7 +53,7 @@ import de.loskutov.anyedit.util.TextUtil.LineAndCaret;
 /**
  * @author Andrey
  */
-public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
+public class DefaultOpenEditorParticipant implements IOpenEditorsParticipant {
 
     public DefaultOpenEditorParticipant() {
         super();
@@ -109,12 +113,12 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
         return editorPart;
     }
 
-    private IEditorPart openInternalEditor(IFile file) throws PartInitException {
+    private static IEditorPart openInternalEditor(IFile file) throws PartInitException {
         return IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow()
                 .getActivePage(), file, true);
     }
 
-    private IEditorPart openExternalEditor(IFile file) throws CoreException {
+    private static IEditorPart openExternalEditor(IFile file) throws CoreException {
         File file2 = new File(file.getFullPath().toOSString());
         if (!file2.isFile()) {
             return null;
@@ -172,18 +176,25 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
     @Override
     public IFile guessFile(IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput, IWorkbenchPart currentPart) throws OperationCanceledException {
-        String selection = EclipseUtils.getSelectedText(selectionProvider);
-        String pathString = guessPath(doc, selectionProvider, selection);
-        IFile file = getFromPath(currentInput, pathString, selection, currentPart);
-        return file;
+        List<IFile> files = guessFiles(doc, selectionProvider, currentInput, currentPart);
+        return files.isEmpty()? null : files.get(0);
     }
 
-    private String guessPath(IDocument doc, ISelectionProvider selectionProvider,
+    @Override
+    public List<IFile> guessFiles(IDocument doc, ISelectionProvider selectionProvider,
+            IEditorInput currentInput, IWorkbenchPart currentPart) throws OperationCanceledException {
+        String selection = EclipseUtils.getSelectedText(selectionProvider);
+        List<String> pathStrings = guessPaths(doc, selectionProvider, selection);
+        List<IFile> files = getFromPath(currentInput, pathStrings, selection, currentPart);
+        return files;
+    }
+
+    private static List<String> guessPaths(IDocument doc, ISelectionProvider selectionProvider,
             String selection) {
         TextUtil textUtil = TextUtil.getDefaultTextUtilities();
         String selectedText = textUtil.trimPath(selection);
         if(selectedText == null) {
-            return null;
+            return Collections.EMPTY_LIST;
         }
         boolean mayBeFilePath = textUtil.isFilePath(selectedText);
         if (!mayBeFilePath) {
@@ -205,18 +216,18 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
                 selectedText = textUtil.findPath(new LineAndCaret(selectedText, selectedText.length() / 2));
             }
             if(selectedText == null) {
-                return null;
+                return Collections.EMPTY_LIST;
             }
         }
         if (selectedText.length() == 0) {
-            selectedText = null;
+            return Collections.EMPTY_LIST;
         }
-        return selectedText;
+        return Arrays.asList(selectedText);
     }
 
-    private IFile getFromPath(IEditorInput currentInput, String pathStr, String selection,
+    private static List<IFile> getFromPath(IEditorInput currentInput, List<String> pathStrings, String selection,
             IWorkbenchPart currentPart) throws OperationCanceledException {
-        if (pathStr == null || pathStr.length() == 0) {
+        if (pathStrings.isEmpty()) {
             return getFromSelection(selection);
         }
         IProject project = EclipseUtils.getProject(currentInput);
@@ -224,18 +235,24 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
         if (project == null) {
             project = EclipseUtils.getProject(currentPart);
         }
-        IFile resource = EclipseUtils.getResource(project, currentInput, pathStr);
-        if (resource != null) {
-            return resource;
+        List<IFile> files = new ArrayList<>();
+        for (String path : pathStrings) {
+            IFile resource = EclipseUtils.getResource(project, currentInput, path);
+            if (resource != null && !files.contains(resource)) {
+                files.add(resource);
+            }
+        }
+        if(!files.isEmpty()) {
+            return files;
         }
         // no luck with guessed path string - so try the entire selection instead
         return getFromSelection(selection);
     }
 
-    private static IFile getFromSelection(String selection) throws OperationCanceledException {
+    private static List<IFile> getFromSelection(String selection) throws OperationCanceledException {
 
         if (selection == null || selection.length() == 0) {
-            return EclipseUtils.queryFile(null, ResourcesPlugin.getWorkspace().getRoot());
+            return EclipseUtils.queryFiles(null, ResourcesPlugin.getWorkspace().getRoot());
         }
         Path path = new Path(selection);
         // remove all stuff but let only the file name there
@@ -243,7 +260,7 @@ public class DefaultOpenEditorParticipant implements IOpenEditorParticipant {
         if (path.segmentCount() > 1) {
             pathString = path.lastSegment();
         }
-        return EclipseUtils.queryFile(pathString, ResourcesPlugin.getWorkspace()
+        return EclipseUtils.queryFiles(pathString, ResourcesPlugin.getWorkspace()
                 .getRoot());
     }
 

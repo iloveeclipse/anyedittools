@@ -12,6 +12,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -834,6 +835,17 @@ public final class EclipseUtils {
      */
     public static IFile queryFile(String path, IContainer input)
             throws OperationCanceledException {
+        List<IFile> files = queryFiles(path, input);
+        return files.isEmpty()? null : files.get(0);
+    }
+
+    /**
+     * @param path may be null, see
+     *   org.eclipse.ui.internal.ide.actions.OpenWorkspaceFileAction#queryFileResource()
+     * @throws OperationCanceledException if user cancels the dialog
+     */
+    public static List<IFile> queryFiles(String path, IContainer input)
+            throws OperationCanceledException {
         Shell parent = AnyEditToolsPlugin.getShell();
 
         MyOpenResourceDialog dialog = new MyOpenResourceDialog(parent, input,
@@ -845,11 +857,16 @@ public final class EclipseUtils {
         }
 
         Object[] result = dialog.getResult();
-        if (result == null || result.length == 0 || result[0] instanceof IFile == false) {
-            return null;
+        if (result == null || result.length == 0) {
+            return Collections.EMPTY_LIST;
         }
-
-        return (IFile) result[0];
+        List<IFile> files = new ArrayList<>();
+        for (Object object : result) {
+            if(object instanceof IFile && !files.contains(object)) {
+                files.add((IFile)object);
+            }
+        }
+        return files;
     }
 
     public static boolean hasJDT() {

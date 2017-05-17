@@ -28,11 +28,12 @@ import org.eclipse.ui.IEditorPart;
 
 import de.loskutov.anyedit.AnyEditToolsPlugin;
 import de.loskutov.anyedit.IOpenEditorParticipant;
+import de.loskutov.anyedit.IOpenEditorsParticipant;
 import de.loskutov.anyedit.ui.editor.AbstractEditor;
 
 public class OpenFile extends AbstractOpenAction {
 
-    static WeakReference<List<IOpenEditorParticipant>> weakRef = new WeakReference<List<IOpenEditorParticipant>>(null);
+    static WeakReference<List<IOpenEditorParticipant>> weakRef = new WeakReference<>(null);
 
     public OpenFile() {
         super();
@@ -42,45 +43,67 @@ public class OpenFile extends AbstractOpenAction {
     protected void handleAction(IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput) {
         List<IOpenEditorParticipant> participants = getParticipants();
-        IFile file;
+        List<IFile> files;
         try {
-            file = guessFile(participants, doc, selectionProvider, currentInput);
+            files = guessFiles(participants, doc, selectionProvider, currentInput);
         } catch (OperationCanceledException e) {
             return;
         }
-
-        IEditorPart editorPart = openEditor(participants, doc, selectionProvider,
-                currentInput, file);
-
-        if (editorPart != null) {
-            goToLine(participants, doc, selectionProvider, editorPart);
+        for (IFile file : files) {
+            IEditorPart editorPart = openEditor(participants, doc, selectionProvider,
+                    currentInput, file);
+            if (editorPart != null) {
+                goToLine(participants, doc, selectionProvider, editorPart);
+            }
         }
     }
 
-    private IFile guessFile(List<IOpenEditorParticipant> participants, IDocument doc,
+    private List<IFile> guessFiles(List<IOpenEditorParticipant> participants, IDocument doc,
             ISelectionProvider selectionProvider, IEditorInput currentInput) {
+
         for (int i = 0; i < participants.size(); i++) {
             IOpenEditorParticipant participant = participants.get(i);
-            IFile file;
-            try {
-                file = participant.guessFile(doc, selectionProvider, currentInput,
-                        getViewPart());
-            } catch (OperationCanceledException e) {
-                // forward
-                throw e;
-            } catch (Throwable e) {
-                AnyEditToolsPlugin.logError("Error with '" + participant
-                        + "' in guessFile() call", e);
-                continue;
-            }
-            if (file != null) {
-                return file;
+            if(participant instanceof IOpenEditorsParticipant) {
+                IOpenEditorsParticipant participant2 = (IOpenEditorsParticipant) participant;
+                List<IFile> files;
+                try {
+                    files = participant2.guessFiles(doc, selectionProvider, currentInput,
+                            getViewPart());
+                } catch (OperationCanceledException e) {
+                    // forward
+                    throw e;
+                } catch (Throwable e) {
+                    AnyEditToolsPlugin.logError("Error with '" + participant
+                            + "' in guessFile() call", e);
+                    continue;
+                }
+                if (!files.isEmpty()) {
+                    return files;
+                }
+            } else {
+                IFile file;
+                try {
+                    file = participant.guessFile(doc, selectionProvider, currentInput,
+                            getViewPart());
+                } catch (OperationCanceledException e) {
+                    // forward
+                    throw e;
+                } catch (Throwable e) {
+                    AnyEditToolsPlugin.logError("Error with '" + participant
+                            + "' in guessFile() call", e);
+                    continue;
+                }
+                if (file != null) {
+                    List<IFile> files = new ArrayList<>();
+                    files.add(file);
+                    return files;
+                }
             }
         }
-        return null;
+        return Collections.EMPTY_LIST;
     }
 
-    private IEditorPart openEditor(List<IOpenEditorParticipant> participants,
+    private static IEditorPart openEditor(List<IOpenEditorParticipant> participants,
             IDocument doc, ISelectionProvider selectionProvider,
             IEditorInput currentInput, IFile file) {
 
@@ -103,7 +126,7 @@ public class OpenFile extends AbstractOpenAction {
         return null;
     }
 
-    private void goToLine(List<IOpenEditorParticipant> participants, IDocument doc,
+    private static void goToLine(List<IOpenEditorParticipant> participants, IDocument doc,
             ISelectionProvider selectionProvider, IEditorPart editorPart) {
 
         for (int i = 0; i < participants.size(); i++) {
@@ -119,10 +142,8 @@ public class OpenFile extends AbstractOpenAction {
                 continue;
             }
             if (line >= 0) {
-                if (line >= 0) {
-                    AbstractEditor aeditor = new AbstractEditor(editorPart);
-                    aeditor.selectAndReveal(line);
-                }
+                AbstractEditor aeditor = new AbstractEditor(editorPart);
+                aeditor.selectAndReveal(line);
                 return;
             }
         }
@@ -131,8 +152,8 @@ public class OpenFile extends AbstractOpenAction {
     private static List<IOpenEditorParticipant> getParticipants() {
         List<IOpenEditorParticipant> participants = weakRef.get();
         if(participants == null){
-            participants = new ArrayList<IOpenEditorParticipant>();
-            weakRef = new WeakReference<List<IOpenEditorParticipant>>(participants);
+            participants = new ArrayList<>();
+            weakRef = new WeakReference<>(participants);
         } else {
             return participants;
         }
