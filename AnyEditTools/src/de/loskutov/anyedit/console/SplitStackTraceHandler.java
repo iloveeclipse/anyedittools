@@ -34,23 +34,13 @@ public class SplitStackTraceHandler extends AbstractHandler {
                 IConsole console = view.getConsole();
                 if (console instanceof TextConsole) {
                     IDocument document = ((TextConsole) console).getDocument();
-                    String splittedText = splitUp(document.get());
+                    String documentContents = document.get();
+                    String splittedText = new SplitStackTrace(documentContents).splitUp();
                     if (splittedText != null) {
                         document.set(splittedText);
                     }
                 }
             }
-        }
-        return null;
-    }
-
-    private String splitUp(String string) {
-        if (string != null) {
-            String temp = string;
-            temp = temp.replaceAll( "\\.[\\t ]+\\n?",     ".\n"            );
-            temp = temp.replaceAll( "\\s+at[\\t ]+",      "\n at "         );
-            temp = temp.replaceAll( "\\s*Caused by:\\s*", "\nCaused by:\n" );
-            return temp;
         }
         return null;
     }
