@@ -57,6 +57,6 @@ public class TestSplitStackTrace extends TestCase {
     }
 
     private static String join(String... lines) {
-        return String.join(System.lineSeparator(), lines);
+        return String.join("\n", lines);
     }
 }
