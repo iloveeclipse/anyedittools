@@ -192,6 +192,14 @@ public final class EclipseUtils {
      */
     @Nullable
     public static File getFile(Object o, boolean askPlatform) {
+        File fileOrDir = getFileInternal(o, askPlatform);
+        if(fileOrDir == null || fileOrDir.isDirectory()) {
+            return null;
+        }
+        return fileOrDir;
+    }
+
+    private static File getFileInternal(Object o, boolean askPlatform) {
         File f = getAdapter(o, File.class, askPlatform);
         if(f != null){
             return f;
