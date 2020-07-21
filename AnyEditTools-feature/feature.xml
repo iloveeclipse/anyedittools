@@ -13,23 +13,17 @@
       convert tabs-spaces on save and contributes Import/Export working sets wizards.
    </description>
 
-   <copyright url="http://andrei.gmxhome.de/anyedit/copyright.html">
-      Copyright (c)2002 - 2019 by Andrey Loskutov &lt;Loskutov@gmx.de&gt;.
-All rights reserved.
+   <copyright url="..">
+      Copyright (c) 2004-2020 by Andrey Loskutov Loskutov@gmx.de
+   All rights reserved.
    </copyright>
 
-   <license url="http://www.eclipse.org/legal/epl-v10.html">
-      Copyright (c) 2002 - 2019 Andrey Loskutov, licensed under the Eclipse Public License 1.0.
+   <license url="https://www.eclipse.org/legal/epl-2.0/">
+      Copyright (c) 2004 - 2020 Andrey Loskutov, licensed under the Eclipse Public License 2.0.
    </license>
 
    <url>
-      <update label="Andrey Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
-      <discovery label="Andrey Loskutov plugins site" url="http://andrei.gmxhome.de/eclipse/"/>
-      <discovery label="Zip Editor" url="http://zipeditor.sourceforge.net/update/"/>
-      <discovery label="SpotBugsBugs" url="https://spotbugs.github.io/eclipse/"/>
-      <discovery label="Eclemma Java Code Coverage" url="http://update.eclemma.org/"/>
-      <discovery label="Subversive" url="https://download.eclipse.org/technology/subversive/4.0/update-site/"/>
-      <discovery label="EGit" url="https://download.eclipse.org/egit/updates/"/>
+      <update label="Andrey Loskutov Eclipse plugins" url="https://raw.githubusercontent.com/iloveeclipse/plugins/latest/"/>
    </url>
 
    <requires>
