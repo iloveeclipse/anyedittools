@@ -1,7 +1,7 @@
 # anyedittools
 "Swiss knife" for Eclipse
 
-[AnyEdit plugin](http://andrei.gmxhome.de/anyedit/) adds several new tools to the context menu of text- based Eclipse editors, to output consoles, to Eclipse main menu and editor toolbar. 
+AnyEdit plugin adds several new tools to the context menu of text- based Eclipse editors, to output consoles, to Eclipse main menu and editor toolbar. 
 
 * AnyEdit contributes Import/Export working sets wizards.
 
