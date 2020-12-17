@@ -43,6 +43,11 @@ myVariable `<->` MyVariable)
 
 You can install the latest plugin version from [Eclipse Marketplace](https://marketplace.eclipse.org/content/anyedit-tools).
 
+The old Eclipse update site for all my plugins is moved now: 
+from http://andrei.gmxhome.de/eclipse/ 
+to https://raw.githubusercontent.com/iloveeclipse/plugins/latest/.
+Same way, my "home" is moved to https://github.com/iloveeclipse/plugins/wiki.
+
 Old versions can be downloaded from [bintray](https://bintray.com/iloveeclipse/plugins/AnyEdit/view/files).
 The code was originally hosted on [code.google.com/p/anyedittools](http://code.google.com/p/anyedittools).
 
