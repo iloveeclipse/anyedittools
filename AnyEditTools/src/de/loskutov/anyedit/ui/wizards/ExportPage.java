@@ -1,10 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2009 Andrey Loskutov.
+ * Copyright (c) 2009-2021 Andrey Loskutov.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * Contributor:  Andrey Loskutov - initial API and implementation
+ * Contributor:  Fabio Zadrozny - import local projects
  *******************************************************************************/
 package de.loskutov.anyedit.ui.wizards;
 
@@ -12,12 +13,21 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.PlatformUI;
@@ -46,11 +56,29 @@ public class ExportPage extends WSPage {
         }
         File file = new File(pathname);
         XMLMemento memento = XMLMemento.createWriteRoot("workingSets");
+        Set<IProject> projects = new HashSet<>();
+
         Object[] sets = getSelectedWorkingSets();
         for (int i = 0; i < sets.length; i++) {
             IMemento childMem = memento.createChild("workingSet");
             IWorkingSet set = (IWorkingSet) sets[i];
             set.saveState(childMem);
+            IAdaptable[] elements = set.getElements();
+            for (IAdaptable iAdaptable : elements) {
+                IProject project = iAdaptable.getAdapter(IProject.class);
+                if(project != null) {
+                    projects.add(project);
+                }
+            }
+        }
+
+        for(IProject project: projects) {
+            IMemento child = memento.createChild("project");
+            IPath location = project.getLocation();
+            if(location != null) {
+                child.putString("name", project.getName());
+                child.putString("location", location.toPortableString());
+            }
         }
 
         FileWriter writer = null;
@@ -77,6 +105,14 @@ public class ExportPage extends WSPage {
             AnyEditToolsPlugin.logError(null, e);
         }
         return true;
+    }
+
+    @Override
+    public void createControl(Composite parent) {
+        super.createControl(parent);
+        Label label = new Label(comp, SWT.NONE);
+
+        label.setText("Note: all "+ResourcesPlugin.getWorkspace().getRoot().getProjects().length+" projects will also be exported");
     }
 
     public boolean finish() {
