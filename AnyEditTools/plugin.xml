@@ -602,9 +602,9 @@
             class="de.loskutov.anyedit.ui.wizards.WorkingSetExportWizard"
             icon="icons/workingSets2.gif"
             id="AnyEditTools.workingSetExportWizard"
-            name="Working Sets">
+            name="Working Sets and Projects">
          <description>
-            Exports all working sets to the file.
+            Exports all working sets and local projects to a file.
          </description>
       </wizard>
    </extension>
@@ -616,9 +616,9 @@
             class="de.loskutov.anyedit.ui.wizards.WorkingSetImportWizard"
             icon="icons/workingSets.gif"
             id="AnyEditTools.workingSetImportWizard"
-            name="Working Sets">
+            name="Working Sets and Projects">
          <description>
-            Imports all working sets from file.
+            Imports all working sets and projects from previously exported file.
          </description>
       </wizard>
    </extension>
