@@ -18,7 +18,6 @@
          <keywordReference id="AnyEditTools.keyword7"/>
          <keywordReference id="AnyEditTools.keyword8"/>
          <keywordReference id="org.eclipse.debug.ui.console"/>
-         <keywordReference id="org.eclipse.team.cvs.ui.cvs.console"/>
          <keywordReference id="org.eclipse.ui.editors.general"/>
          <keywordReference id="org.eclipse.ui.ide.editors"/>
 

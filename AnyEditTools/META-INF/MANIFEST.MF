@@ -29,7 +29,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: de.loskutov.anyedit,
  de.loskutov.anyedit.actions,
  de.loskutov.anyedit.actions.compare,
- de.loskutov.anyedit.actions.internal;x-internal:=true,
+ de.loskutov.anyedit.actions.internal,
  de.loskutov.anyedit.actions.replace,
  de.loskutov.anyedit.actions.sort,
  de.loskutov.anyedit.compare,
@@ -40,4 +40,3 @@ Export-Package: de.loskutov.anyedit,
  de.loskutov.anyedit.ui.util,
  de.loskutov.anyedit.ui.wizards,
  de.loskutov.anyedit.util
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
