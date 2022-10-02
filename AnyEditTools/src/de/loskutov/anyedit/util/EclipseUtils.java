@@ -47,7 +47,6 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.console.IConsole;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -190,7 +189,7 @@ public final class EclipseUtils {
      * @param askPlatform
      * @return adapter from given object to file, may return null
      */
-    @Nullable
+
     public static File getFile(Object o, boolean askPlatform) {
         File fileOrDir = getFileInternal(o, askPlatform);
         if(fileOrDir == null || fileOrDir.isDirectory()) {
@@ -224,7 +223,7 @@ public final class EclipseUtils {
      * @param b
      * @return adapter from given object to {@link IFile}, may return null
      */
-    @Nullable
+
     public static IFile getIFile(Object o, boolean askPlatform) {
         IResource r = getAdapter(o, IResource.class, askPlatform);
         if (r != null) {
@@ -243,7 +242,7 @@ public final class EclipseUtils {
      * @param <V> type of target
      * @return adapter from given object to given type, may return null
      */
-    @Nullable
+
     public static <V> V getAdapter(Object object, Class<V> target) {
         return getAdapter(object, target, true);
     }
@@ -263,7 +262,7 @@ public final class EclipseUtils {
      * @param askPlatform
      * @return adapter from given object to resource, may return null
      */
-    @Nullable
+
     public static IResource getResource(Object o, boolean askPlatform) {
         IResource r = getAdapter(o, IResource.class, askPlatform);
         if (r != null) {
@@ -281,7 +280,7 @@ public final class EclipseUtils {
      * @param <V> type of target
      * @return adapter from given object to given type, may return null
      */
-    @Nullable
+
     public static <V> V getAdapter(Object o, Class<V> target, boolean askPlatform) {
         if(o instanceof IStructuredSelection) {
             IStructuredSelection selection = (IStructuredSelection) o;
@@ -324,7 +323,7 @@ public final class EclipseUtils {
      *         does not have an adapter for the given class
      */
     @SuppressWarnings("unchecked")
-    @Nullable
+
     public static <T> T getAdapter(IAdaptable adaptable, Class<T> adapterClass) {
         Object adapter = adaptable.getAdapter(adapterClass);
         return (T) adapter;
@@ -452,7 +451,7 @@ public final class EclipseUtils {
      * @return may return null or external file, which location in workspace is null. For
      *         files located inside the root of the file system, always returns null.
      */
-    @Nullable
+
     public static IFile getIFile(IPath iPath) throws OperationCanceledException {
         IFile resource = getWorkspaceFile(iPath.toFile());
         if (resource != null) {
@@ -533,7 +532,7 @@ public final class EclipseUtils {
         return currentPath.toString();
     }
 
-    @Nullable
+
     public final static IFile getWorkspaceFile() {
         try {
             IFile file = queryFile(null, ResourcesPlugin.getWorkspace().getRoot());
@@ -579,8 +578,8 @@ public final class EclipseUtils {
         return fileBuffer;
     }
 
-    @Nullable
-    public static URI getURI(@Nullable IEditorInput input){
+
+    public static URI getURI( IEditorInput input){
         if(input == null){
             return null;
         }
@@ -591,8 +590,8 @@ public final class EclipseUtils {
         return null;
     }
 
-    @Nullable
-    public static File getFile(@Nullable IEditorInput input) {
+
+    public static File getFile( IEditorInput input) {
         URI uri = getURI(input);
         if(uri == null){
             return null;
@@ -607,8 +606,8 @@ public final class EclipseUtils {
     /**
      * @return may return null
      */
-    @Nullable
-    public static File getLocalFile(@Nullable URI uri) {
+
+    public static File getLocalFile( URI uri) {
         if (uri != null) {
             try {
                 IFileStore store = EFS.getStore(uri);

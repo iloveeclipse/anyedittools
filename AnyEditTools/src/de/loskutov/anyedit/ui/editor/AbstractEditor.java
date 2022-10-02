@@ -19,8 +19,6 @@ import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentRewriteSession;
 import org.eclipse.jface.text.DocumentRewriteSessionType;
@@ -63,7 +61,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
     /**
      * Proxy for different editor types
      */
-    public AbstractEditor(final @Nullable IWorkbenchPart editorPart) {
+    public AbstractEditor(final  IWorkbenchPart editorPart) {
         this();
         wPart = editorPart;
         if(editorPart instanceof FormEditor){
@@ -134,7 +132,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
     /**
      * @return may return null
      */
-    @Nullable
+
     public IDocumentProvider getDocumentProvider() {
         if (wPart == null) {
             return null;
@@ -150,7 +148,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
     /**
      * @return may return null
      */
-    @Nullable
+
     public IEditorInput getInput() {
         if (!(wPart instanceof IEditorPart)) {
             return null;
@@ -161,7 +159,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
     /**
      * @return may return null
      */
-    @Nullable
+
     public IFile getIFile(){
         if(wPart == null){
             return null;
@@ -177,7 +175,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return adapter;
     }
 
-    @Nullable
+
     public File getFile(){
         if(wPart == null){
             return null;
@@ -206,7 +204,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
     /**
      * @see ITypedElement#getType()
      */
-    @Nullable
+
     public String getContentType(){
         URI uri = getURI();
         String path;
@@ -226,7 +224,6 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return path;
     }
 
-    @NonNull
     public String getTitle(){
         if(wPart == null){
             return "";
@@ -238,12 +235,11 @@ public class AbstractEditor implements ITextEditorExtension2 {
     /**
      * @return may return null
      */
-    @Nullable
+
     private URI getURI(){
         return EclipseUtils.getURI(getInput());
     }
 
-    @NonNull
     public String computeEncoding() {
         IFile file = getIFile();
         if(file != null) {
@@ -267,7 +263,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return TextUtil.SYSTEM_CHARSET;
     }
 
-    @Nullable
+
     public ISelectionProvider getSelectionProvider() {
         if (wPart == null) {
             return null;
@@ -291,7 +287,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return null;
     }
 
-    @Nullable
+
     public IDocument getDocument() {
         IEditorInput input = getInput();
         if(input != null) {
@@ -322,7 +318,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return null;
     }
 
-    @Nullable
+
     public ITextSelection getSelection(){
         ISelectionProvider selectionProvider = getSelectionProvider();
         if (selectionProvider == null) {
@@ -335,7 +331,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return null;
     }
 
-    @Nullable
+
     public String getSelectedText(){
         ITextSelection selection = getSelection();
         if(selection == null){
@@ -373,7 +369,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return ((ISaveablePart) wPart).isDirty();
     }
 
-    @Nullable
+
     private <T> T getAdapterFromPart(Class<T> clazz){
         if (wPart == null) {
             return null;
@@ -441,7 +437,7 @@ public class AbstractEditor implements ITextEditorExtension2 {
      * @param normalized <code>true</code> if the rewrite is performed
      * from the start to the end of the document
      */
-    @Nullable
+
     public DocumentRewriteSession startSequentialRewriteMode(boolean normalized) {
         // de/activate listeners etc, prepare multiple replace
         IRewriteTarget target = getAdapterFromPart(IRewriteTarget.class);
@@ -515,12 +511,12 @@ public class AbstractEditor implements ITextEditorExtension2 {
         return this.hashCode() == other.hashCode();
     }
 
-    @Nullable
+
     public IWorkbenchPart getPart() {
         return wPart;
     }
 
-    @Nullable
+
     public String getText() {
         IDocument doc = getDocument();
         return doc != null? doc.get() : null;

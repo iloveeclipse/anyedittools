@@ -1,10 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2012 Andrey.
+ * Copyright (c) 2012-2021 Andrey.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * Contributor:  Andrey Loskutov - initial API and implementation
+ * Contributor:  Fabio Zadrozny - import local projects
  *******************************************************************************/
 package de.loskutov.anyedit.ui.wizards;
 
@@ -16,13 +17,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -51,10 +62,14 @@ import de.loskutov.anyedit.util.EclipseUtils;
 public class ImportPage extends WSPage {
 
     private static final String TITLE = "Import working sets from the local file system";
-    private static final String DESCRIPTION = "Select the file path to import working " +
-            "sets from and working sets to import";
+    private static final String DESCRIPTION = "Select the file path to import working "
+            + "sets from and working sets to import";
 
     protected boolean isMerge;
+    protected boolean importProjects;
+    private IMemento[] projects;
+    private Button importProjectsBtn;
+    private String importText = "Import local projects (note: projects will be initially closed).";
 
     protected ImportPage(String pageName) {
         super(pageName, TITLE, DESCRIPTION, "icons/import_wiz.gif");
@@ -68,6 +83,7 @@ public class ImportPage extends WSPage {
         chooserBtn.setSelection(isMerge);
         chooserBtn.setText("Merge with existing working sets");
         chooserBtn.addSelectionListener(new SelectionListener() {
+
             @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 // ignored
@@ -78,6 +94,43 @@ public class ImportPage extends WSPage {
                 isMerge = chooserBtn.getSelection();
             }
         });
+
+        importProjectsBtn = new Button(comp, SWT.CHECK);
+        importProjectsBtn.setSelection(importProjects);
+        setImportText(null, 0);
+        importProjectsBtn.addSelectionListener(new SelectionListener() {
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+                // ignored
+            }
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                importProjects = importProjectsBtn.getSelection();
+            }
+        });
+    }
+
+    private void setImportText(Integer nProjectsForImport, int totalInFile) {
+        if (nProjectsForImport != null) {
+            // if found == null, just use what was already set.
+            if (totalInFile == 0) {
+                importText = "No projects found to import";
+            } else if (nProjectsForImport == 0) {
+                importText = totalInFile + " projects found, but all are already imported";
+            } else if (nProjectsForImport == totalInFile) {
+                importText = "Import " + nProjectsForImport
+                        + " projects (note: projects will be initially closed)";
+            } else {
+                importText = "Import " + nProjectsForImport + " projects of "
+                        + (totalInFile - nProjectsForImport)
+                        + " are already in the workspace or are not valid (note: projects will be initially closed)";
+            }
+        }
+        if (importProjectsBtn != null) {
+            importProjectsBtn.setText(importText);
+        }
     }
 
     private String readSets() {
@@ -109,8 +162,43 @@ public class ImportPage extends WSPage {
             }
         }
 
+        IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        IWorkspaceRoot root = workspace.getRoot();
+        IProject[] existingProjects = root.getProjects();
+        Set<String> existingNames = new HashSet<>();
+        Set<String> existingLocations = new HashSet<>();
+        for (IProject iProject : existingProjects) {
+            existingNames.add(iProject.getName());
+            IPath location = iProject.getLocation();
+            if (location != null) {
+                existingLocations.add(location.toPortableString());
+            }
+        }
+        IMemento[] projectMementos = memento.getChildren("project");
+        List<IMemento> lst = new ArrayList<>(projectMementos.length);
+        for (IMemento iMemento : projectMementos) {
+            String name = iMemento.getString("name");
+            String location = iMemento.getString("location");
+            if (existingNames.contains(name)) {
+                continue;
+            }
+            if (existingLocations.contains(location)) {
+                continue;
+            }
+
+            IPath locationAsPath = Path.fromPortableString(location);
+            IPath dotProjectPath = locationAsPath.append(".project");
+            if (!dotProjectPath.toFile().exists()) {
+                continue;
+            }
+
+            lst.add(iMemento);
+        }
+        this.projects = lst.toArray(new IMemento[0]);
+        this.setImportText(this.projects.length, projectMementos.length);
+
         IMemento[] mementos = memento.getChildren("workingSet");
-        List<IWorkingSet> sets = new ArrayList<IWorkingSet>();
+        List<IWorkingSet> sets = new ArrayList<>();
         for (int i = 0; i < mementos.length; i++) {
             IWorkingSet set = restoreWorkingSet(mementos[i]);
             if (set != null) {
@@ -143,21 +231,21 @@ public class ImportPage extends WSPage {
         IElementFactory factory = PlatformUI.getWorkbench().getElementFactory(factoryID);
         if (factory == null) {
             AnyEditToolsPlugin.logError(
-                    "Unable to restore working set - cannot instantiate factory: "
-                            + factoryID, null);
+                    "Unable to restore working set - cannot instantiate factory: " + factoryID,
+                    null);
             return null;
         }
         IAdaptable adaptable = factory.createElement(memento);
         if (adaptable == null) {
             AnyEditToolsPlugin.logError(
-                    "Unable to restore working set - cannot instantiate working set: "
-                            + factoryID, null);
+                    "Unable to restore working set - cannot instantiate working set: " + factoryID,
+                    null);
             return null;
         }
         if (!(adaptable instanceof IWorkingSet)) {
             AnyEditToolsPlugin.logError(
-                    "Unable to restore working set - element is not an IWorkingSet: "
-                            + factoryID, null);
+                    "Unable to restore working set - element is not an IWorkingSet: " + factoryID,
+                    null);
             return null;
         }
         return (IWorkingSet) adaptable;
@@ -169,13 +257,61 @@ public class ImportPage extends WSPage {
     }
 
     private void importSelectedSets() {
+        IProgressMonitor pm = Job.getJobManager().createProgressGroup();
+        try {
+            if (importProjects && projects != null && projects.length > 0) {
+                pm.beginTask("Import projects", projects.length);
+
+                IWorkspace workspace = ResourcesPlugin.getWorkspace();
+                workspace.run((IProgressMonitor monitor) -> {
+                    for (IMemento iMemento : projects) {
+                        try {
+                            String name = iMemento.getString("name");
+                            String location = iMemento.getString("location");
+
+                            pm.setTaskName("Importing: " + name);
+                            IProjectDescription description;
+                            try {
+                                IPath locationAsPath = Path.fromPortableString(location);
+                                IPath dotProjectPath = locationAsPath.append(".project");
+                                if (!dotProjectPath.toFile().exists()) {
+                                    continue;
+                                }
+                                description = workspace.loadProjectDescription(dotProjectPath);
+                                IProject project = workspace.getRoot()
+                                        .getProject(description.getName());
+                                if (project.exists()) {
+                                    continue;
+                                }
+                                description.setLocation(locationAsPath);
+                                project.create(description, null);
+                                // Note: don't open initially as that's slow (let the user
+                                // open it when he wants later on).
+                            } catch (CoreException e) {
+                                AnyEditToolsPlugin.logError(null, e);
+                                continue;
+                            }
+                        } finally {
+                            pm.worked(1);
+                        }
+                    }
+                }, workspace.getRoot(), IWorkspace.AVOID_UPDATE, pm);
+
+            }
+        } catch (CoreException e) {
+            AnyEditToolsPlugin.logError(null, e);
+        } finally {
+            pm.done();
+        }
+
+        pm.setTaskName("Restoring working sets.");
+
         Object[] selected = getSelectedWorkingSets();
         if (selected == null) {
             return;
         }
-        IWorkingSetManager workingSetManager = PlatformUI.getWorkbench()
-                .getWorkingSetManager();
-        List<IWorkingSet> added = new ArrayList<IWorkingSet>();
+        IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
+        List<IWorkingSet> added = new ArrayList<>();
         for (int i = 0; i < selected.length; i++) {
             IWorkingSet workingSet = (IWorkingSet) selected[i];
             IWorkingSet oldWorkingSet = workingSetManager.getWorkingSet(workingSet.getName());
@@ -183,7 +319,7 @@ public class ImportPage extends WSPage {
                 removeNonExistingChildren(workingSet);
                 workingSetManager.addWorkingSet(workingSet);
                 added.add(workingSet);
-            } else if(isMerge) {
+            } else if (isMerge) {
                 removeNonExistingChildren(workingSet);
                 mergeWorkingSets(oldWorkingSet, workingSet);
             }
@@ -191,13 +327,11 @@ public class ImportPage extends WSPage {
         if (added.size() > 0) {
             try {
                 /*
-                 * Reflection required because some people do not have JDT installed, and
-                 * thus current class would not be loaded at all with the direct reference
-                 * to the action
+                 * Reflection required because some people do not have JDT installed, and thus
+                 * current class would not be loaded at all with the direct reference to the action
                  */
-                Class<?> actClass = Class.forName(
-                        "de.loskutov.anyedit.jdt.SelectWorkingSetsAction", true,
-                        getClass().getClassLoader());
+                Class<?> actClass = Class.forName("de.loskutov.anyedit.jdt.SelectWorkingSetsAction",
+                        true, getClass().getClassLoader());
                 IWSAction action = (IWSAction) actClass.newInstance();
                 action.setWorkingSets(added);
                 action.run();
@@ -206,8 +340,9 @@ public class ImportPage extends WSPage {
             } catch (ClassNotFoundException e) {
                 AnyEditToolsPlugin.logError("JDT not installed", e);
             } catch (Throwable e) {
-                AnyEditToolsPlugin.logError("Failed to activate imported working sets"
-                        + " in Package Explorer view", e);
+                AnyEditToolsPlugin.logError(
+                        "Failed to activate imported working sets" + " in Package Explorer view",
+                        e);
             }
         }
     }
@@ -216,7 +351,7 @@ public class ImportPage extends WSPage {
         IAdaptable[] elements = workingSet.getElements();
         List<IResource> existing = new ArrayList<>();
         for (int i = 0; i < elements.length; i++) {
-            IResource resource =  EclipseUtils.getResource(elements[i]);
+            IResource resource = EclipseUtils.getResource(elements[i]);
             if (resource != null && resource.exists()) {
                 existing.add(resource);
             }
@@ -225,6 +360,7 @@ public class ImportPage extends WSPage {
     }
 
     public static class WorkingSetContentProvider implements ITreeContentProvider {
+
         private IWorkingSet[] workingSets;
 
         @Override
@@ -314,39 +450,39 @@ public class ImportPage extends WSPage {
     }
 
     public void setInitialSelection(IStructuredSelection selection) {
-        if(selection == null) {
+        if (selection == null) {
             return;
         }
         IResource resource = EclipseUtils.getResource(selection);
-        if(resource == null) {
+        if (resource == null) {
             return;
         }
         IPath location = resource.getLocation();
-        if(location != null && "wst".equals(location.getFileExtension()) &&
-                location.toFile().isFile()) {
+        if (location != null && "wst".equals(location.getFileExtension())
+                && location.toFile().isFile()) {
             usedFiles.add(location.toOSString());
         }
     }
 
     private void mergeWorkingSets(IWorkingSet oldWorkingSet, IWorkingSet newWorkingSet) {
-        if(!oldWorkingSet.isEditable()) {
+        if (!oldWorkingSet.isEditable()) {
             return;
         }
         IAdaptable[] elementsOld = oldWorkingSet.getElements();
         IAdaptable[] elementsNew = newWorkingSet.getElements();
-        if(elementsNew == null || elementsOld == null || elementsNew.length == 0) {
+        if (elementsNew == null || elementsOld == null || elementsNew.length == 0) {
             return;
         }
         LinkedHashSet<IAdaptable> set = new LinkedHashSet<IAdaptable>(Arrays.asList(elementsOld));
         ArrayList<IAdaptable> newList = new ArrayList<IAdaptable>(Arrays.asList(elementsNew));
         newList.removeAll(set);
-        if(newList.size() == 0) {
+        if (newList.size() == 0) {
             return;
         }
         elementsNew = oldWorkingSet.adaptElements(newList.toArray(new IAdaptable[newList.size()]));
         newList = new ArrayList<IAdaptable>(Arrays.asList(elementsNew));
         newList.removeAll(set);
-        if(newList.size() == 0) {
+        if (newList.size() == 0) {
             return;
         }
         set.addAll(newList);
