@@ -38,16 +38,12 @@
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.compare"/>
-      <import plugin="org.eclipse.core.net"/>
       <import plugin="org.eclipse.core.expressions"/>
       <import plugin="org.eclipse.ui.workbench" version="3.8.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="de.loskutov.anyedit.AnyEditTools"
-         download-size="400"
-         install-size="400"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>
