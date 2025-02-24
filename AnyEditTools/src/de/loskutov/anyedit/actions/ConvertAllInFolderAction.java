@@ -18,7 +18,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -61,7 +60,6 @@ public class ConvertAllInFolderAction extends ConvertAllAction {
         return !selectedResources.isEmpty();
     }
 
-    @Nullable
     protected IResource getResource(Object selection) {
         if(selection instanceof IContainer || selection instanceof IFile) {
             return (IResource)selection;
