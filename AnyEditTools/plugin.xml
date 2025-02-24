@@ -1092,4 +1092,28 @@
       </definition>
    </extension>
 
+   <extension
+        point="org.eclipse.ui.activities">
+
+     <activity
+           name="AnyEdit Contributions"
+           description="Enable or disable AnyEdit"
+           id="de.loskutov.anyedit">
+     </activity>
+
+     <activityPatternBinding
+           activityId="de.loskutov.anyedit"
+           pattern="de\.loskutov\.anyedit.*">
+     </activityPatternBinding>
+
+     <categoryActivityBinding
+           activityId="de.loskutov.anyedit"
+           categoryId="org.eclipse.categories.developmentCategory">
+     </categoryActivityBinding>
+
+     <defaultEnablement
+           id="de.loskutov.anyedit">
+     </defaultEnablement>
+   </extension>
+
 </plugin>
