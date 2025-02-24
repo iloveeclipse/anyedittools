@@ -857,7 +857,7 @@ public final class EclipseUtils {
         Shell parent = AnyEditToolsPlugin.getShell();
 
         MyOpenResourceDialog dialog = new MyOpenResourceDialog(parent, input,
-                IResource.FILE, path);
+                IResource.FILE | IResource.PROJECT, path);
 
         int resultCode = dialog.open();
         if (resultCode != IDialogConstants.OK_ID) {
