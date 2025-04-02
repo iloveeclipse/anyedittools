@@ -1105,6 +1105,10 @@
            activityId="de.loskutov.anyedit"
            pattern="de\.loskutov\.anyedit.*">
      </activityPatternBinding>
+     <activityPatternBinding
+           activityId="de.loskutov.anyedit"
+           pattern="AnyEdit.*">
+     </activityPatternBinding>
 
      <categoryActivityBinding
            activityId="de.loskutov.anyedit"
